@@ -11,6 +11,8 @@ public class TouchDetection : MonoBehaviour
         Slide
     }
 
+    public int touchId = 0;
+
     [SerializeField]
     private Collider2D touchArea;
 
@@ -53,7 +55,7 @@ public class TouchDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (touchInputType == InputType.DoubleTap)
+         if (touchInputType == InputType.DoubleTap)
             time += Time.deltaTime;
     }
 
@@ -66,16 +68,7 @@ public class TouchDetection : MonoBehaviour
             touchY = worldPoint.y;
             Vector2 touchPoint = new Vector2(touchX, touchY);
 
-            if (touchArea == Physics2D.OverlapPoint(touchPoint))
-            {
-                validTouch = true;
-            }
-            else
-            {
-                validTouch = false;
-            }
-
-            return validTouch;
+            return (touchArea == Physics2D.OverlapPoint(touchPoint));
         }
 
         return false;
@@ -87,13 +80,16 @@ public class TouchDetection : MonoBehaviour
         UpdatePreviousTouch();
         while (true)
         {
-            if (OnTouchArea() && !touchIsDown)
+            if (OnTouchArea() && Input.touchCount > 0)
                 CalculateTouchDiff();
 
             if (!OnTouchArea())
+            {
                 touchIsDown = false;
+                UpdatePreviousTouch();
+            }
 
-            yield return new WaitForSecondsRealtime(1 / 8);
+                yield return new WaitForSecondsRealtime(1/16);
             UpdatePreviousTouch();
         }
     }
@@ -120,11 +116,34 @@ public class TouchDetection : MonoBehaviour
     {
         while (true)
         {
-            if (OnTouchArea() && !touchIsDown && Input.touchCount > 0)
+            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown)
+            {
                 touchIsDown = true;
+                tapDetected = true;
+            }
 
             if (!OnTouchArea())
                 touchIsDown = false;
+
+            yield return null;
+        }
+    }
+
+    IEnumerator TapDeadTime()
+    {
+        float time = 0;
+        float deadTime = 0.01f;
+        while (true)
+        {
+
+            if (tapDetected)
+                time += Time.deltaTime;
+       
+            if (time >= deadTime)
+            {
+                tapDetected = false;
+                time = 0;
+            }
 
             yield return null;
         }
@@ -143,8 +162,8 @@ public class TouchDetection : MonoBehaviour
         diffTouchX = touchX - previousTouchX;
         diffTouchY = touchY - previousTouchY;
 
-        horizontalSlideDetected = (Mathf.Abs(diffTouchX) > 0.25f);
-        verticalSlideDetected = (Mathf.Abs(diffTouchY) > 0.25f);
+        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold);
+        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold);
     }
 
     //Calculate difference in time since a touch was detected
@@ -170,6 +189,7 @@ public class TouchDetection : MonoBehaviour
         {
             case InputType.Tap:
                 StartCoroutine(TapDetection());
+                StartCoroutine(TapDeadTime());
                 break;
             case InputType.DoubleTap:
                 StartCoroutine(DoubleTapDetection());

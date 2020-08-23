@@ -68,6 +68,7 @@ public class PlayerController : Controller
 
     void TouchInputControls()
     {
+        //Movement controls
         if (movementTouchArea.SlideLeft())
         {
             AssociatedPawn.MoveLeft();
@@ -86,6 +87,12 @@ public class PlayerController : Controller
         else if (movementTouchArea.SlideDown())
         {
             AssociatedPawn.MoveDown();
+        }
+
+        //Boosting
+        if (boostTouchArea.Tap())
+        {
+            AssociatedPawn.Boost();
         }
     }
 
