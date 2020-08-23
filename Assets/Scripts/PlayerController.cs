@@ -39,21 +39,21 @@ public class PlayerController : Controller
 
     void InputControls()
     {
-        if (Keymapper.OnKeyDown("left") || movementTouchArea.SlideLeft()){
+        if (Keymapper.OnKeyDown("left")){
             AssociatedPawn.MoveLeft();
         }
 
-        else if (Keymapper.OnKeyDown("right") || movementTouchArea.SlideRight())
+        else if (Keymapper.OnKeyDown("right") )
         {
             AssociatedPawn.MoveRight();
         }
 
-        else if (Keymapper.OnKeyDown("up") || movementTouchArea.SlideUp())
+        if (Keymapper.OnKeyDown("up"))
         {
             AssociatedPawn.MoveUp();
         }
 
-        else if (Keymapper.OnKeyDown("down") || movementTouchArea.SlideDown())
+        else if (Keymapper.OnKeyDown("down"))
         {
             AssociatedPawn.MoveDown();
         }
@@ -61,7 +61,25 @@ public class PlayerController : Controller
 
     void TouchInputControls()
     {
+        if (movementTouchArea.SlideLeft())
+        {
+            AssociatedPawn.MoveLeft();
+        }
 
+        else if (movementTouchArea.SlideRight())
+        {
+            AssociatedPawn.MoveRight();
+        }
+
+        if (movementTouchArea.SlideUp())
+        {
+            AssociatedPawn.MoveUp();
+        }
+
+        else if (movementTouchArea.SlideDown())
+        {
+            AssociatedPawn.MoveDown();
+        }
     }
 
     IEnumerator InputCycle()
@@ -71,6 +89,7 @@ public class PlayerController : Controller
             try
             {
                 InputControls();
+                TouchInputControls();
             }
             catch(Exception e)
             {

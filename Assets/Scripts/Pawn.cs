@@ -44,7 +44,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveLeft()
     {
         currentDirection = Direction.LEFT;
-        setEulerAngle = new Vector3(0f, 0f, 90f);
+        transform.eulerAngles = new Vector3(0f, 0f, 90f);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveRight()
     {
         currentDirection = Direction.RIGHT;
-        setEulerAngle = new Vector3(0f, 0f, 270f);
+        transform.eulerAngles = new Vector3(0f, 0f, 270f);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveUp()
     {
         currentDirection = Direction.UP;
-        setEulerAngle = new Vector3(0f, 0f, 0f);
+        transform.eulerAngles = new Vector3(0f, 0f, 0f);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveDown()
     {
         currentDirection = Direction.DOWN;
-        setEulerAngle =  new Vector3(0f, 0f, 180f);
+        transform.eulerAngles =  new Vector3(0f, 0f, 180f);
     }
 
     /// <summary>

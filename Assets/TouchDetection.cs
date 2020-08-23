@@ -1,6 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,6 +18,9 @@ public class TouchDetection : MonoBehaviour
     [SerializeField]
     private InputType touchInputType;
 
+    [SerializeField, Range(0.1f, 1f)]
+    private float slideDeltaThreshold = 0.1f;
+
     [SerializeField]
     private UnityEvent onTap, onDoubleTap, onSlide;
 
@@ -35,10 +37,7 @@ public class TouchDetection : MonoBehaviour
     private float lastTimeSinceTouch;
     private float timeDiff;
 
-    private bool beginDetectingTap = false;
-    private bool beginDetectingDoubleTap = false;
-    private bool beginDetectingSlide = false;
-
+    private bool validTouch = false;
     private bool doubleTapDetected;
     private bool horizontalSlideDetected;
     private bool verticalSlideDetected;
@@ -55,56 +54,32 @@ public class TouchDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.touchCount == 1)
+        if(touchInputType == InputType.DoubleTap)
+            time += Time.deltaTime;
+    }
+
+    bool OnTouchArea()
+    {
+        if (Input.touchCount > 0)
         {
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             touchX = worldPoint.x;
             touchY = worldPoint.y;
             Vector2 touchPoint = new Vector2(touchX, touchY);
 
-            if(touchArea == Physics2D.OverlapPoint(touchPoint)){
-                //Execute event based on enumerator
-                switch (touchInputType)
-                {
-                    case InputType.Tap:
-                        DetectTap();
-                        break;
-                    case InputType.DoubleTap:
-                        DetectDoubleTap();
-                        break;
-                    case InputType.Slide:
-                        DetectSlide();
-                        break;
-                    default:
-                        break;
-                }
-            } else
+            if (touchArea == Physics2D.OverlapPoint(touchPoint))
             {
-                beginDetectingTap = false;
-                beginDetectingDoubleTap = false;
-                beginDetectingSlide = false;
-                touchIsDown = false;
+                validTouch = true;
             }
+            else
+            {
+                validTouch = false;
+            }
+
+            return validTouch;
         }
-    }
 
-    void DetectTap()
-    {
-        onTap.Invoke();
-        AudioManager.Play("Awesome", 100);
-        beginDetectingTap = true;
-    }
-
-    void DetectDoubleTap()
-    {
-        onDoubleTap.Invoke();
-        beginDetectingDoubleTap = true;
-    }
-
-    void DetectSlide()
-    {
-        onSlide.Invoke();
-        beginDetectingSlide = true;
+        return false;
     }
 
     IEnumerator TouchPositionDeltaDetection()
@@ -113,8 +88,12 @@ public class TouchDetection : MonoBehaviour
         UpdatePreviousTouch();
         while (true)
         {
-            if(beginDetectingSlide)
+            if (OnTouchArea() && !touchIsDown)
                 CalculateTouchDiff();
+
+            if (!OnTouchArea())
+                touchIsDown = false;
+
             yield return new WaitForSecondsRealtime(1 / 4);
             UpdatePreviousTouch();
         }
@@ -124,13 +103,31 @@ public class TouchDetection : MonoBehaviour
     {
         while (true)
         {
-            if(
-                (beginDetectingTap && Input.touchCount > 0) || 
-                (beginDetectingDoubleTap && Input.touchCount > 0)
-              )
+            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown || Input.GetMouseButtonDown(0)) {
+                CalculateTimeDiff();
                 lastTimeSinceTouch = time;
+                touchIsDown = true;
+            }
 
-            CalculateTimeDiff();
+            if (!OnTouchArea())
+                touchIsDown = false;
+
+            yield return null;
+        }
+    }
+
+    IEnumerator TapDetection()
+    {
+        while (true)
+        {
+            if (OnTouchArea() && !touchIsDown && Input.touchCount > 0)
+            {
+                touchIsDown = true;
+                AudioManager.Play("Awesome");
+            }
+            
+            if(!OnTouchArea())
+                touchIsDown = false;
 
             yield return null;
         }
@@ -157,11 +154,19 @@ public class TouchDetection : MonoBehaviour
     void CalculateTimeDiff()
     {
         timeDiff = time - lastTimeSinceTouch;
+        Debug.Log(timeDiff);
         if (!touchIsDown)
         {
             doubleTapDetected = (timeDiff > 0.5f);
-            tapDetected = (timeDiff < 0.5f);
-            touchIsDown = true;
+
+            if (doubleTapDetected)
+            {
+                Debug.Log("Tap Detected");
+                touchIsDown = true;
+            } else
+            {
+                touchIsDown = false;
+            }
         }
     }
 
@@ -173,7 +178,7 @@ public class TouchDetection : MonoBehaviour
         switch (touchInputType)
         {
             case InputType.Tap:
-                StartCoroutine(DoubleTapDetection());
+                StartCoroutine(TapDetection());
                 break;
             case InputType.DoubleTap:
                 StartCoroutine(DoubleTapDetection());
@@ -184,13 +189,13 @@ public class TouchDetection : MonoBehaviour
             default:
                 break;
         }
-        
+
     }
 
     public bool IsTapping() => tapDetected;
-    public bool SlideLeft() => (Mathf.Sign(diffTouchX) == -1);
-    public bool SlideRight() => (Mathf.Sign(diffTouchX) == 1);
-    public bool SlideUp() => (Mathf.Sign(diffTouchY) == -1);
-    public bool SlideDown() => (Mathf.Sign(diffTouchY) == 1);
+    public bool SlideLeft() => (diffTouchX <= -slideDeltaThreshold);
+    public bool SlideRight() => (diffTouchX >= slideDeltaThreshold);
+    public bool SlideUp() => (diffTouchY >= slideDeltaThreshold);
+    public bool SlideDown() => (diffTouchY <= -slideDeltaThreshold);
     public bool IsDoubleTapping => doubleTapDetected;
 }
