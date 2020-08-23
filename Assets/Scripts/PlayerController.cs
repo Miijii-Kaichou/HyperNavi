@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerController : Controller
 {
+    [SerializeField]
+    TouchDetection movementTouchArea, boostTouchArea;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,24 +39,29 @@ public class PlayerController : Controller
 
     void InputControls()
     {
-        if (Keymapper.OnKeyDown("left")){
+        if (Keymapper.OnKeyDown("left") || movementTouchArea.SlideLeft()){
             AssociatedPawn.MoveLeft();
         }
 
-        else if (Keymapper.OnKeyDown("right"))
+        else if (Keymapper.OnKeyDown("right") || movementTouchArea.SlideRight())
         {
             AssociatedPawn.MoveRight();
         }
 
-        else if (Keymapper.OnKeyDown("up"))
+        else if (Keymapper.OnKeyDown("up") || movementTouchArea.SlideUp())
         {
             AssociatedPawn.MoveUp();
         }
 
-        else if (Keymapper.OnKeyDown("down"))
+        else if (Keymapper.OnKeyDown("down") || movementTouchArea.SlideDown())
         {
             AssociatedPawn.MoveDown();
         }
+    }
+
+    void TouchInputControls()
+    {
+
     }
 
     IEnumerator InputCycle()
