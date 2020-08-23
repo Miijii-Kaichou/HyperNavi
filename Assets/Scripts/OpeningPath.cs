@@ -16,5 +16,10 @@ public class OpeningPath : MonoBehaviour
     private bool leftOpen, rightOpen, topOpen, bottomOpen;
 
     [SerializeField]
-    private float xUnit, yUnity;
+    private float xUnit, yUnit;
+
+    public bool IsLeftOpen() => leftOpen;
+    public bool IsRightOpen() => rightOpen;
+    public bool IsTopOpen() => topOpen;
+    public bool IsBottomOpen() => bottomOpen;
 }
