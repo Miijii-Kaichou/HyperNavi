@@ -35,9 +35,9 @@ public class GameManager : MonoBehaviour
     // Handles all gaming things in the game
 
     // The starting speed of the player
-    public static float InitialSpeed { get; private set; } = 0.01f;
+    public static float InitialSpeed { get; private set; } = 5f;
 
-    public static float SpeedRate { get; private set; } = 0.01f;
+    public static float SpeedRate { get; private set; } = 0.1f;
 
     public static float CurrentSpeed { get; private set; } = InitialSpeed;
 
@@ -46,18 +46,23 @@ public class GameManager : MonoBehaviour
     public static int CurrentScore { get; private set; } = 0;
 
     // The max speed of the player
-    public const float maxSpeed = 5f;
+    public const float MaxSpeed = 30f;
 
     public const float FULL_SEC = 1;
 
     public static PlayerPawn player;
+
+    private void Start()
+    {
+        Application.targetFrameRate = 120;
+    }
 
     // Increase the player speed over time;
     static void Accelerate()
     {
  
         CurrentSpeed += SpeedRate;
-        CurrentSpeed = Mathf.Clamp(CurrentSpeed, InitialSpeed, maxSpeed);
+        CurrentSpeed = Mathf.Clamp(CurrentSpeed, InitialSpeed, MaxSpeed);
     }
 
     static IEnumerator AccelerationCycle()

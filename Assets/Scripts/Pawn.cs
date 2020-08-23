@@ -10,6 +10,7 @@ public abstract class Pawn : MonoBehaviour
     Direction currentDirection = default;
     Rigidbody2D rb2d;
 
+    Vector3 setEulerAngle;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +44,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveLeft()
     {
         currentDirection = Direction.LEFT;
-        transform.eulerAngles = new Vector3(0f, 0f, 90f);
+        setEulerAngle = new Vector3(0f, 0f, 90f);
     }
 
     /// <summary>
@@ -52,7 +53,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveRight()
     {
         currentDirection = Direction.RIGHT;
-        transform.eulerAngles = new Vector3(0f, 0f, 270f);
+        setEulerAngle = new Vector3(0f, 0f, 270f);
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveUp()
     {
         currentDirection = Direction.UP;
-        transform.eulerAngles = new Vector3(0f, 0f, 0f);
+        setEulerAngle = new Vector3(0f, 0f, 0f);
     }
 
     /// <summary>
@@ -70,7 +71,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveDown()
     {
         currentDirection = Direction.DOWN;
-        transform.eulerAngles = new Vector3(0f, 0f, 180f);
+        setEulerAngle =  new Vector3(0f, 0f, 180f);
     }
 
     /// <summary>
@@ -89,6 +90,7 @@ public abstract class Pawn : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
+        setEulerAngle = transform.eulerAngles;
         StartCoroutine(Move());
     }
 }
