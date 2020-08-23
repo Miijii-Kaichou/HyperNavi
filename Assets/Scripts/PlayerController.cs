@@ -36,7 +36,21 @@ public class PlayerController : Controller
 
     void InputControls()
     {
-
+        if (Keymapper.OnKeyDown("left")){
+            AssociatedPawn.MoveLeft();
+        }
+        if (Keymapper.OnKeyDown("right"))
+        {
+            AssociatedPawn.MoveRight();
+        }
+        if (Keymapper.OnKeyDown("up"))
+        {
+            AssociatedPawn.MoveUp();
+        }
+        if (Keymapper.OnKeyDown("down"))
+        {
+            AssociatedPawn.MoveDown();
+        }
     }
 
     IEnumerator InputCycle()

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public abstract class Pawn : MonoBehaviour
 {
+    [SerializeField]
+    Controller pawnController;
+
     Direction currentDirection = default;
+    Rigidbody2D rb2d;
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +22,15 @@ public abstract class Pawn : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        Init();
+    }
+
     /// <summary>
     /// Have the pawn move left
     /// </summary>
-    protected virtual void MoveLeft()
+    public virtual void MoveLeft()
     {
         currentDirection = Direction.LEFT;
     }
@@ -29,7 +38,7 @@ public abstract class Pawn : MonoBehaviour
     /// <summary>
     /// Have the pawn move right
     /// </summary>
-    protected virtual void MoveRight()
+    public virtual void MoveRight()
     {
         currentDirection = Direction.RIGHT;
     }
@@ -37,7 +46,7 @@ public abstract class Pawn : MonoBehaviour
     /// <summary>
     /// Have the pawn move up
     /// </summary>
-    protected virtual void MoveUp()
+    public virtual void MoveUp()
     {
         currentDirection = Direction.UP;
     }
@@ -45,13 +54,26 @@ public abstract class Pawn : MonoBehaviour
     /// <summary>
     /// Have the pawn move down
     /// </summary>
-    protected virtual void MoveDown()
+    public virtual void MoveDown()
     {
         currentDirection = Direction.DOWN;
     }
 
-    protected virtual HookToController(Controller controller)
+    /// <summary>
+    /// Hooks a pawn to a controller in order to be controlled
+    /// </summary>
+    /// <param name="controller"></param>
+    protected virtual void HookToController(Controller controller)
     {
-       
+        controller.AssignPawn(this);
+    }
+
+    /// <summary>
+    /// Initialize Pawn
+    /// </summary>
+    private void Init()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        HookToController(pawnController);
     }
 }
