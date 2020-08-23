@@ -39,15 +39,18 @@ public class PlayerController : Controller
         if (Keymapper.OnKeyDown("left")){
             AssociatedPawn.MoveLeft();
         }
-        if (Keymapper.OnKeyDown("right"))
+
+        else if (Keymapper.OnKeyDown("right"))
         {
             AssociatedPawn.MoveRight();
         }
-        if (Keymapper.OnKeyDown("up"))
+
+        else if (Keymapper.OnKeyDown("up"))
         {
             AssociatedPawn.MoveUp();
         }
-        if (Keymapper.OnKeyDown("down"))
+
+        else if (Keymapper.OnKeyDown("down"))
         {
             AssociatedPawn.MoveDown();
         }

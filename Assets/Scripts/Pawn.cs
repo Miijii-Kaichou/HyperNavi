@@ -27,12 +27,23 @@ public abstract class Pawn : MonoBehaviour
         Init();
     }
 
+    IEnumerator Move()
+    {
+        while (true)
+        {
+            Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed);
+            transform.Translate(direction * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
     /// <summary>
     /// Have the pawn move left
     /// </summary>
     public virtual void MoveLeft()
     {
         currentDirection = Direction.LEFT;
+        transform.eulerAngles = new Vector3(0f, 0f, 90f);
     }
 
     /// <summary>
@@ -41,6 +52,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveRight()
     {
         currentDirection = Direction.RIGHT;
+        transform.eulerAngles = new Vector3(0f, 0f, 270f);
     }
 
     /// <summary>
@@ -49,6 +61,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveUp()
     {
         currentDirection = Direction.UP;
+        transform.eulerAngles = new Vector3(0f, 0f, 0f);
     }
 
     /// <summary>
@@ -57,6 +70,7 @@ public abstract class Pawn : MonoBehaviour
     public virtual void MoveDown()
     {
         currentDirection = Direction.DOWN;
+        transform.eulerAngles = new Vector3(0f, 0f, 180f);
     }
 
     /// <summary>
@@ -75,5 +89,6 @@ public abstract class Pawn : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
+        StartCoroutine(Move());
     }
 }
