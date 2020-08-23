@@ -40,7 +40,7 @@ public static class Keymapper
 
     public static void Configure(params Key[] keys)
     {
-        int size = keys.Length;
+        int size = keys.Length + 1;
         
         loggedKeys = new Key[size];
 

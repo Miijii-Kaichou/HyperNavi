@@ -5,25 +5,25 @@ using UnityEngine;
 public abstract class Pawn : MonoBehaviour
 {
     [SerializeField]
-    Controller pawnController;
+    protected Controller pawnController;
 
-    Direction currentDirection = default;
-    Rigidbody2D rb2d;
+    protected Direction currentDirection = default;
+    protected Rigidbody2D rb2d;
 
     Vector3 setEulerAngle;
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         Init();
     }
@@ -32,7 +32,7 @@ public abstract class Pawn : MonoBehaviour
     {
         while (true)
         {
-            Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed);
+            Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed));
             transform.Translate(direction * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
@@ -72,6 +72,14 @@ public abstract class Pawn : MonoBehaviour
     {
         currentDirection = Direction.DOWN;
         transform.eulerAngles =  new Vector3(0f, 0f, 180f);
+    }
+
+    /// <summary>
+    /// Enter into a burst of speed
+    /// </summary>
+    public virtual void Boost()
+    {
+
     }
 
     /// <summary>

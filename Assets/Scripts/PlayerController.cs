@@ -39,6 +39,7 @@ public class PlayerController : Controller
 
     void InputControls()
     {
+        //Movement controls
         if (Keymapper.OnKeyDown("left")){
             AssociatedPawn.MoveLeft();
         }
@@ -56,6 +57,12 @@ public class PlayerController : Controller
         else if (Keymapper.OnKeyDown("down"))
         {
             AssociatedPawn.MoveDown();
+        }
+
+        //Boosting
+        if (Keymapper.OnKeyDown("boost"))
+        {
+            AssociatedPawn.Boost();
         }
     }
 

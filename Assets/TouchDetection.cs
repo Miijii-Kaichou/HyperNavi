@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -54,7 +53,7 @@ public class TouchDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(touchInputType == InputType.DoubleTap)
+        if (touchInputType == InputType.DoubleTap)
             time += Time.deltaTime;
     }
 
@@ -94,7 +93,7 @@ public class TouchDetection : MonoBehaviour
             if (!OnTouchArea())
                 touchIsDown = false;
 
-            yield return new WaitForSecondsRealtime(1 / 4);
+            yield return new WaitForSecondsRealtime(1 / 8);
             UpdatePreviousTouch();
         }
     }
@@ -103,7 +102,8 @@ public class TouchDetection : MonoBehaviour
     {
         while (true)
         {
-            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown || Input.GetMouseButtonDown(0)) {
+            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown)
+            {
                 CalculateTimeDiff();
                 lastTimeSinceTouch = time;
                 touchIsDown = true;
@@ -121,12 +121,9 @@ public class TouchDetection : MonoBehaviour
         while (true)
         {
             if (OnTouchArea() && !touchIsDown && Input.touchCount > 0)
-            {
                 touchIsDown = true;
-                AudioManager.Play("Awesome");
-            }
-            
-            if(!OnTouchArea())
+
+            if (!OnTouchArea())
                 touchIsDown = false;
 
             yield return null;
@@ -154,19 +151,13 @@ public class TouchDetection : MonoBehaviour
     void CalculateTimeDiff()
     {
         timeDiff = time - lastTimeSinceTouch;
-        Debug.Log(timeDiff);
+
         if (!touchIsDown)
         {
-            doubleTapDetected = (timeDiff > 0.5f);
+            doubleTapDetected = (timeDiff < 0.2f && timeDiff > 0.1f);
 
             if (doubleTapDetected)
-            {
-                Debug.Log("Tap Detected");
                 touchIsDown = true;
-            } else
-            {
-                touchIsDown = false;
-            }
         }
     }
 
@@ -192,10 +183,10 @@ public class TouchDetection : MonoBehaviour
 
     }
 
-    public bool IsTapping() => tapDetected;
+    public bool Tap() => tapDetected;
     public bool SlideLeft() => (diffTouchX <= -slideDeltaThreshold);
     public bool SlideRight() => (diffTouchX >= slideDeltaThreshold);
     public bool SlideUp() => (diffTouchY >= slideDeltaThreshold);
     public bool SlideDown() => (diffTouchY <= -slideDeltaThreshold);
-    public bool IsDoubleTapping => doubleTapDetected;
+    public bool DoubleTap() => doubleTapDetected;
 }

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public enum Direction
 {
@@ -34,47 +36,77 @@ public class GameManager : MonoBehaviour
 
     // Handles all gaming things in the game
 
-    // The starting speed of the player
+    //Const for QuarterOfSec
+    const float QUARTER_OF_A_SEC = 0.25f;
+
+    /// <summary>
+    /// The starting speed of the player
+    /// </summary>
     public static float InitialSpeed { get; private set; } = 5f;
 
-    public static float SpeedRate { get; private set; } = 0.1f;
+    /// <summary>
+    /// The rate in which to increase speed
+    /// </summary>
+    public static float SpeedRate { get; private set; } = 0.5f;
 
+    /// <summary>
+    /// The speed added to current speed over a certain rate
+    /// </summary>
+    public static float SpeedAcceleration { get; private set; } = 0.001f;
+
+    /// <summary>
+    /// Current speed of the player
+    /// </summary>
     public static float CurrentSpeed { get; private set; } = InitialSpeed;
 
+    /// <summary>
+    /// Check if the game has started
+    /// </summary>
     public static bool IsGameStarted { get; private set; } = false;
 
+    /// <summary>
+    /// Current score
+    /// </summary>
     public static int CurrentScore { get; private set; } = 0;
 
-    // The max speed of the player
-    public const float MaxSpeed = 30f;
+    //This speed is added to the current speed
+    public static float BoostSpeed { get; private set; } = 0f;
 
+    /// <summary>
+    /// This is the burst value of the boost. This will be assigned to the BoostSpeed
+    /// BoostSpeed will then gradually lerp back to zero
+    /// </summary>
+    public static float BoostBurstValue { get; private set; } = 5f;
+
+    /// <summary>
+    /// The rate the boost speed will deplete in seconds
+    /// </summary>
+    public static float BoostSlowdownRate { get; private set; } = 0.025f;
+
+    /// <summary>
+    ///  How much BoostSpeed you'll loose over a certain rate
+    /// </summary>
+    public static float BoostDepletionValue { get; private set; } = 0.1f;
+
+    /// <summary>
+    /// The max speed of the player
+    /// </summary>
+    public const float MaxSpeed = 50f;
+
+    /// <summary>
+    /// A full second
+    /// </summary>
     public const float FULL_SEC = 1;
 
     public static PlayerPawn player;
 
     private void Start()
     {
-        Application.targetFrameRate = 120;
-    }
+        //Start friction
+        StartCoroutine(Friction());
 
-    // Increase the player speed over time;
-    static void Accelerate()
-    {
- 
-        CurrentSpeed += SpeedRate;
-        CurrentSpeed = Mathf.Clamp(CurrentSpeed, InitialSpeed, MaxSpeed);
-    }
-
-    static IEnumerator AccelerationCycle()
-    {
-        while(true)
-        {
-            // Increase Speed;
-            Accelerate();
-
-            //Every quarter of a second, we'll increase speed
-            yield return new WaitForSeconds(FULL_SEC / 4);
-        }
+        //Testing
+        StartGame();
     }
 
     /// <summary>
@@ -83,6 +115,32 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         IsGameStarted = true;
-        StartCoroutine(AccelerationCycle());
+        StartCoroutine(Accelerate());
+    }
+
+    /// <summary>
+    /// Begin boost
+    /// </summary>
+    public static void BurstIntoBoost()
+    {
+        BoostSpeed = BoostBurstValue;
+    }
+
+    IEnumerator Friction()
+    {
+        while (true)
+        {
+            BoostSpeed = Mathf.Lerp(BoostSpeed, 0f, BoostDepletionValue);
+            yield return new WaitForSeconds(BoostSlowdownRate);
+        }
+    }
+
+    IEnumerator Accelerate()
+    {
+        while (true)
+        {
+            CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
+            yield return new WaitForSeconds(SpeedRate);
+        }
     }
 }

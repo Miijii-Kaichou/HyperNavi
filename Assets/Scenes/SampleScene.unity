@@ -8740,8 +8740,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 832.28, y: -0.00014602}
-  m_SizeDelta: {x: 400, y: 400}
+  m_AnchoredPosition: {x: 804.78, y: 5.0715}
+  m_SizeDelta: {x: 455, y: 455}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &82705932
 MonoBehaviour:
@@ -8757,6 +8757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchArea: {fileID: 82705933}
   touchInputType: 0
+  slideDeltaThreshold: 0.1
   onTap:
     m_PersistentCalls:
       m_Calls: []
@@ -8779,7 +8780,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.6085205, y: 0.5246353}
+  m_Offset: {x: 0.59439087, y: -8.019859}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -8790,7 +8791,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 395.96918, y: 400.14197}
+  m_Size: {x: 453.63843, y: 447.13647}
   m_EdgeRadius: 0
 --- !u!114 &82705934
 MonoBehaviour:
@@ -17718,8 +17719,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00048828, y: -302.18988}
-  m_SizeDelta: {x: 2064.5593, y: 399.9998}
+  m_AnchoredPosition: {x: -0.00048828, y: -279.8}
+  m_SizeDelta: {x: 2064.5593, y: 444.8571}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &356162358
 GameObject:
@@ -26703,7 +26704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3b41bad91c6ed4ca542083a266e002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dampTime: 0.15
+  dampTime: 10
   offset: {x: 0, y: 0, z: 0}
   targetTranform: {fileID: 463254633}
   zDepth: 0
@@ -26968,8 +26969,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -832.27954, y: -0.00012207031}
-  m_SizeDelta: {x: 400, y: 400}
+  m_AnchoredPosition: {x: -804.78, y: 5.0715}
+  m_SizeDelta: {x: 455, y: 455}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &905907881
 MonoBehaviour:
@@ -26985,6 +26986,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchArea: {fileID: 905907882}
   touchInputType: 2
+  slideDeltaThreshold: 0.2
   onTap:
     m_PersistentCalls:
       m_Calls: []
@@ -27007,7 +27009,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.6085205, y: 0.5246353}
+  m_Offset: {x: 0.59439087, y: -8.019859}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -27018,7 +27020,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 395.96918, y: 400.14197}
+  m_Size: {x: 453.63843, y: 447.13647}
   m_EdgeRadius: 0
 --- !u!114 &905907883
 MonoBehaviour:
