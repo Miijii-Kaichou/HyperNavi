@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class OpeningPath : MonoBehaviour
 {
-
+    [SerializeField]
+    SignalLayoutSpawn signalTrigger;
+    
     // A component used to specify what paths are open
     // This is used to connect layout types
     // For example, if we have a layout with a left opening, we need to
@@ -22,4 +24,8 @@ public class OpeningPath : MonoBehaviour
     public bool IsRightOpen() => rightOpen;
     public bool IsTopOpen() => topOpen;
     public bool IsBottomOpen() => bottomOpen;
+
+    public Vector3 GetSignalTriggerPosition() => signalTrigger.transform.localPosition;
+    public float GetXUnit() => xUnit;
+    public float GetYUnit() => yUnit;
 }

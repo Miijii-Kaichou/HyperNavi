@@ -231,12 +231,15 @@ public class TouchDetection : MonoBehaviour
     {
         while (true)
         {
-            testMeshProUGUI.text = string.Format("TouchX: {0}\n" +
-                "TouchY: {1}\n" +
-                "PreviousTouchX: {2}\n" +
-                "PreviousTouchY: {3}\n" +
-                "diffTouchX: {4}\n" +
-                "diffTouchY: {5}\n", touchX, touchY, previousTouchX, previousTouchY, diffTouchX, diffTouchY);
+            if (testMeshProUGUI != null)
+            {
+                testMeshProUGUI.text = string.Format("TouchX: {0}\n" +
+                    "TouchY: {1}\n" +
+                    "PreviousTouchX: {2}\n" +
+                    "PreviousTouchY: {3}\n" +
+                    "diffTouchX: {4}\n" +
+                    "diffTouchY: {5}\n", touchX, touchY, previousTouchX, previousTouchY, diffTouchX, diffTouchY);
+            }
             yield return new WaitForSeconds(1 / 64);
         }
     }

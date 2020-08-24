@@ -17,22 +17,6 @@ public class GameManager : MonoBehaviour
 {
     
     private static GameManager Instance;
-    public GameManager instance {
-        get
-        {
-            return Instance;
-        }
-
-        private set
-        {
-            if(Instance == null)
-            {
-                instance = this;
-                Instance = instance;
-                DontDestroyOnLoad(Instance);
-            }
-        }
-    }
 
     // Handles all gaming things in the game
 
@@ -100,13 +84,22 @@ public class GameManager : MonoBehaviour
 
     public static PlayerPawn player;
 
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        }    else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
         //Start friction
         StartCoroutine(Friction());
-
-        //Testing
-        StartGame();
     }
 
     /// <summary>
@@ -125,6 +118,8 @@ public class GameManager : MonoBehaviour
     {
         BoostSpeed = BoostBurstValue;
     }
+
+    public static Direction GetPlayerDirection() => player.GetDirection();
 
     IEnumerator Friction()
     {

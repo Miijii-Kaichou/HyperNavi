@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : Controller
@@ -107,7 +106,7 @@ public class PlayerController : Controller
             }
             catch(Exception e)
             {
-                Debug.Log("Input Controls threw an exception: " + e.Message);
+                Debug.LogError("Input Controls threw an exception: " + e.Message);
             }
             yield return null;
         }

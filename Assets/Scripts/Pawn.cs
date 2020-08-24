@@ -7,7 +7,7 @@ public abstract class Pawn : MonoBehaviour
     [SerializeField]
     protected Controller pawnController;
 
-    protected Direction currentDirection = default;
+    protected Direction currentDirection = Direction.UP;
     protected Rigidbody2D rb2d;
 
     Vector3 setEulerAngle;
@@ -81,6 +81,8 @@ public abstract class Pawn : MonoBehaviour
     {
 
     }
+
+    public Direction GetDirection() => currentDirection;
 
     /// <summary>
     /// Hooks a pawn to a controller in order to be controlled

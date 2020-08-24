@@ -1,13 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static Extensions;
 using Random = UnityEngine.Random;
 
+public enum Side
+{
+    LEFT,
+    RIGHT,
+    TOP,
+    BOTTOM
+}
 public class ProceduralGenerator : MonoBehaviour
 {
     //All Environmental Layers
     public GameObject[] environmentalLayoutPrefabs;
+
+    public ObjectPooler objectPooler;
+
+    public OpeningPath currentLayout;
+
+    public OpeningPath previousLayout;
 
     const string ENVIRONMENT_LAYOUT_TAG = "EnvironmentLayout";
 
@@ -24,7 +38,7 @@ public class ProceduralGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -32,44 +46,91 @@ public class ProceduralGenerator : MonoBehaviour
     /// </summary>
     void GetAllEnvironmentalLayouts()
     {
-        GameObject[] foundChildren = transform.parent.GetComponentsInChildren<GameObject>();
+        GameObject[] foundChildren = objectPooler.pooledObjects.ToArray();
 
         //Check if under Environmental Tag
-        foreach(GameObject child in foundChildren)
+        foreach (GameObject child in foundChildren)
         {
             //If even 1 child doesn't match the tag, get out of the function
-            if (!child.CompareTag(ENVIRONMENT_LAYOUT_TAG)) return;        
+            if (!child.CompareTag(ENVIRONMENT_LAYOUT_TAG))
+            {
+                Debug.Log("No Environment Tag...");
+            }
         }
 
         environmentalLayoutPrefabs = foundChildren;
     }
 
     //Generate a layout and place it some many units relative to the active layout
-    void GenerateLayout()
+    public void GenerateLayout(Side side, OpeningPath relativePath)
     {
+        OpeningPath path = null;
+        float horSign = 0;
+        float verSign = 0;
+        switch (side)
+        {
+            case Side.LEFT:
+                path = GetOpeningPath(side);
+                horSign = 1;
+                break;
+            case Side.RIGHT:
+                path = GetOpeningPath(side);
+                horSign = -1;
+                break;
+            case Side.TOP:
+                path = GetOpeningPath(side);
+                verSign = -1;
+                break;
+            case Side.BOTTOM:
+                path = GetOpeningPath(side);
+                verSign = 1;
+                break;
+            default:
+                return;
+        }
 
+        //Now we spawn this path so many units from the trigger poinnt
+        if (!path.gameObject.activeInHierarchy)
+        {
+            path.gameObject.SetActive(true);
+            path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 1f);
+            path.transform.rotation = Quaternion.identity;
+        }
     }
 
-    
+
     /// <summary>
     /// Iterate through the child layouts, and get an opening based on parameters
     /// If more than one with the amount of openings, a random layout will be chosen
     /// </summary>
     /// <returns></returns>
-    OpeningPath GetOpeningPath(bool leftOpened, bool rightOpened, bool topOpened, bool bottomOpened)
+    OpeningPath GetOpeningPath(Side side)
     {
         OpeningPath[] paths = environmentalLayoutPrefabs.GetPathsFromPrefab();
         List<OpeningPath> matchingPaths = new List<OpeningPath>();
-        foreach(OpeningPath path in paths)
+        foreach (OpeningPath path in paths)
         {
-            if(
-                path.IsLeftOpen() == leftOpened ||
-                path.IsRightOpen() == rightOpened ||
-                path.IsTopOpen() == topOpened ||
-                path.IsBottomOpen() == bottomOpened
-                )
+            switch (side)
             {
-                matchingPaths.Add(path);
+                case Side.LEFT:
+                    if (path.IsLeftOpen())
+                        matchingPaths.Add(path);
+                    break;
+
+                case Side.RIGHT:
+                    if (path.IsRightOpen())
+                        matchingPaths.Add(path);
+                    break;
+                case Side.TOP:
+                    if (path.IsTopOpen())
+                        matchingPaths.Add(path);
+                    break;
+                case Side.BOTTOM:
+                    if (path.IsBottomOpen())
+                        matchingPaths.Add(path);
+                    break;
+                default:
+                    break;
             }
         }
 
