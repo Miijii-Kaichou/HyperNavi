@@ -100,6 +100,9 @@ public class GameManager : MonoBehaviour
     {
         //Start friction
         StartCoroutine(Friction());
+
+        //Test Again
+        StartGame();
     }
 
     /// <summary>

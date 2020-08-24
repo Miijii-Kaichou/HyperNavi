@@ -9,25 +9,27 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     OpeningPath layout;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnEnable()
     {
         generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-        Debug.Log(generator != null ? "We got it!" : "We don't got it. Try again.");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+    {
+        try
+        {
+            PlayerPawn player = collision.GetComponent<PlayerPawn>();
+
+            if(player != null) 
+                generator.previousLayout = generator.currentLayout ?? (generator.currentLayout = layout);
+        }
+        catch
+        {
+            //Do nothing
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
     {
         //Signal generator to generate a layout based on the player's direction
         try {
@@ -35,7 +37,8 @@ public class SignalLayoutSpawn : MonoBehaviour
             if (player != null)
             {
                 Side side = default;
-                generator.previousLayout = generator.currentLayout;
+                
+                generator.previousLayout.gameObject.SetActive(false);
                 generator.currentLayout = layout;
                 switch (player.GetDirection())
                 {

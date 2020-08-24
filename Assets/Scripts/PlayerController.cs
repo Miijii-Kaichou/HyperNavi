@@ -7,6 +7,9 @@ public class PlayerController : Controller
     [SerializeField]
     TouchDetection movementTouchArea, boostTouchArea;
 
+    [SerializeField]
+    Sensor[] sensors;
+
     // Start is called before the first frame update
     void Start()
     {
