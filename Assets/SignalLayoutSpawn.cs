@@ -10,9 +10,14 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     OpeningPath layout;
 
+    [SerializeField]
+    bool turningPoint = true;
+
     bool receiveInput = false;
 
     float distance = 0f;
+
+
 
     private void OnEnable()
     {
@@ -21,8 +26,7 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     void CalculateDistance(Transform a, Transform b)
     {
-        distance = Vector3.Distance(a.position, b.position);
-        Debug.Log("Distance between Trigger Point and Player: " + distance);
+        distance = Vector3.Distance(b.position, a.position);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -32,7 +36,7 @@ public class SignalLayoutSpawn : MonoBehaviour
             PlayerPawn player = collision.GetComponent<PlayerPawn>();
             if(player != null)
             {
-                player.AllowTurn();
+                if (turningPoint) player.AllowTurn();
                 receiveInput = true;
             }
         } catch(Exception e)

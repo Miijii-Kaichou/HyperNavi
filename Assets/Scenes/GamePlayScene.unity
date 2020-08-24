@@ -1428,6 +1428,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375290, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.02544713
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375290, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.9761218
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375290, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: -0.003181085
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375290, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.0063616
+      objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_BodyType
@@ -1458,6 +1478,11 @@ PrefabInstance:
       propertyPath: boostTouchArea
       value: 
       objectReference: {fileID: 82705932}
+    - target: {fileID: 1711948332822375294, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: wallDetector
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2101355186547669696, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsTrigger
@@ -1477,6 +1502,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8929064188371464651, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8af83a3c1a554e4c954f1bd1ef457ec, type: 3}
@@ -6001,6 +6031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layout: {fileID: 4365486017063413541}
+  turningPoint: 0
 --- !u!4 &8705231759721928347
 Transform:
   m_ObjectHideFlags: 0

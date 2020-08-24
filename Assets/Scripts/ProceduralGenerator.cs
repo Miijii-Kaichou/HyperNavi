@@ -127,10 +127,12 @@ public class ProceduralGenerator : MonoBehaviour
                         if (path.GetComponent<OpeningPath>().IsRightOpen())
                             matchingPaths.Add(path.GetComponent<OpeningPath>());
                         break;
+
                     case Side.TOP:
                         if (path.GetComponent<OpeningPath>().IsTopOpen())
                             matchingPaths.Add(path.GetComponent<OpeningPath>());
                         break;
+
                     case Side.BOTTOM:
                         if (path.GetComponent<OpeningPath>().IsBottomOpen())
                             matchingPaths.Add(path.GetComponent<OpeningPath>());

@@ -1,11 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerPawn : Pawn
 {
+    [SerializeField]
+    private WallDetector wallDetector;
+
     private bool hasContactedWall = false;
 
-    private  bool canTurn = false;
+    private bool canTurn = false;
+
+    protected override void Update()
+    {
+
+    }
 
     /// <summary>
     /// Have the pawn move left
@@ -70,5 +80,17 @@ public class PlayerPawn : Pawn
     /// Prohibit the player from turning
     /// </summary>
     public void ProhibitTurn() => canTurn = false;
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        try
+        {
+            hasContactedWall = collision.collider.GetComponent<TilemapCollider2D>() != null;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
 
 }

@@ -4417,6 +4417,11 @@ PrefabInstance:
       propertyPath: layout
       value: 
       objectReference: {fileID: 8858873354170538340}
+    - target: {fileID: 5926104575645599912, guid: e56fb3a1e41f6c647a0a4a882a07f8df,
+        type: 3}
+      propertyPath: turningPoint
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6697895174805877704, guid: e56fb3a1e41f6c647a0a4a882a07f8df,
         type: 3}
       propertyPath: m_LocalPosition.x

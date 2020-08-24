@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The starting speed of the player
     /// </summary>
-    public static float InitialSpeed { get; private set; } = 5f;
+    public static float InitialSpeed { get; private set; } = 500f;
 
     /// <summary>
     /// The rate in which to increase speed
@@ -98,11 +98,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //Start friction
-        StartCoroutine(Friction());
-
         //Test Again
-        StartGame();
+        //StartGame();
     }
 
     /// <summary>
@@ -111,7 +108,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         IsGameStarted = true;
-        StartCoroutine(Accelerate());
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
+        StartCoroutine(GameLoop());
     }
 
     /// <summary>
@@ -122,7 +120,10 @@ public class GameManager : MonoBehaviour
         BoostSpeed = BoostBurstValue;
     }
 
-    public static Direction GetPlayerDirection() => player.GetDirection();
+    public static void DetermineTiming()
+    {
+
+    }
 
     IEnumerator Friction()
     {
@@ -139,6 +140,23 @@ public class GameManager : MonoBehaviour
         {
             CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
             yield return new WaitForSeconds(SpeedRate);
+        }
+    }
+
+    IEnumerator GameLoop()
+    {
+        //Start friction
+        StartCoroutine(Friction());
+
+        //Start acceleration
+        StartCoroutine(Accelerate());
+
+        while (true)
+        {
+            if (player != null && player.HasContactedWall())
+                player.gameObject.SetActive(false);
+
+            yield return null;
         }
     }
 }
