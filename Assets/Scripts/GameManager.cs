@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The starting speed of the player
     /// </summary>
-    public static float InitialSpeed { get; private set; } = 500f;
+    public static float InitialSpeed { get; private set; } = 5f;
 
     /// <summary>
     /// The rate in which to increase speed

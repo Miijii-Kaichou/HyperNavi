@@ -70,27 +70,43 @@ public class ProceduralGenerator : MonoBehaviour
         OpeningPath path = null;
         float horSign = 0;
         float verSign = 0;
-
-        switch (side)
+        if (!onPreview)
         {
-            case Side.LEFT:
-                path = GetOpeningPath(side);
-                horSign = 1;
-                break;
-            case Side.RIGHT:
-                path = GetOpeningPath(side);
-                horSign = -1;
-                break;
-            case Side.TOP:
-                path = GetOpeningPath(side);
-                verSign = -1;
-                break;
-            case Side.BOTTOM:
-                path = GetOpeningPath(side);
-                verSign = 1;
-                break;
-            default:
-                break;
+            switch (side)
+            {
+                //I need a layout with left side opened
+                case Side.LEFT:
+                    path = GetOpeningPath(side);
+                    horSign = 1;
+                    break;
+
+                //I need a layout with right side opened
+                case Side.RIGHT:
+                    path = GetOpeningPath(side);
+                    horSign = -1;
+                    break;
+
+                //I need a layout with top side opened
+                case Side.TOP:
+                    path = GetOpeningPath(side);
+                    verSign = -1;
+                    break;
+
+                //I need a layout with bottom side opened
+                case Side.BOTTOM:
+                    path = GetOpeningPath(side);
+                    verSign = 1;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            side = Side.BOTTOM;
+            path = GetOpeningPath(side);
+            verSign = 1;
         }
 
         //Now we spawn this path so many units from the trigger poinnt
@@ -144,7 +160,14 @@ public class ProceduralGenerator : MonoBehaviour
 
             // Now, return a random matching path
             int value = Random.Range(0, matchingPaths.Count - 1);
-            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)",string.Empty), out OpeningPath pooledPath);
+
+            OpeningPath pooledPath;
+
+            if (!onPreview)
+                ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out pooledPath);
+            else
+                ObjectPooler.GetMember("Layout000Grid", out pooledPath);
+
             return pooledPath;
         }
         catch (Exception e)

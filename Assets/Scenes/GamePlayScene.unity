@@ -1003,27 +1003,27 @@ MonoBehaviour:
     size: 4
     prefab: {fileID: 1750561396474468973, guid: 033451229e332944f9b10a9b792b354b,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout001Grid
     size: 4
     prefab: {fileID: 8025712621812156363, guid: 9e372971f96066f4591707b409bdf34a,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout002Grid
     size: 4
     prefab: {fileID: 5553840196004580031, guid: 4bca41b2fb7c31b4f8bd7110930ffe31,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout003Grid
     size: 4
     prefab: {fileID: 4582031480643956398, guid: d251beda24a0efc4bbcf635369dda1c3,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout004Grid
     size: 4
     prefab: {fileID: 6109971479521678614, guid: 588a718717f9e2e409e0d385cddc17fe,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout005Grid
     size: 4
     prefab: {fileID: 3805002598767380842, guid: 53e0e6804885c2042a0efd4206077033,
@@ -1038,22 +1038,22 @@ MonoBehaviour:
     size: 4
     prefab: {fileID: 6412160669615937581, guid: a98857af68a840945a0e2be5fc2504fb,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout008Grid
     size: 4
     prefab: {fileID: 7709928633715735378, guid: 327c519ec80bd1c48a96d7bcd870da2f,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout009Grid
     size: 4
     prefab: {fileID: 2113676513684635851, guid: f95c15d96a486bb49856db6604b6593a,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   - name: Layout010Grid
     size: 4
     prefab: {fileID: 5108516589255240427, guid: 89882e3d10d142745938dc55cb3f3fbd,
       type: 3}
-    expandPool: 0
+    expandPool: 1
   pooledObjects: []
   spawnInParent: 1
   poolIndex: 0
@@ -1237,8 +1237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environmentalLayoutPrefabs: []
   objectPooler: {fileID: 1613675066}
-  currentLayout: {fileID: 0}
-  previousLayout: {fileID: 0}
+  currentLayout: {fileID: 4365486017063413541}
+  previousLayout: {fileID: 4365486017063413541}
   dontDeactivate: 1
   onPreview: 1
 --- !u!58 &311740539708426664
