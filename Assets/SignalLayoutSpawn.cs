@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SignalLayoutSpawn : MonoBehaviour
 {
@@ -14,21 +15,6 @@ public class SignalLayoutSpawn : MonoBehaviour
         generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        try
-        {
-            PlayerPawn player = collision.GetComponent<PlayerPawn>();
-
-            if(player != null) 
-                generator.previousLayout = generator.currentLayout ?? (generator.currentLayout = layout);
-        }
-        catch
-        {
-            //Do nothing
-        }
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         //Signal generator to generate a layout based on the player's direction
@@ -37,9 +23,16 @@ public class SignalLayoutSpawn : MonoBehaviour
             if (player != null)
             {
                 Side side = default;
-                
-                generator.previousLayout.gameObject.SetActive(false);
+
+                generator.previousLayout = generator.currentLayout;
+
+                if (!generator.dontDeactivate && generator.previousLayout != null)
+                    generator.previousLayout.gameObject.SetActive(false);
+
                 generator.currentLayout = layout;
+
+                generator.dontDeactivate = false;
+
                 switch (player.GetDirection())
                 {
                     case Direction.LEFT:
@@ -69,13 +62,12 @@ public class SignalLayoutSpawn : MonoBehaviour
                     default:
                         break;
                 }
-
-                
             }
         }
-        catch
+        catch(Exception e)
         {
             //Do nothing
+            Debug.LogError("If you get this error for some reason, please check it out...: " + e.Message);
         }
     }
 }

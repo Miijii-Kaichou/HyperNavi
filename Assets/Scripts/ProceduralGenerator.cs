@@ -23,6 +23,8 @@ public class ProceduralGenerator : MonoBehaviour
 
     public OpeningPath previousLayout;
 
+    public bool dontDeactivate = true;
+
     const string ENVIRONMENT_LAYOUT_TAG = "EnvironmentLayout";
 
     // Toggling this on will only use Layout's 0 and 1 in a loop
@@ -67,34 +69,40 @@ public class ProceduralGenerator : MonoBehaviour
         OpeningPath path = null;
         float horSign = 0;
         float verSign = 0;
-        switch (side)
+        while (path == null)
         {
-            case Side.LEFT:
-                path = GetOpeningPath(side);
-                horSign = 1;
-                break;
-            case Side.RIGHT:
-                path = GetOpeningPath(side);
-                horSign = -1;
-                break;
-            case Side.TOP:
-                path = GetOpeningPath(side);
-                verSign = -1;
-                break;
-            case Side.BOTTOM:
-                path = GetOpeningPath(side);
-                verSign = 1;
-                break;
-            default:
-                return;
+            switch (side)
+            {
+                case Side.LEFT:
+                    path = GetOpeningPath(side);
+                    horSign = 1;
+                    break;
+                case Side.RIGHT:
+                    path = GetOpeningPath(side);
+                    horSign = -1;
+                    break;
+                case Side.TOP:
+                    path = GetOpeningPath(side);
+                    verSign = -1;
+                    break;
+                case Side.BOTTOM:
+                    path = GetOpeningPath(side);
+                    verSign = 1;
+                    break;
+                default:
+                    break;
+            }
         }
 
         //Now we spawn this path so many units from the trigger poinnt
-        if (!path.gameObject.activeInHierarchy)
+        if (path != null && !path.gameObject.activeInHierarchy)
         {
             path.gameObject.SetActive(true);
             path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 1f);
             path.transform.rotation = Quaternion.identity;
+        } else
+        {
+            Debug.Log("If you got this, apparently path is null...");
         }
     }
 
@@ -135,7 +143,7 @@ public class ProceduralGenerator : MonoBehaviour
         }
 
         // Now, return a random matching path
-        int value = Random.Range(0, matchingPaths.Count - 1);
+        int value = Random.Range(0, matchingPaths.Count-1);
         return matchingPaths[value];
     }
 }

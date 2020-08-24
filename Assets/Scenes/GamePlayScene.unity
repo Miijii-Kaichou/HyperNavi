@@ -1196,6 +1196,7 @@ MonoBehaviour:
   objectPooler: {fileID: 1613675066}
   currentLayout: {fileID: 0}
   previousLayout: {fileID: 0}
+  dontDeactivate: 1
   onPreview: 1
 --- !u!58 &311740539708426664
 CircleCollider2D:
@@ -1246,7 +1247,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750561396465999662}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1266,9 +1267,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1898618192}
     m_Modifications:
+    - target: {fileID: 80076548800628059, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 142294627378014619, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1373906285326120024, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1673649584254615211, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456365, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Autodestruct
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375288, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
@@ -1344,17 +1370,22 @@ PrefabInstance:
     - target: {fileID: 2101355186547669696, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5430225517358869847, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5703843838390503575, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7125655591091474939, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8af83a3c1a554e4c954f1bd1ef457ec, type: 3}
