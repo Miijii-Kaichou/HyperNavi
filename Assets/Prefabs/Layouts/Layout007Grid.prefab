@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5752220207546749276}
   - component: {fileID: 5752220207546749275}
   - component: {fileID: 2997242552317093949}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: Layout007
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -4328,7 +4328,7 @@ GameObject:
   - component: {fileID: 3349984843040698962}
   - component: {fileID: 6570223769962706580}
   - component: {fileID: 8331305009448882288}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: Layout007Grid
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -4458,6 +4458,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LayoutSpawnTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 7580482404534787393, guid: e56fb3a1e41f6c647a0a4a882a07f8df,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e56fb3a1e41f6c647a0a4a882a07f8df, type: 3}

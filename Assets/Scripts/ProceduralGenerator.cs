@@ -142,7 +142,8 @@ public class ProceduralGenerator : MonoBehaviour
 
             // Now, return a random matching path
             int value = Random.Range(0, matchingPaths.Count - 1);
-            return matchingPaths[value];
+            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)",string.Empty), out OpeningPath pooledPath);
+            return pooledPath;
         }
         catch (Exception e)
         {
