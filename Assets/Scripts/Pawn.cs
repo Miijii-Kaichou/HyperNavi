@@ -10,6 +10,8 @@ public abstract class Pawn : MonoBehaviour
     protected Direction currentDirection = Direction.UP;
     protected Rigidbody2D rb2d;
 
+    
+
     Vector3 setEulerAngle;
     // Start is called before the first frame update
     protected virtual void Start()
@@ -82,7 +84,11 @@ public abstract class Pawn : MonoBehaviour
 
     }
 
-    public Direction GetDirection() => currentDirection;
+    /// <summary>
+    /// Get the current direction of the player
+    /// </summary>
+    /// <returns></returns>
+    public virtual Direction GetDirection() => currentDirection;
 
     /// <summary>
     /// Hooks a pawn to a controller in order to be controlled

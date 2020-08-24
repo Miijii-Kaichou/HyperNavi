@@ -1274,7 +1274,7 @@ GameObject:
   - component: {fileID: 9202932663549929056}
   - component: {fileID: 5495224331078666238}
   - component: {fileID: 4365486017063413541}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: Layout000Obj
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -1539,7 +1539,7 @@ GameObject:
   - component: {fileID: 8459447590518204744}
   - component: {fileID: 8503155309783264763}
   - component: {fileID: 311740539708426664}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: LayoutSpawnTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 173a5eb1d13d68d4ea39f3e5d2c6e2c0, type: 3}
@@ -5966,7 +5966,7 @@ GameObject:
   - component: {fileID: 6860303794245898083}
   - component: {fileID: 6860303794245898084}
   - component: {fileID: 2403083971729911115}
-  m_Layer: 9
+  m_Layer: 2
   m_Name: Layout000
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}

@@ -15,13 +15,6 @@ public class PlayerController : Controller
     {
         Init();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     
     /// <summary>
     /// Initialize Player Controller
@@ -41,60 +34,87 @@ public class PlayerController : Controller
 
     void InputControls()
     {
+        PlayerPawn player = AssociatedPawn as PlayerPawn;
         //Movement controls
-        if (Keymapper.OnKeyDown("left")){
-            AssociatedPawn.MoveLeft();
+        if (Keymapper.OnKeyDown("left") &&
+            player.GetDirection() != Direction.RIGHT &&
+            player.CanTurn())
+        {
+            player.MoveLeft();
+            player.ProhibitTurn();
         }
 
-        else if (Keymapper.OnKeyDown("right") )
+        else if (Keymapper.OnKeyDown("right") &&
+            player.GetDirection() != Direction.LEFT &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveRight();
+            player.MoveRight();
+            player.ProhibitTurn();
         }
 
-        else if (Keymapper.OnKeyDown("up"))
+        else if (Keymapper.OnKeyDown("up") &&
+            player.GetDirection() != Direction.DOWN &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveUp();
+            player.MoveUp();
+            player.ProhibitTurn();
         }
 
-        else if (Keymapper.OnKeyDown("down"))
+        else if (Keymapper.OnKeyDown("down") &&
+            player.GetDirection() != Direction.UP &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveDown();
+            player.MoveDown();
+            player.ProhibitTurn();
         }
 
         //Boosting
         if (Keymapper.OnKeyDown("boost"))
         {
-            AssociatedPawn.Boost();
+            player.Boost();
         }
     }
 
     void TouchInputControls()
     {
+        PlayerPawn player = AssociatedPawn as PlayerPawn;
         //Movement controls
-        if (movementTouchArea.SlideLeft())
+        if (movementTouchArea.SlideLeft() &&
+            player.GetDirection() != Direction.RIGHT &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveLeft();
+            player.MoveLeft();
+            player.ProhibitTurn();
         }
 
-        else if (movementTouchArea.SlideRight())
+        else if (movementTouchArea.SlideRight() &&
+            player.GetDirection() != Direction.LEFT &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveRight();
+            player.MoveRight();
+            player.ProhibitTurn();
         }
 
-        else if (movementTouchArea.SlideUp())
+        else if (movementTouchArea.SlideUp() &&
+            player.GetDirection() != Direction.DOWN &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveUp();
+            player.MoveUp();
+            player.ProhibitTurn();
         }
 
-        else if (movementTouchArea.SlideDown())
+        else if (movementTouchArea.SlideDown() &&
+            player.GetDirection() != Direction.UP &&
+            player.CanTurn())
         {
-            AssociatedPawn.MoveDown();
+            player.MoveDown();
+            player.ProhibitTurn();
         }
 
         //Boosting
         if (boostTouchArea.Tap())
         {
-            AssociatedPawn.Boost();
+            player.Boost();
         }
     }
 

@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The max speed of the player
     /// </summary>
-    public const float MaxSpeed = 50f;
+    public const float MaxSpeed = 30f;
 
     /// <summary>
     /// A full second

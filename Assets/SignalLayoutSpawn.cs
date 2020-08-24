@@ -10,9 +10,49 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     OpeningPath layout;
 
+    bool receiveInput = false;
+
+    float distance = 0f;
+
     private void OnEnable()
     {
         generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
+    }
+
+    void CalculateDistance(Transform a, Transform b)
+    {
+        distance = Vector3.Distance(a.position, b.position);
+        Debug.Log("Distance between Trigger Point and Player: " + distance);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        try
+        {
+            PlayerPawn player = collision.GetComponent<PlayerPawn>();
+            if(player != null)
+            {
+                player.AllowTurn();
+                receiveInput = true;
+            }
+        } catch(Exception e)
+        {
+            throw e;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        try
+        {
+            PlayerPawn player = collision.GetComponent<PlayerPawn>();
+            if (player != null)
+                CalculateDistance(transform, player.transform);
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -63,6 +103,7 @@ public class SignalLayoutSpawn : MonoBehaviour
                         break;
                 }
             }
+            receiveInput = false;
         }
         catch(Exception e)
         {

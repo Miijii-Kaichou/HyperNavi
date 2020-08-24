@@ -147,7 +147,7 @@ public class ProceduralGenerator : MonoBehaviour
         }
         catch (Exception e)
         {
-
+            Debug.LogError("Couldn't Get Path Layout.");
             throw e;
         }
     }

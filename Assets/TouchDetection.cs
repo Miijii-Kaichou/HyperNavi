@@ -42,7 +42,6 @@ public class TouchDetection : MonoBehaviour
     private float lastTimeSinceTouch;
     private float timeDiff;
 
-    private bool validTouch = false;
     private bool doubleTapDetected;
     private bool horizontalSlideDetected;
     private bool verticalSlideDetected;
