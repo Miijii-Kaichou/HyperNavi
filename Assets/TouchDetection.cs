@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,6 +13,9 @@ public class TouchDetection : MonoBehaviour
     }
 
     public int touchId = 0;
+
+    [SerializeField]
+    TextMeshProUGUI testMeshProUGUI;
 
     [SerializeField]
     private Collider2D touchArea;
@@ -46,6 +50,8 @@ public class TouchDetection : MonoBehaviour
 
     private bool touchIsDown = false;
 
+    public const float RESET = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +61,7 @@ public class TouchDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         if (touchInputType == InputType.DoubleTap)
+        if (touchInputType == InputType.DoubleTap)
             time += Time.deltaTime;
     }
 
@@ -63,12 +69,16 @@ public class TouchDetection : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            touchX = worldPoint.x;
-            touchY = worldPoint.y;
-            Vector2 touchPoint = new Vector2(touchX, touchY);
+            foreach (Touch touch in Input.touches)
+            {
+                Vector3 viewportPoint = Camera.main.ScreenToViewportPoint(touch.position);
+                touchX = viewportPoint.x;
+                touchY = viewportPoint.y;
+                Vector2 touchPoint = new Vector2(touchX, touchY);
 
-            return (touchArea == Physics2D.OverlapPoint(touchPoint));
+                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint)))
+                    return true;
+            }
         }
 
         return false;
@@ -80,17 +90,21 @@ public class TouchDetection : MonoBehaviour
         UpdatePreviousTouch();
         while (true)
         {
-            if (OnTouchArea() && Input.touchCount > 0)
+            UpdatePreviousTouch();
+
+            if (!touchIsDown)
+                touchIsDown = true;
+
+            if (OnTouchArea())
                 CalculateTouchDiff();
 
             if (!OnTouchArea())
             {
                 touchIsDown = false;
-                UpdatePreviousTouch();
+                ResetTouchPosition();
             }
 
-                yield return new WaitForSecondsRealtime(1/16);
-            UpdatePreviousTouch();
+            yield return null;
         }
     }
 
@@ -98,7 +112,7 @@ public class TouchDetection : MonoBehaviour
     {
         while (true)
         {
-            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown)
+            if (OnTouchArea() && !touchIsDown)
             {
                 CalculateTimeDiff();
                 lastTimeSinceTouch = time;
@@ -107,16 +121,25 @@ public class TouchDetection : MonoBehaviour
 
             if (!OnTouchArea())
                 touchIsDown = false;
-
             yield return null;
         }
+    }
+
+    void ResetTouchPosition()
+    {
+        touchX = RESET;
+        touchY = touchX;
+        previousTouchX = touchX;
+        previousTouchY = touchY;
+        diffTouchX = touchX;
+        diffTouchY = touchX;
     }
 
     IEnumerator TapDetection()
     {
         while (true)
         {
-            if (OnTouchArea() && Input.touchCount > 0 && !touchIsDown)
+            if (OnTouchArea() && !touchIsDown)
             {
                 touchIsDown = true;
                 tapDetected = true;
@@ -132,13 +155,13 @@ public class TouchDetection : MonoBehaviour
     IEnumerator TapDeadTime()
     {
         float time = 0;
-        float deadTime = 0.01f;
+        float deadTime = 0.1f;
         while (true)
         {
 
             if (tapDetected)
                 time += Time.deltaTime;
-       
+
             if (time >= deadTime)
             {
                 tapDetected = false;
@@ -162,8 +185,8 @@ public class TouchDetection : MonoBehaviour
         diffTouchX = touchX - previousTouchX;
         diffTouchY = touchY - previousTouchY;
 
-        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold);
-        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold);
+        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold / 25);
+        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold / 25);
     }
 
     //Calculate difference in time since a touch was detected
@@ -185,6 +208,7 @@ public class TouchDetection : MonoBehaviour
     /// </summary>
     void Init()
     {
+        StartCoroutine(UpdateDebugUI());
         switch (touchInputType)
         {
             case InputType.Tap:
@@ -203,10 +227,24 @@ public class TouchDetection : MonoBehaviour
 
     }
 
+    IEnumerator UpdateDebugUI()
+    {
+        while (true)
+        {
+            testMeshProUGUI.text = string.Format("TouchX: {0}\n" +
+                "TouchY: {1}\n" +
+                "PreviousTouchX: {2}\n" +
+                "PreviousTouchY: {3}\n" +
+                "diffTouchX: {4}\n" +
+                "diffTouchY: {5}\n", touchX, touchY, previousTouchX, previousTouchY, diffTouchX, diffTouchY);
+            yield return new WaitForSeconds(1 / 64);
+        }
+    }
+
     public bool Tap() => tapDetected;
-    public bool SlideLeft() => (diffTouchX <= -slideDeltaThreshold);
-    public bool SlideRight() => (diffTouchX >= slideDeltaThreshold);
-    public bool SlideUp() => (diffTouchY >= slideDeltaThreshold);
-    public bool SlideDown() => (diffTouchY <= -slideDeltaThreshold);
+    public bool SlideLeft() => (horizontalSlideDetected &&  !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 25);
+    public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 25);
+    public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 25);
+    public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 25);
     public bool DoubleTap() => doubleTapDetected;
 }

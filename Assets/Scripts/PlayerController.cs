@@ -49,7 +49,7 @@ public class PlayerController : Controller
             AssociatedPawn.MoveRight();
         }
 
-        if (Keymapper.OnKeyDown("up"))
+        else if (Keymapper.OnKeyDown("up"))
         {
             AssociatedPawn.MoveUp();
         }
@@ -79,7 +79,7 @@ public class PlayerController : Controller
             AssociatedPawn.MoveRight();
         }
 
-        if (movementTouchArea.SlideUp())
+        else if (movementTouchArea.SlideUp())
         {
             AssociatedPawn.MoveUp();
         }
