@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System;
 using static Extensions;
 using Random = UnityEngine.Random;
 
@@ -69,29 +70,27 @@ public class ProceduralGenerator : MonoBehaviour
         OpeningPath path = null;
         float horSign = 0;
         float verSign = 0;
-        while (path == null)
+
+        switch (side)
         {
-            switch (side)
-            {
-                case Side.LEFT:
-                    path = GetOpeningPath(side);
-                    horSign = 1;
-                    break;
-                case Side.RIGHT:
-                    path = GetOpeningPath(side);
-                    horSign = -1;
-                    break;
-                case Side.TOP:
-                    path = GetOpeningPath(side);
-                    verSign = -1;
-                    break;
-                case Side.BOTTOM:
-                    path = GetOpeningPath(side);
-                    verSign = 1;
-                    break;
-                default:
-                    break;
-            }
+            case Side.LEFT:
+                path = GetOpeningPath(side);
+                horSign = 1;
+                break;
+            case Side.RIGHT:
+                path = GetOpeningPath(side);
+                horSign = -1;
+                break;
+            case Side.TOP:
+                path = GetOpeningPath(side);
+                verSign = -1;
+                break;
+            case Side.BOTTOM:
+                path = GetOpeningPath(side);
+                verSign = 1;
+                break;
+            default:
+                break;
         }
 
         //Now we spawn this path so many units from the trigger poinnt
@@ -100,9 +99,6 @@ public class ProceduralGenerator : MonoBehaviour
             path.gameObject.SetActive(true);
             path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 1f);
             path.transform.rotation = Quaternion.identity;
-        } else
-        {
-            Debug.Log("If you got this, apparently path is null...");
         }
     }
 
@@ -114,36 +110,44 @@ public class ProceduralGenerator : MonoBehaviour
     /// <returns></returns>
     OpeningPath GetOpeningPath(Side side)
     {
-        OpeningPath[] paths = environmentalLayoutPrefabs.GetPathsFromPrefab();
-        List<OpeningPath> matchingPaths = new List<OpeningPath>();
-        foreach (OpeningPath path in paths)
+        try
         {
-            switch (side)
+            GameObject[] paths = environmentalLayoutPrefabs;
+            List<OpeningPath> matchingPaths = new List<OpeningPath>();
+            foreach (GameObject path in paths)
             {
-                case Side.LEFT:
-                    if (path.IsLeftOpen())
-                        matchingPaths.Add(path);
-                    break;
+                switch (side)
+                {
+                    case Side.LEFT:
+                        if (path.GetComponent<OpeningPath>().IsLeftOpen())
+                            matchingPaths.Add(path.GetComponent<OpeningPath>());
+                        break;
 
-                case Side.RIGHT:
-                    if (path.IsRightOpen())
-                        matchingPaths.Add(path);
-                    break;
-                case Side.TOP:
-                    if (path.IsTopOpen())
-                        matchingPaths.Add(path);
-                    break;
-                case Side.BOTTOM:
-                    if (path.IsBottomOpen())
-                        matchingPaths.Add(path);
-                    break;
-                default:
-                    break;
+                    case Side.RIGHT:
+                        if (path.GetComponent<OpeningPath>().IsRightOpen())
+                            matchingPaths.Add(path.GetComponent<OpeningPath>());
+                        break;
+                    case Side.TOP:
+                        if (path.GetComponent<OpeningPath>().IsTopOpen())
+                            matchingPaths.Add(path.GetComponent<OpeningPath>());
+                        break;
+                    case Side.BOTTOM:
+                        if (path.GetComponent<OpeningPath>().IsBottomOpen())
+                            matchingPaths.Add(path.GetComponent<OpeningPath>());
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
 
-        // Now, return a random matching path
-        int value = Random.Range(0, matchingPaths.Count-1);
-        return matchingPaths[value];
+            // Now, return a random matching path
+            int value = Random.Range(0, matchingPaths.Count - 1);
+            return matchingPaths[value];
+        }
+        catch (Exception e)
+        {
+
+            throw e;
+        }
     }
 }

@@ -1231,7 +1231,6 @@ GameObject:
   - component: {fileID: 9202932663549929056}
   - component: {fileID: 5495224331078666238}
   - component: {fileID: 4365486017063413541}
-  - component: {fileID: 1750561396465999663}
   m_Layer: 0
   m_Name: Layout000Obj
   m_TagString: EnvironmentLayout
@@ -1239,27 +1238,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!50 &1750561396465999663
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750561396465999662}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1001 &2050865881665410412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1290,12 +1268,52 @@ PrefabInstance:
     - target: {fileID: 1711948332484456365, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_Autodestruct
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.textureMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Time
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.4956494
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].inSlope
+      value: 0.000042755157
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outSlope
+      value: 0.000042755157
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332484456367, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].outWeight
+      value: 0.52554554
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375288, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
@@ -1356,6 +1374,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375293, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
@@ -5845,9 +5883,9 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
 --- !u!4 &6860303794245898085
 Transform:
   m_ObjectHideFlags: 0

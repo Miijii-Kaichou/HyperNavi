@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// All defined extensions are placed here
@@ -9,12 +10,18 @@ public static class Extensions
 {
     public static OpeningPath[] GetPathsFromPrefab(this GameObject[] prefabs)
     {
-        List<OpeningPath> paths = new List<OpeningPath>();
-        foreach (GameObject prefab in prefabs)
+        try
         {
-            paths.Add(prefab.GetComponent<OpeningPath>());
-        }
+            List<OpeningPath> paths = new List<OpeningPath>();
+            foreach (GameObject prefab in prefabs)
+            {
+                paths.Add(prefab.GetComponent<OpeningPath>());
+            }
 
-        return paths.ToArray();
+            return paths.ToArray();
+        } catch (Exception e)
+        {
+            throw e;
+        }
     }
 }
