@@ -27293,7 +27293,7 @@ MonoBehaviour:
   testMeshProUGUI: {fileID: 561625160}
   touchArea: {fileID: 905907882}
   touchInputType: 2
-  slideDeltaThreshold: 0.25
+  slideDeltaThreshold: 0.15
   onTap:
     m_PersistentCalls:
       m_Calls: []
