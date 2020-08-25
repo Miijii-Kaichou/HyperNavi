@@ -2,6 +2,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Threading;
+using System.IO;
 
 public enum Side
 {
@@ -54,13 +55,13 @@ public class ProceduralGenerator : MonoBehaviour
     /// </summary>
     void GetAllEnvironmentalLayouts()
     {
-        OpeningPath[] foundChildren = objectPooler.pooledObjects.GetAllPaths();
+        OpeningPath[] foundChildren = ObjectPooler.pooledObjects.GetAllPaths();
 
         //Check if under Environmental Tag
         foreach (OpeningPath child in foundChildren)
         {
             //If even 1 child doesn't match the tag, get out of the function
-            if (!child.CompareTag(ENVIRONMENT_LAYOUT_TAG))
+            if (child != null && !child.CompareTag(ENVIRONMENT_LAYOUT_TAG))
             {
                 Debug.Log("No Environment Tag...");
                 break;
@@ -136,8 +137,9 @@ public class ProceduralGenerator : MonoBehaviour
         OpeningPath[] paths = environmentalLayoutPaths;
         List<OpeningPath> matchingPaths = new List<OpeningPath>();
 
-        foreach (OpeningPath path in paths)
+        for(int iter = 0; iter < paths.Length; iter++)
         {
+            OpeningPath path = paths[iter];
             switch (side)
             {
                 case Side.LEFT:

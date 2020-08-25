@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 /// <summary>
 /// All defined extensions are placed here
@@ -13,7 +11,9 @@ public static class Extensions
         List<OpeningPath> paths = new List<OpeningPath>();
         foreach(GameObject obj in objectList)
         {
-            paths.Add(obj.GetComponent<OpeningPath>());
+            OpeningPath path;
+            if((path = obj.GetComponent<OpeningPath>()) != null)
+                paths.Add(path);
         }
 
         return paths.ToArray();

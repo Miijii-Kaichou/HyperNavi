@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The speed added to current speed over a certain rate
     /// </summary>
-    public static float SpeedAcceleration { get; private set; } = 0.001f;
+    public static float SpeedAcceleration { get; private set; } = 0.0005f;
 
     /// <summary>
     /// Current speed of the player
@@ -79,12 +79,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public const float FULL_SEC = 1;
 
+    public const int RESET = 0;
+
     public static PlayerPawn player;
 
     public static bool dontDestroy = false;
 
+    private static float time;
+    private static float deadTime = 0.1f;
+
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+
         //Load Title Screen
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
 
@@ -101,7 +108,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Application.targetFrameRate = 300;
+        
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
     }
@@ -132,6 +139,11 @@ public class GameManager : MonoBehaviour
 
     public static void AllowDestructionOfPlayer() => dontDestroy = false;
 
+    public static void ResetTime()
+    {
+        time = RESET;
+    }
+
     static IEnumerator Friction()
     {
         while (true)
@@ -160,10 +172,34 @@ public class GameManager : MonoBehaviour
 
         while (true)
         {
-            if (player != null && player.HasContactedWall() && dontDestroy == false)
-                player.gameObject.SetActive(false);
+            if(player.HasContactedWall())
+                time += Time.deltaTime;
+
+            if (time >= deadTime &&
+                player.isActiveAndEnabled &&
+                player.HasContactedWall() &&
+                dontDestroy == false)
+                DestoryPlayer();
 
             yield return null;
         }
     }
+
+    static void DestoryPlayer()
+    {
+
+        GameObject prefab = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);
+        if(prefab != null && !prefab.activeInHierarchy)
+        {
+            prefab.SetActive(true);
+            prefab.transform.localPosition = player.transform.localPosition;
+            prefab.transform.rotation = Quaternion.identity;
+
+            deathParticle.Play();
+        }
+        ResetTime();
+        player.gameObject.SetActive(false);
+    }
+
+    
 }

@@ -15,7 +15,16 @@ public class PlayerController : Controller
     {
         Init();
     }
-    
+
+    private void Update()
+    {
+        if (GameManager.IsGameStarted)
+        {
+            InputControls();
+            TouchInputControls();
+        }
+    }
+
     /// <summary>
     /// Initialize Player Controller
     /// </summary>
@@ -27,9 +36,6 @@ public class PlayerController : Controller
             new Keymapper.Key("up", KeyCode.UpArrow),
             new Keymapper.Key("down", KeyCode.DownArrow),
             new Keymapper.Key("boost", KeyCode.Space));
-
-        //Start getting input from player
-        StartCoroutine(InputCycle());
     }
 
     void InputControls()
@@ -115,26 +121,6 @@ public class PlayerController : Controller
         if (boostTouchArea.Tap())
         {
             player.Boost();
-        }
-    }
-
-    IEnumerator InputCycle()
-    {
-        while (true)
-        {
-            try
-            {
-                if (GameManager.IsGameStarted)
-                {
-                    InputControls();
-                    TouchInputControls();
-                }
-            }
-            catch(Exception e)
-            {
-                Debug.LogError("Input Controls threw an exception: " + e.Message);
-            }
-            yield return null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SignalLayoutSpawn : MonoBehaviour
 {
@@ -36,38 +37,7 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        player = GameManager.player;
-
-        //Get distance check component
-        distanceCheck = GetComponent<DistanceCheck>();
-
-        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
-
-        //Set distance target
-        distanceCheck.SetTarget(player.transform);
-
-        //Set up OnRangeEnter Event
-        distanceCheck.OnRangeEnter.AddNewListener(
-        () =>
-        {
-            if (player != null && turningPoint)
-            {
-                player.AllowTurn();
-                player.UpdateSignalPoint(layout.GetSignal());
-            }
-        });
-
-
-        //Set up OnRangeExit Event
-        distanceCheck.OnRangeExit.AddNewListener(
-        () =>
-        {
-            //Signal generator to generate a layout based on the player's direction
-            generateEvent.Trigger();
-            player.ProhibitTurn();
-            GameManager.AllowDestructionOfPlayer();
-        });
+        Init();
     }
 
     private void Update()
@@ -75,6 +45,7 @@ public class SignalLayoutSpawn : MonoBehaviour
         if (player != null)
             distance = distanceCheck.Distance;
     }
+
 
     /// <summary>
     /// Trigger an event to generate a new layout
@@ -129,5 +100,42 @@ public class SignalLayoutSpawn : MonoBehaviour
     public void SubmitDistanceToManager()
     {
         GameManager.DetermineTiming(distance);
+    }
+
+    private void Init()
+    {
+        player = GameManager.player;
+
+        //Get distance check component
+        distanceCheck = GetComponent<DistanceCheck>();
+
+        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
+        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
+
+        //Set distance target
+        distanceCheck.SetTarget(player.transform);
+
+        //Set up OnRangeEnter Event
+        distanceCheck.OnRangeEnter.AddNewListener(
+        () =>
+        {
+            if (player != null && turningPoint)
+            {
+                player.AllowTurn();
+                player.UpdateSignalPoint(layout.GetSignal());
+            }
+        });
+
+
+        //Set up OnRangeExit Event
+        distanceCheck.OnRangeExit.AddNewListener(
+        () =>
+        {
+            //Signal generator to generate a layout based on the player's direction
+            generateEvent.Trigger();
+            player.ProhibitTurn();
+            GameManager.AllowDestructionOfPlayer();
+            GameManager.ResetTime();
+        });
     }
 }

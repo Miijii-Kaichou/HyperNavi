@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Pawn : MonoBehaviour
 {
@@ -19,7 +17,6 @@ public abstract class Pawn : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     protected virtual void Update()
     {
         float speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);

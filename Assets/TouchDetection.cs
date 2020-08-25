@@ -12,6 +12,9 @@ public class TouchDetection : MonoBehaviour
         Slide
     }
 
+    [SerializeField]
+    private bool debug;
+
     public int touchId = 0;
 
     [SerializeField]
@@ -60,8 +63,20 @@ public class TouchDetection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (touchInputType == InputType.DoubleTap)
-            time += Time.deltaTime;
+        switch (touchInputType)
+        {
+            case InputType.Tap:
+                TapDetection();
+                break;
+            case InputType.DoubleTap:
+                DoubleTapDetection();
+                break;
+            case InputType.Slide:
+                TouchPositionDeltaDetection();
+                break;
+            default:
+                break;
+        }
     }
 
     bool OnTouchArea()
@@ -76,7 +91,7 @@ public class TouchDetection : MonoBehaviour
                 Vector2 touchPoint = new Vector2(touchX, touchY);
 
                 LayerMask layerMask = LayerMask.GetMask("TouchInput");
-                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint),  layerMask))
+                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint), layerMask))
                     return true;
             }
         }
@@ -84,45 +99,40 @@ public class TouchDetection : MonoBehaviour
         return false;
     }
 
-    IEnumerator TouchPositionDeltaDetection()
+    void TouchPositionDeltaDetection()
     {
-        //Set previous touch to current
+
         UpdatePreviousTouch();
-        while (true)
+
+        if (!touchIsDown)
+            touchIsDown = true;
+
+        if (OnTouchArea())
+            CalculateTouchDiff();
+
+        if (!OnTouchArea())
         {
-            UpdatePreviousTouch();
-
-            if (!touchIsDown)
-                touchIsDown = true;
-
-            if (OnTouchArea())
-                CalculateTouchDiff();
-
-            if (!OnTouchArea())
-            {
-                touchIsDown = false;
-                ResetTouchPosition();
-            }
-
-            yield return null;
+            touchIsDown = false;
+            ResetTouchPosition();
         }
+
     }
 
-    IEnumerator DoubleTapDetection()
+    void DoubleTapDetection()
     {
-        while (true)
-        {
-            if (OnTouchArea() && !touchIsDown)
-            {
-                CalculateTimeDiff();
-                lastTimeSinceTouch = time;
-                touchIsDown = true;
-            }
 
-            if (!OnTouchArea())
-                touchIsDown = false;
-            yield return null;
+        time += Time.deltaTime;
+
+        if (OnTouchArea() && !touchIsDown)
+        {
+            CalculateTimeDiff();
+            lastTimeSinceTouch = time;
+            touchIsDown = true;
         }
+
+        if (!OnTouchArea())
+            touchIsDown = false;
+
     }
 
     void ResetTouchPosition()
@@ -135,21 +145,18 @@ public class TouchDetection : MonoBehaviour
         diffTouchY = touchX;
     }
 
-    IEnumerator TapDetection()
+    void TapDetection()
     {
-        while (true)
+
+        if (OnTouchArea() && !touchIsDown)
         {
-            if (OnTouchArea() && !touchIsDown)
-            {
-                touchIsDown = true;
-                tapDetected = true;
-            }
-
-            if (!OnTouchArea())
-                touchIsDown = false;
-
-            yield return null;
+            touchIsDown = true;
+            tapDetected = true;
         }
+
+        if (!OnTouchArea())
+            touchIsDown = false;
+
     }
 
     IEnumerator TapDeadTime()
@@ -208,23 +215,14 @@ public class TouchDetection : MonoBehaviour
     /// </summary>
     void Init()
     {
-        StartCoroutine(UpdateDebugUI());
-        switch (touchInputType)
-        {
-            case InputType.Tap:
-                StartCoroutine(TapDetection());
-                StartCoroutine(TapDeadTime());
-                break;
-            case InputType.DoubleTap:
-                StartCoroutine(DoubleTapDetection());
-                break;
-            case InputType.Slide:
-                StartCoroutine(TouchPositionDeltaDetection());
-                break;
-            default:
-                break;
-        }
+        if (debug)
+            StartCoroutine(UpdateDebugUI());
 
+        //Set previous touch to current
+        UpdatePreviousTouch();
+
+        if (touchInputType == InputType.Tap)
+            StartCoroutine(TapDeadTime());
     }
 
     IEnumerator UpdateDebugUI()
@@ -245,7 +243,7 @@ public class TouchDetection : MonoBehaviour
     }
 
     public bool Tap() => tapDetected;
-    public bool SlideLeft() => (horizontalSlideDetected &&  !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 25);
+    public bool SlideLeft() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 25);
     public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 25);
     public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 25);
     public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 25);

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class WallDetector : MonoBehaviour
 {

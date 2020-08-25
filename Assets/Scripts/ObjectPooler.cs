@@ -19,7 +19,7 @@ public class ObjectPooler : MonoBehaviour
 
     public List<ObjectPoolItem> itemsToPool;
 
-    public List<GameObject> pooledObjects;
+    public static List<GameObject> pooledObjects;
 
     public bool spawnInParent = false;
 
@@ -61,11 +61,10 @@ public class ObjectPooler : MonoBehaviour
 
     public static GameObject GetMember(string name)
     {
-
         #region Iteration
-        for (int i = 0; i < Instance.pooledObjects.Count; i++)
+        for (int i = 0; i < pooledObjects.Count; i++)
         {
-            GameObject pooledObject = Instance.pooledObjects[i];
+            GameObject pooledObject = pooledObjects[i];
 
             if (pooledObject != null &&
                 !pooledObject.activeInHierarchy &&
@@ -83,7 +82,7 @@ public class ObjectPooler : MonoBehaviour
 
                 GameObject newMember = Instantiate(item.prefab);
                 newMember.SetActive(false);
-                Instance.pooledObjects.Add(newMember);
+                pooledObjects.Add(newMember);
                 return newMember;
             }
         }

@@ -28,12 +28,50 @@ public class DistanceCheck : MonoBehaviour
         OnRangeExit = EventManager.AddNewEvent(34, "onRangeExit");
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        StartCoroutine(DistanceCheckLoop());
-        StartCoroutine(DeadTime());
+        CheckDistance();
+        DeadTime();
     }
 
+    void CheckDistance()
+    {
+        if (target != null && enabled)
+        {
+            CalculateDistance(target, transform.parent);
+
+            if (!trigger && !inside && Distance <= radius)
+                trigger = true;
+
+            if (Distance <= radius)
+            {
+                try
+                {
+                    inside = true;
+                    if (OnRangeStay.HasListerners())
+                        OnRangeStay.Trigger();
+                }
+                catch { }
+            }
+
+            if (inside && Distance > radius)
+            {
+                inside = false;
+                if (OnRangeExit.HasListerners())
+                    OnRangeExit.Trigger();
+            }
+        }
+    }
+
+    void DeadTime()
+    {
+        if (trigger && OnRangeEnter != null && OnRangeEnter.HasListerners() && enabled)
+        {
+            OnRangeEnter.Trigger();
+            OnRangeEnter.Reset();
+            trigger = false;
+        }
+    }
 
     /// <summary>
     /// Calculate distance between point a and b
@@ -43,56 +81,6 @@ public class DistanceCheck : MonoBehaviour
     void CalculateDistance(Transform a, Transform b)
     {
         Distance = Vector3.Distance(b.localPosition, a.localPosition);
-    }
-
-    IEnumerator DistanceCheckLoop()
-    {
-        while (true)
-        {
-            
-            if (target != null && enabled)
-            {
-                CalculateDistance(target, transform.parent);
-
-                if (!trigger && !inside && Distance <= radius)
-                    trigger = true;
-
-                if (Distance <= radius)
-                {
-                    try
-                    {
-                        inside = true;
-                        if (OnRangeStay.HasListerners())
-                            OnRangeStay.Trigger();
-                    }
-                    catch { }
-                }
-
-                if (inside && Distance > radius)
-                {
-                    inside = false;
-                    if ( OnRangeExit.HasListerners())
-                        OnRangeExit.Trigger();
-                }
-            }
-
-            yield return null;
-        }
-    }
-
-    IEnumerator DeadTime()
-    {
-        while (true)
-        {
-            if (trigger && OnRangeEnter != null && OnRangeEnter.HasListerners())
-            {
-                OnRangeEnter.Trigger();
-                OnRangeEnter.Reset();
-                trigger = false;
-            }
-
-            yield return null;
-        }
     }
 
     public void SetTarget(Transform target)
