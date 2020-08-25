@@ -101,11 +101,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = 300;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
-
-
     }
 
     /// <summary>
@@ -130,11 +128,6 @@ public class GameManager : MonoBehaviour
     public static void DetermineTiming(float distance)
     {
         dontDestroy = (distance < 2f);
-
-        if (dontDestroy)
-            player.ApplyIFrames();
-
-        return;
     }
 
     public static void AllowDestructionOfPlayer() => dontDestroy = false;
@@ -168,8 +161,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             if (player != null && player.HasContactedWall() && dontDestroy == false)
-                player.gameObject.SetActive(true);
-
+                player.gameObject.SetActive(false);
 
             yield return null;
         }

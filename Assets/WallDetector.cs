@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.Tilemaps;
+﻿using UnityEngine;
 
 public class WallDetector : MonoBehaviour
 {
@@ -12,14 +10,9 @@ public class WallDetector : MonoBehaviour
     {
         RaycastHit2D hit;
         Vector2 pos = transform.position;
-        Debug.DrawRay(transform.position, Vector2.up * detectionDistance, Color.red);
-        hit = Physics2D.Raycast(pos, Vector2.up, detectionDistance);
-        Debug.Log(hit.collider);
-        hasContactedWall = hit.collider != null && hit.collider.GetType() == typeof(TilemapCollider2D);
-
-        
-        if (hasContactedWall)
-            Debug.Log("We hit da wall!!!");
+        Debug.DrawRay(transform.position, transform.up * detectionDistance, Color.red);
+        hit = Physics2D.Raycast(pos, transform.up, detectionDistance, LayerMask.GetMask("Layout"));
+        hasContactedWall = hit.collider != null;
     }
 
     public bool HasCollided() => hasContactedWall;

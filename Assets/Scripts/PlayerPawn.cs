@@ -11,19 +11,15 @@ public class PlayerPawn : Pawn
     [SerializeField]
     private float gridSize = 1f;
 
+    [SerializeField]
     private bool hasContactedWall = false;
 
     private bool canTurn = false;
 
     private SignalLayoutSpawn signalPoint;
 
-    private bool invincibility = false;
-
-    private float time = 0f;
-    private float duration = 0.25f;
     protected override void Start()
     {
-        StartCoroutine(IFrameLoop());
         base.Start();
     }
 
@@ -102,33 +98,6 @@ public class PlayerPawn : Pawn
     public void ProhibitTurn() => canTurn = false;
 
     public Rigidbody2D GetRigidbody() => rb2d;
-
-    public void ApplyIFrames()
-    {
-        invincibility = true;
-        hasContactedWall = false;
-        time = 0f;
-    }
-
-    IEnumerator IFrameLoop()
-    {
-        while (true)
-        {
-            if (invincibility)
-            {
-                time += Time.deltaTime;
-                hasContactedWall = false;
-                if(time >= duration)
-                {
-
-                    time = 0f;
-                    invincibility = false;
-                }
-            }
-
-            yield return null;
-        }
-    }
 
     /// <summary>
     /// Update the signal point that the player is at

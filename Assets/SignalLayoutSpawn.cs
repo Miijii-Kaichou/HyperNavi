@@ -47,6 +47,7 @@ public class SignalLayoutSpawn : MonoBehaviour
         //Set distance target
         distanceCheck.SetTarget(player.transform);
 
+        //Set up OnRangeEnter Event
         distanceCheck.OnRangeEnter.AddNewListener(
         () =>
         {
@@ -57,12 +58,14 @@ public class SignalLayoutSpawn : MonoBehaviour
             }
         });
 
+
+        //Set up OnRangeExit Event
         distanceCheck.OnRangeExit.AddNewListener(
         () =>
         {
             //Signal generator to generate a layout based on the player's direction
             generateEvent.Trigger();
-            Debug.Log("Exitted!!!");
+            player.ProhibitTurn();
             GameManager.AllowDestructionOfPlayer();
         });
     }

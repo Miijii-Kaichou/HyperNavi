@@ -75,7 +75,8 @@ public class TouchDetection : MonoBehaviour
                 touchY = viewportPoint.y;
                 Vector2 touchPoint = new Vector2(touchX, touchY);
 
-                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint), LayerMask.NameToLayer("TouchInput")))
+                LayerMask layerMask = LayerMask.GetMask("TouchInput");
+                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint),  layerMask))
                     return true;
             }
         }
