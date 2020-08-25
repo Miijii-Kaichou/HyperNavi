@@ -557,7 +557,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -0.0005493164, y: -0.0045166016}
+  m_AnchoredPosition: {x: -0.00048828125, y: -0.0045166016}
   m_SizeDelta: {x: 401.02112, y: 171.83093}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &561625160
@@ -1240,7 +1240,6 @@ MonoBehaviour:
   currentLayout: {fileID: 0}
   previousLayout: {fileID: 0}
   dontDeactivate: 1
-  onPreview: 1
 --- !u!58 &311740539708426664
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1381,7 +1380,7 @@ PrefabInstance:
     - target: {fileID: 1711948332822375289, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.59
+      value: -7.46
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375289, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
@@ -1624,6 +1623,7 @@ GameObject:
   - component: {fileID: 8459447590518204744}
   - component: {fileID: 8503155309783264763}
   - component: {fileID: 311740539708426664}
+  - component: {fileID: 5552883983925311507}
   m_Layer: 2
   m_Name: LayoutSpawnTrigger
   m_TagString: Untagged
@@ -1631,6 +1631,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5552883983925311507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552883983925311506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.1
 --- !u!1839735485 &6860303794245898083
 Tilemap:
   m_ObjectHideFlags: 0

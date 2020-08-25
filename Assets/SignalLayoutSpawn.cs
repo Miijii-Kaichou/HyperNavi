@@ -16,6 +16,7 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     bool turningPoint = true;
 
+
     float distance = 0f;
 
     /// <summary>
@@ -28,12 +29,43 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     EventManager.Event @generateEvent;
 
+    DistanceCheck distanceCheck;
+
     /// <summary>
     /// Start of Object
     /// </summary>
     private void Start()
     {
         player = GameManager.player;
+
+        //Get distance check component
+        distanceCheck = GetComponent<DistanceCheck>();
+
+        //Set distance target
+        distanceCheck.SetTarget(player.transform);
+
+        //Set Up Events
+        distanceCheck.OnRangeEnter.AddNewListener(
+        () =>
+        {
+            if (player != null)
+            {
+                if (turningPoint) player.AllowTurn();
+            }
+        });
+
+        distanceCheck.OnRangeExit.AddNewListener(
+        () =>
+        {
+            //Signal generator to generate a layout based on the player's direction
+            generateEvent.Trigger();
+        });
+    }
+
+    private void Update()
+    {
+        if (player != null)
+            distance = distanceCheck.Distance;
     }
 
     /// <summary>
@@ -45,29 +77,9 @@ public class SignalLayoutSpawn : MonoBehaviour
         generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
     }
 
-    /// <summary>
-    /// Calculate distance between point a and b
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    void CalculateDistance(Transform a, Transform b)
-    {
-        distance = Vector3.Distance(b.position, a.position);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (player != null)
-        {
-            if (turningPoint) player.AllowTurn();
-        }
-    }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //Signal generator to generate a layout based on the player's direction
-        if (collision.CompareTag("Player"))
-            generateEvent.Trigger();
+        
     }
 
     /// <summary>
