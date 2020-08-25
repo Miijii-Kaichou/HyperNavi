@@ -41,17 +41,18 @@ public class SignalLayoutSpawn : MonoBehaviour
         //Get distance check component
         distanceCheck = GetComponent<DistanceCheck>();
 
+        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
+        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
+
         //Set distance target
         distanceCheck.SetTarget(player.transform);
 
-        //Set Up Events
         distanceCheck.OnRangeEnter.AddNewListener(
         () =>
         {
-            if (player != null)
-            {
-                if (turningPoint) player.AllowTurn();
-            }
+            Debug.Log("Yes!!!");
+            if (player != null && turningPoint)
+                player.AllowTurn();
         });
 
         distanceCheck.OnRangeExit.AddNewListener(
@@ -66,20 +67,6 @@ public class SignalLayoutSpawn : MonoBehaviour
     {
         if (player != null)
             distance = distanceCheck.Distance;
-    }
-
-    /// <summary>
-    /// On Enable
-    /// </summary>
-    private void OnEnable()
-    {
-        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        
     }
 
     /// <summary>

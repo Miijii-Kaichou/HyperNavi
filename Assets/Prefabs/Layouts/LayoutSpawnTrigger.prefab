@@ -74,4 +74,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.1
+  radius: 2
+  Distance: 0
+  OnRangeEnter:
+    uniqueID: 0
+    eventCode: 
+    hasTriggered: 0
+    hasListeners: 0
+  OnRangeStay:
+    uniqueID: 0
+    eventCode: 
+    hasTriggered: 0
+    hasListeners: 0
+  OnRangeExit:
+    uniqueID: 0
+    eventCode: 
+    hasTriggered: 0
+    hasListeners: 0
