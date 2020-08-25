@@ -22,7 +22,8 @@ public abstract class Pawn : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed));
+        float speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
+        Vector2 direction = new Vector2(0f, speed);
         transform.Translate(direction * Time.deltaTime);
     }
 

@@ -8,6 +8,9 @@ public class PlayerPawn : Pawn
     [SerializeField]
     private WallDetector wallDetector;
 
+    [SerializeField]
+    private float gridSize = 1f;
+
     private bool hasContactedWall = false;
 
     private bool canTurn = false;
@@ -17,7 +20,7 @@ public class PlayerPawn : Pawn
     private bool invincibility = false;
 
     private float time = 0f;
-    private float duration = 0.5f;
+    private float duration = 0.25f;
     protected override void Start()
     {
         StartCoroutine(IFrameLoop());
@@ -26,6 +29,7 @@ public class PlayerPawn : Pawn
 
     protected override void Update()
     {
+        hasContactedWall = wallDetector.HasCollided();
         base.Update();
     }
 
@@ -35,7 +39,7 @@ public class PlayerPawn : Pawn
     public override void MoveLeft()
     {
         currentDirection = Direction.LEFT;
-        transform.eulerAngles = new Vector3(0f, 0f, 90f);
+        transform.eulerAngles = new Vector3(0, 0, 90);
         signalPoint.SubmitDistanceToManager();
     }
 
@@ -45,7 +49,7 @@ public class PlayerPawn : Pawn
     public override void MoveRight()
     {
         currentDirection = Direction.RIGHT;
-        transform.eulerAngles = new Vector3(0f, 0f, 270f);
+        transform.eulerAngles = new Vector3(0, 0, 270);
         signalPoint.SubmitDistanceToManager();
     }
 
@@ -55,7 +59,7 @@ public class PlayerPawn : Pawn
     public override void MoveUp()
     {
         currentDirection = Direction.UP;
-        transform.eulerAngles = new Vector3(0f, 0f, 0f);
+        transform.eulerAngles = new Vector3(0, 0, 0);
         signalPoint.SubmitDistanceToManager();
     }
 
@@ -65,7 +69,7 @@ public class PlayerPawn : Pawn
     public override void MoveDown()
     {
         currentDirection = Direction.DOWN;
-        transform.eulerAngles = new Vector3(0f, 0f, 180f);
+        transform.eulerAngles = new Vector3(0, 0, 180);
         signalPoint.SubmitDistanceToManager();
     }
 
@@ -113,12 +117,16 @@ public class PlayerPawn : Pawn
             if (invincibility)
             {
                 time += Time.deltaTime;
+                hasContactedWall = false;
                 if(time >= duration)
                 {
+
                     time = 0f;
                     invincibility = false;
                 }
             }
+
+            yield return null;
         }
     }
 
@@ -129,17 +137,5 @@ public class PlayerPawn : Pawn
     public void UpdateSignalPoint(SignalLayoutSpawn signalPoint)
     {
         this.signalPoint = signalPoint;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        try
-        {
-            hasContactedWall = collision.collider.GetType() == typeof(TilemapCollider2D);
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
     }
 }

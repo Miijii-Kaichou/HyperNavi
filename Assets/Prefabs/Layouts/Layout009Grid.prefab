@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2005682900902433799}
   - component: {fileID: 631294018234876570}
   - component: {fileID: 5705951699245700116}
-  m_Layer: 2
+  m_Layer: 9
   m_Name: Layout009Grid
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 83166047278224953}
   - component: {fileID: 3750772572965106973}
   - component: {fileID: 7420162271044690237}
-  m_Layer: 2
+  m_Layer: 9
   m_Name: Layout009 (1)
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -4395,7 +4395,7 @@ GameObject:
   - component: {fileID: 6795206470404431981}
   - component: {fileID: 6795206470404431980}
   - component: {fileID: 1773998902981378947}
-  m_Layer: 2
+  m_Layer: 9
   m_Name: Layout009
   m_TagString: EnvironmentLayout
   m_Icon: {fileID: 0}
@@ -8780,7 +8780,7 @@ PrefabInstance:
     - target: {fileID: 7580482404534787393, guid: e56fb3a1e41f6c647a0a4a882a07f8df,
         type: 3}
       propertyPath: m_Layer
-      value: 2
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e56fb3a1e41f6c647a0a4a882a07f8df, type: 3}

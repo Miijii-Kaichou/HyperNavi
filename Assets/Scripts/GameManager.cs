@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 
 public enum Direction
@@ -172,7 +168,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             if (player != null && player.HasContactedWall() && dontDestroy == false)
-                player.gameObject.SetActive(false);
+                player.gameObject.SetActive(true);
 
 
             yield return null;
