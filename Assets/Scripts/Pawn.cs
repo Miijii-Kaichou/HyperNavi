@@ -8,9 +8,9 @@ public abstract class Pawn : MonoBehaviour
     protected Direction currentDirection = Direction.UP;
     protected Rigidbody2D rb2d;
 
+    private float speed;
+    Vector2 direction;
     
-
-    Vector3 setEulerAngle;
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -19,8 +19,8 @@ public abstract class Pawn : MonoBehaviour
 
     protected virtual void Update()
     {
-        float speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
-        Vector2 direction = new Vector2(0f, speed);
+        speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
+        direction = new Vector2(0f, speed);
         transform.Translate(direction * Time.deltaTime);
     }
 
@@ -95,6 +95,5 @@ public abstract class Pawn : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
-        setEulerAngle = transform.eulerAngles;
     }
 }

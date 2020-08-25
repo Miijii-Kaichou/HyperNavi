@@ -54,6 +54,15 @@ public class TouchDetection : MonoBehaviour
 
     public const float RESET = 0;
 
+    Vector3 viewportPoint;
+    Vector2 touchPoint;
+    LayerMask layerMask;
+
+    private void Awake()
+    {
+        layerMask = LayerMask.GetMask("TouchInput");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -85,12 +94,11 @@ public class TouchDetection : MonoBehaviour
         {
             foreach (Touch touch in Input.touches)
             {
-                Vector3 viewportPoint = Camera.main.ScreenToViewportPoint(touch.position);
+                viewportPoint = Camera.main.ScreenToViewportPoint(touch.position);
                 touchX = viewportPoint.x;
                 touchY = viewportPoint.y;
-                Vector2 touchPoint = new Vector2(touchX, touchY);
+                touchPoint = new Vector2(touchX, touchY);
 
-                LayerMask layerMask = LayerMask.GetMask("TouchInput");
                 if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint), layerMask))
                     return true;
             }

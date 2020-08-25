@@ -9,9 +9,10 @@ public static class Extensions
     public static OpeningPath[] GetAllPaths(this List<GameObject> objectList)
     {
         List<OpeningPath> paths = new List<OpeningPath>();
-        foreach(GameObject obj in objectList)
+        OpeningPath path;
+
+        foreach (GameObject obj in objectList)
         {
-            OpeningPath path;
             if((path = obj.GetComponent<OpeningPath>()) != null)
                 paths.Add(path);
         }

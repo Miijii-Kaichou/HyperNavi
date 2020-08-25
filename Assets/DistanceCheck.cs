@@ -15,6 +15,7 @@ public class DistanceCheck : MonoBehaviour
     public EventManager.Event OnRangeExit;
 
     Transform target = null;
+    Transform parent;
 
     bool trigger = false;
     bool inside = false;
@@ -23,6 +24,7 @@ public class DistanceCheck : MonoBehaviour
 
     private void Awake()
     {
+        parent = transform.parent;
         OnRangeEnter = EventManager.AddNewEvent(32, "onRangeEnter");
         OnRangeStay = EventManager.AddNewEvent(33, "onRangeStay");
         OnRangeExit = EventManager.AddNewEvent(34, "onRangeExit");
@@ -36,9 +38,9 @@ public class DistanceCheck : MonoBehaviour
 
     void CheckDistance()
     {
-        if (target != null && enabled)
+        if (target != null)
         {
-            CalculateDistance(target, transform.parent);
+            CalculateDistance(ref target, ref parent);
 
             if (!trigger && !inside && Distance <= radius)
                 trigger = true;
@@ -65,7 +67,7 @@ public class DistanceCheck : MonoBehaviour
 
     void DeadTime()
     {
-        if (trigger && OnRangeEnter != null && OnRangeEnter.HasListerners() && enabled)
+        if (trigger && OnRangeEnter != null && OnRangeEnter.HasListerners())
         {
             OnRangeEnter.Trigger();
             OnRangeEnter.Reset();
@@ -78,9 +80,10 @@ public class DistanceCheck : MonoBehaviour
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
-    void CalculateDistance(Transform a, Transform b)
+    void CalculateDistance(ref Transform a, ref Transform b)
     {
         Distance = Vector3.Distance(b.localPosition, a.localPosition);
+        return;
     }
 
     public void SetTarget(Transform target)

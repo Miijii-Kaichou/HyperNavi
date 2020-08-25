@@ -64,31 +64,31 @@ public class SignalLayoutSpawn : MonoBehaviour
         if (player != null)
         {
             Side side;
-
+            OpeningPath path = null;
             switch (player.GetDirection())
             {
                 case Direction.LEFT:
                     //Coming from left. Need right to open
                     side = Side.RIGHT;
-                    generator.GenerateLayout(side, layout);
+                    generator.GenerateLayout(side, layout, ref path);
                     return;
 
                 case Direction.RIGHT:
                     //Coming from Right. Need left to open
                     side = Side.LEFT;
-                    generator.GenerateLayout(side, layout);
+                    generator.GenerateLayout(side, layout, ref path);
                     return;
 
                 case Direction.UP:
                     //Coming from top. Need bottome to open
                     side = Side.BOTTOM;
-                    generator.GenerateLayout(side, layout);
+                    generator.GenerateLayout(side, layout, ref path);
                     return;
 
                 case Direction.DOWN:
                     //Coming from bottom. Need top to open
                     side = Side.TOP;
-                    generator.GenerateLayout(side, layout);
+                    generator.GenerateLayout(side, layout, ref path);
                     return;
 
                 default:
@@ -99,7 +99,7 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     public void SubmitDistanceToManager()
     {
-        GameManager.DetermineTiming(distance);
+        GameManager.DetermineTiming(ref distance);
     }
 
     private void Init()
@@ -122,7 +122,8 @@ public class SignalLayoutSpawn : MonoBehaviour
             if (player != null && turningPoint)
             {
                 player.AllowTurn();
-                player.UpdateSignalPoint(layout.GetSignal());
+                SignalLayoutSpawn signal = layout.GetSignal();
+                player.UpdateSignalPoint(ref signal);
             }
         });
 

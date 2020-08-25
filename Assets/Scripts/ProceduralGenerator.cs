@@ -72,9 +72,8 @@ public class ProceduralGenerator : MonoBehaviour
     }
 
     //Generate a layout and place it some many units relative to the active layout
-    public void GenerateLayout(Side side, OpeningPath relativePath)
+    public void GenerateLayout(Side side, OpeningPath relativePath, ref OpeningPath existingPath)
     {
-        OpeningPath path = null;
         float horSign = 0;
         float verSign = 0;
         if (!OnPreview)
@@ -83,25 +82,25 @@ public class ProceduralGenerator : MonoBehaviour
             {
                 //I need a layout with left side opened
                 case Side.LEFT:
-                    path = GetOpeningPath(side);
+                    existingPath = GetOpeningPath(side);
                     horSign = 1;
                     break;
 
                 //I need a layout with right side opened
                 case Side.RIGHT:
-                    path = GetOpeningPath(side);
+                    existingPath = GetOpeningPath(side);
                     horSign = -1;
                     break;
 
                 //I need a layout with top side opened
                 case Side.TOP:
-                    path = GetOpeningPath(side);
+                    existingPath = GetOpeningPath(side);
                     verSign = -1;
                     break;
 
                 //I need a layout with bottom side opened
                 case Side.BOTTOM:
-                    path = GetOpeningPath(side);
+                    existingPath = GetOpeningPath(side);
                     verSign = 1;
                     break;
 
@@ -113,16 +112,16 @@ public class ProceduralGenerator : MonoBehaviour
         {
             //Need bottom side open
             side = Side.BOTTOM;
-            path = GetOpeningPath(side);
+            existingPath = GetOpeningPath(side);
             verSign = 1;
         }
 
         //Now we spawn this path so many units from the trigger poinnt
-        if (path != null && !path.gameObject.activeInHierarchy)
+        if (existingPath != null && !existingPath.gameObject.activeInHierarchy)
         {
-            path.gameObject.SetActive(true);
-            path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 0f);
-            path.transform.rotation = Quaternion.identity;
+            existingPath.gameObject.SetActive(true);
+            existingPath.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * existingPath.GetXUnit(), verSign * existingPath.GetYUnit(), 0f);
+            existingPath.transform.rotation = Quaternion.identity;
         }
     }
 
@@ -136,10 +135,10 @@ public class ProceduralGenerator : MonoBehaviour
     {
         OpeningPath[] paths = environmentalLayoutPaths;
         List<OpeningPath> matchingPaths = new List<OpeningPath>();
-
-        for(int iter = 0; iter < paths.Length; iter++)
+        OpeningPath path;
+        for (int iter = 0; iter < paths.Length; iter++)
         {
-            OpeningPath path = paths[iter];
+            path = paths[iter];
             switch (side)
             {
                 case Side.LEFT:
@@ -169,14 +168,12 @@ public class ProceduralGenerator : MonoBehaviour
         // Now, return a random matching path
         int value = Random.Range(0, matchingPaths.Count - 1);
 
-        OpeningPath pooledPath;
-
         if (!OnPreview)
-            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out pooledPath);
+            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out path);
         else
-            ObjectPooler.GetMember("Layout000Grid", out pooledPath);
+            ObjectPooler.GetMember("Layout000Grid", out path);
 
-        return pooledPath;
+        return path;
     }
 }
 

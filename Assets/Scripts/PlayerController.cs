@@ -10,6 +10,8 @@ public class PlayerController : Controller
     [SerializeField]
     Sensor[] sensors;
 
+    PlayerPawn player;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,11 +38,13 @@ public class PlayerController : Controller
             new Keymapper.Key("up", KeyCode.UpArrow),
             new Keymapper.Key("down", KeyCode.DownArrow),
             new Keymapper.Key("boost", KeyCode.Space));
+
+         player = AssociatedPawn as PlayerPawn;
     }
 
     void InputControls()
     {
-        PlayerPawn player = AssociatedPawn as PlayerPawn;
+        
         //Movement controls
         if (Keymapper.OnKeyDown("left") &&
             player.GetDirection() != Direction.RIGHT &&

@@ -103,7 +103,7 @@ public class PlayerPawn : Pawn
     /// Update the signal point that the player is at
     /// </summary>
     /// <param name="signalPoint"></param>
-    public void UpdateSignalPoint(SignalLayoutSpawn signalPoint)
+    public void UpdateSignalPoint(ref SignalLayoutSpawn signalPoint)
     {
         this.signalPoint = signalPoint;
     }

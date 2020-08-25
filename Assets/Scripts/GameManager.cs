@@ -88,9 +88,13 @@ public class GameManager : MonoBehaviour
     private static float time;
     private static float deadTime = 0.1f;
 
+    private const int DEFAULT_FRAMERATE = 60;
+
+    private static GameObject playerDeathObj;
+
     private void Awake()
     {
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = DEFAULT_FRAMERATE;
 
         //Load Title Screen
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
@@ -132,7 +136,7 @@ public class GameManager : MonoBehaviour
         BoostSpeed = BoostBurstValue;
     }
 
-    public static void DetermineTiming(float distance)
+    public static void DetermineTiming(ref float distance)
     {
         dontDestroy = (distance < 2f);
     }
@@ -188,12 +192,12 @@ public class GameManager : MonoBehaviour
     static void DestoryPlayer()
     {
 
-        GameObject prefab = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);
-        if(prefab != null && !prefab.activeInHierarchy)
+        playerDeathObj = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);
+        if(playerDeathObj != null && !playerDeathObj.activeInHierarchy)
         {
-            prefab.SetActive(true);
-            prefab.transform.localPosition = player.transform.localPosition;
-            prefab.transform.rotation = Quaternion.identity;
+            playerDeathObj.SetActive(true);
+            playerDeathObj.transform.localPosition = player.transform.localPosition;
+            playerDeathObj.transform.rotation = Quaternion.identity;
 
             deathParticle.Play();
         }
