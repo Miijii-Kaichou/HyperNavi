@@ -16,7 +16,7 @@ public enum Direction
 
 public class GameManager : MonoBehaviour
 {
-    
+
     private static GameManager Instance;
 
     // Handles all gaming things in the game
@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
 
     public static PlayerPawn player;
 
+    public static bool dontDestroy = false;
+
     private void Awake()
     {
         //Load Title Screen
@@ -94,7 +96,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
-        }    else
+        }
+        else
         {
             Destroy(gameObject);
         }
@@ -106,7 +109,7 @@ public class GameManager : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
 
-        
+
     }
 
     /// <summary>
@@ -128,10 +131,17 @@ public class GameManager : MonoBehaviour
         BoostSpeed = BoostBurstValue;
     }
 
-    public static void DetermineTiming()
+    public static void DetermineTiming(float distance)
     {
+        dontDestroy = (distance < 2f);
 
+        if (dontDestroy)
+            player.ApplyIFrames();
+
+        return;
     }
+
+    public static void AllowDestructionOfPlayer() => dontDestroy = false;
 
     static IEnumerator Friction()
     {
@@ -161,8 +171,9 @@ public class GameManager : MonoBehaviour
 
         while (true)
         {
-            //if (player != null && player.HasContactedWall())
-            //    player.gameObject.SetActive(false);
+            if (player != null && player.HasContactedWall() && dontDestroy == false)
+                player.gameObject.SetActive(false);
+
 
             yield return null;
         }

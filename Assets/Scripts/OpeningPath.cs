@@ -26,6 +26,7 @@ public class OpeningPath : MonoBehaviour
     public bool IsBottomOpen() => bottomOpen;
 
     public Vector3 GetSignalTriggerPosition() => signalTrigger.transform.localPosition;
+    public SignalLayoutSpawn GetSignal() => signalTrigger;
     public float GetXUnit() => xUnit;
     public float GetYUnit() => yUnit;
 }

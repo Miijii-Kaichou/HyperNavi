@@ -1449,7 +1449,7 @@ PrefabInstance:
     - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_Mass
-      value: 0.79568845
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
@@ -1464,7 +1464,7 @@ PrefabInstance:
     - target: {fileID: 1711948332822375291, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}
       propertyPath: m_UseAutoMass
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1711948332822375293, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
         type: 3}

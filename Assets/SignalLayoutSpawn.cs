@@ -50,9 +50,11 @@ public class SignalLayoutSpawn : MonoBehaviour
         distanceCheck.OnRangeEnter.AddNewListener(
         () =>
         {
-            Debug.Log("Yes!!!");
             if (player != null && turningPoint)
+            {
                 player.AllowTurn();
+                player.UpdateSignalPoint(layout.GetSignal());
+            }
         });
 
         distanceCheck.OnRangeExit.AddNewListener(
@@ -60,6 +62,8 @@ public class SignalLayoutSpawn : MonoBehaviour
         {
             //Signal generator to generate a layout based on the player's direction
             generateEvent.Trigger();
+            Debug.Log("Exitted!!!");
+            GameManager.AllowDestructionOfPlayer();
         });
     }
 
@@ -117,5 +121,10 @@ public class SignalLayoutSpawn : MonoBehaviour
                     return;
             }
         }
+    }
+
+    public void SubmitDistanceToManager()
+    {
+        GameManager.DetermineTiming(distance);
     }
 }

@@ -12,6 +12,18 @@ public class PlayerPawn : Pawn
 
     private bool canTurn = false;
 
+    private SignalLayoutSpawn signalPoint;
+
+    private bool invincibility = false;
+
+    private float time = 0f;
+    private float duration = 0.5f;
+    protected override void Start()
+    {
+        StartCoroutine(IFrameLoop());
+        base.Start();
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -24,6 +36,7 @@ public class PlayerPawn : Pawn
     {
         currentDirection = Direction.LEFT;
         transform.eulerAngles = new Vector3(0f, 0f, 90f);
+        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -33,6 +46,7 @@ public class PlayerPawn : Pawn
     {
         currentDirection = Direction.RIGHT;
         transform.eulerAngles = new Vector3(0f, 0f, 270f);
+        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -42,6 +56,7 @@ public class PlayerPawn : Pawn
     {
         currentDirection = Direction.UP;
         transform.eulerAngles = new Vector3(0f, 0f, 0f);
+        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -51,6 +66,7 @@ public class PlayerPawn : Pawn
     {
         currentDirection = Direction.DOWN;
         transform.eulerAngles = new Vector3(0f, 0f, 180f);
+        signalPoint.SubmitDistanceToManager();
     }
 
     // Unique to player
@@ -81,16 +97,49 @@ public class PlayerPawn : Pawn
     /// </summary>
     public void ProhibitTurn() => canTurn = false;
 
+    public Rigidbody2D GetRigidbody() => rb2d;
+
+    public void ApplyIFrames()
+    {
+        invincibility = true;
+        hasContactedWall = false;
+        time = 0f;
+    }
+
+    IEnumerator IFrameLoop()
+    {
+        while (true)
+        {
+            if (invincibility)
+            {
+                time += Time.deltaTime;
+                if(time >= duration)
+                {
+                    time = 0f;
+                    invincibility = false;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Update the signal point that the player is at
+    /// </summary>
+    /// <param name="signalPoint"></param>
+    public void UpdateSignalPoint(SignalLayoutSpawn signalPoint)
+    {
+        this.signalPoint = signalPoint;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         try
         {
-            hasContactedWall = collision.collider.GetComponent<TilemapCollider2D>() != null;
+            hasContactedWall = collision.collider.GetType() == typeof(TilemapCollider2D);
         }
         catch (Exception e)
         {
             throw e;
         }
     }
-
 }
