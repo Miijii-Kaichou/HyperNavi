@@ -22,22 +22,13 @@ public abstract class Pawn : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+        Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed));
+        transform.Translate(direction * Time.deltaTime);
     }
 
     protected virtual void OnEnable()
     {
         Init();
-    }
-
-    IEnumerator Move()
-    {
-        while (true)
-        {
-            Vector2 direction = new Vector2(0f, GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed));
-            transform.Translate(direction * Time.deltaTime);
-            yield return new WaitForEndOfFrame();
-        }
     }
 
     /// <summary>
@@ -107,6 +98,5 @@ public abstract class Pawn : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
         setEulerAngle = transform.eulerAngles;
-        StartCoroutine(Move());
     }
 }

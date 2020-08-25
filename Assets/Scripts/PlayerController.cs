@@ -124,8 +124,11 @@ public class PlayerController : Controller
         {
             try
             {
-                InputControls();
-                TouchInputControls();
+                if (GameManager.IsGameStarted)
+                {
+                    InputControls();
+                    TouchInputControls();
+                }
             }
             catch(Exception e)
             {

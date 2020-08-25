@@ -14,7 +14,7 @@ public class PlayerPawn : Pawn
 
     protected override void Update()
     {
-
+        base.Update();
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class PlayerPawn : Pawn
     /// </summary>
     public void ProhibitTurn() => canTurn = false;
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         try
         {

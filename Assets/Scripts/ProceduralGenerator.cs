@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
-using static Extensions;
 using Random = UnityEngine.Random;
+using System.Threading;
 
 public enum Side
 {
@@ -15,8 +12,10 @@ public enum Side
 }
 public class ProceduralGenerator : MonoBehaviour
 {
+    private static ProceduralGenerator Instance;
+
     //All Environmental Layers
-    public GameObject[] environmentalLayoutPrefabs;
+    public OpeningPath[] environmentalLayoutPaths;
 
     public ObjectPooler objectPooler;
 
@@ -30,18 +29,24 @@ public class ProceduralGenerator : MonoBehaviour
 
     // Toggling this on will only use Layout's 0 and 1 in a loop
     // This effect is used for the title screen
-    [SerializeField]
-    private bool onPreview;
+    public static bool OnPreview { get; set; } = true;
+
+    private void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        } else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         GetAllEnvironmentalLayouts();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     /// <summary>
@@ -49,19 +54,20 @@ public class ProceduralGenerator : MonoBehaviour
     /// </summary>
     void GetAllEnvironmentalLayouts()
     {
-        GameObject[] foundChildren = objectPooler.pooledObjects.ToArray();
+        OpeningPath[] foundChildren = objectPooler.pooledObjects.GetAllPaths();
 
         //Check if under Environmental Tag
-        foreach (GameObject child in foundChildren)
+        foreach (OpeningPath child in foundChildren)
         {
             //If even 1 child doesn't match the tag, get out of the function
             if (!child.CompareTag(ENVIRONMENT_LAYOUT_TAG))
             {
                 Debug.Log("No Environment Tag...");
+                break;
             }
         }
 
-        environmentalLayoutPrefabs = foundChildren;
+        environmentalLayoutPaths = foundChildren;
     }
 
     //Generate a layout and place it some many units relative to the active layout
@@ -70,7 +76,7 @@ public class ProceduralGenerator : MonoBehaviour
         OpeningPath path = null;
         float horSign = 0;
         float verSign = 0;
-        if (!onPreview)
+        if (!OnPreview)
         {
             switch (side)
             {
@@ -104,6 +110,7 @@ public class ProceduralGenerator : MonoBehaviour
         }
         else
         {
+            //Need bottom side open
             side = Side.BOTTOM;
             path = GetOpeningPath(side);
             verSign = 1;
@@ -113,7 +120,7 @@ public class ProceduralGenerator : MonoBehaviour
         if (path != null && !path.gameObject.activeInHierarchy)
         {
             path.gameObject.SetActive(true);
-            path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 1f);
+            path.transform.localPosition = relativePath.transform.localPosition + new Vector3(horSign * path.GetXUnit(), verSign * path.GetYUnit(), 0f);
             path.transform.rotation = Quaternion.identity;
         }
     }
@@ -126,54 +133,48 @@ public class ProceduralGenerator : MonoBehaviour
     /// <returns></returns>
     OpeningPath GetOpeningPath(Side side)
     {
-        try
+        OpeningPath[] paths = environmentalLayoutPaths;
+        List<OpeningPath> matchingPaths = new List<OpeningPath>();
+
+        foreach (OpeningPath path in paths)
         {
-            GameObject[] paths = environmentalLayoutPrefabs;
-            List<OpeningPath> matchingPaths = new List<OpeningPath>();
-            foreach (GameObject path in paths)
+            switch (side)
             {
-                switch (side)
-                {
-                    case Side.LEFT:
-                        if (path.GetComponent<OpeningPath>().IsLeftOpen())
-                            matchingPaths.Add(path.GetComponent<OpeningPath>());
-                        break;
+                case Side.LEFT:
+                    if (path.IsLeftOpen())
+                        matchingPaths.Add(path);
+                    break;
 
-                    case Side.RIGHT:
-                        if (path.GetComponent<OpeningPath>().IsRightOpen())
-                            matchingPaths.Add(path.GetComponent<OpeningPath>());
-                        break;
+                case Side.RIGHT:
+                    if (path.IsRightOpen())
+                        matchingPaths.Add(path);
+                    break;
 
-                    case Side.TOP:
-                        if (path.GetComponent<OpeningPath>().IsTopOpen())
-                            matchingPaths.Add(path.GetComponent<OpeningPath>());
-                        break;
+                case Side.TOP:
+                    if (path.IsTopOpen())
+                        matchingPaths.Add(path);
+                    break;
 
-                    case Side.BOTTOM:
-                        if (path.GetComponent<OpeningPath>().IsBottomOpen())
-                            matchingPaths.Add(path.GetComponent<OpeningPath>());
-                        break;
-                    default:
-                        break;
-                }
+                case Side.BOTTOM:
+                    if (path.IsBottomOpen())
+                        matchingPaths.Add(path);
+                    break;
+                default:
+                    break;
             }
-
-            // Now, return a random matching path
-            int value = Random.Range(0, matchingPaths.Count - 1);
-
-            OpeningPath pooledPath;
-
-            if (!onPreview)
-                ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out pooledPath);
-            else
-                ObjectPooler.GetMember("Layout000Grid", out pooledPath);
-
-            return pooledPath;
         }
-        catch (Exception e)
-        {
-            Debug.LogError("Couldn't Get Path Layout.");
-            throw e;
-        }
+
+        // Now, return a random matching path
+        int value = Random.Range(0, matchingPaths.Count - 1);
+
+        OpeningPath pooledPath;
+
+        if (!OnPreview)
+            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out pooledPath);
+        else
+            ObjectPooler.GetMember("Layout000Grid", out pooledPath);
+
+        return pooledPath;
     }
 }
+

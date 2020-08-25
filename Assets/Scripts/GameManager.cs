@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
+using UnityEngine.SceneManagement;
 
 public enum Direction
 {
@@ -86,7 +87,10 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        //Load Title Screen
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
+
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
@@ -98,18 +102,22 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //Test Again
-        //StartGame();
+        Application.targetFrameRate = 120;
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
+
+        
     }
 
     /// <summary>
     /// Start the game officially
     /// </summary>
-    public void StartGame()
+    public static void StartGame()
     {
         IsGameStarted = true;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
-        StartCoroutine(GameLoop());
+
+        //Start Game loop
+        Instance.StartCoroutine(GameLoop());
     }
 
     /// <summary>
@@ -125,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    IEnumerator Friction()
+    static IEnumerator Friction()
     {
         while (true)
         {
@@ -134,7 +142,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator Accelerate()
+    static IEnumerator Accelerate()
     {
         while (true)
         {
@@ -143,18 +151,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator GameLoop()
+    static IEnumerator GameLoop()
     {
         //Start friction
-        StartCoroutine(Friction());
+        Instance.StartCoroutine(Friction());
 
         //Start acceleration
-        StartCoroutine(Accelerate());
+        Instance.StartCoroutine(Accelerate());
 
         while (true)
         {
-            if (player != null && player.HasContactedWall())
-                player.gameObject.SetActive(false);
+            //if (player != null && player.HasContactedWall())
+            //    player.gameObject.SetActive(false);
 
             yield return null;
         }

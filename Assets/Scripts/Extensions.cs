@@ -8,20 +8,18 @@ using System;
 /// </summary>
 public static class Extensions
 {
-    public static OpeningPath[] GetPathsFromPrefab(this GameObject[] prefabs)
+    public static OpeningPath[] GetAllPaths(this List<GameObject> objectList)
     {
-        try
+        List<OpeningPath> paths = new List<OpeningPath>();
+        foreach(GameObject obj in objectList)
         {
-            List<OpeningPath> paths = new List<OpeningPath>();
-            foreach (GameObject prefab in prefabs)
-            {
-                paths.Add(prefab.GetComponent<OpeningPath>());
-            }
-
-            return paths.ToArray();
-        } catch (Exception e)
-        {
-            throw e;
+            paths.Add(obj.GetComponent<OpeningPath>());
         }
+
+        return paths.ToArray();
+    }
+    public static bool ContainsComponent<T>(this Collider2D collision) where T : Component
+    {
+        return (collision.GetComponent<PlayerPawn>() != null);
     }
 }
