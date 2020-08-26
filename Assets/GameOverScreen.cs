@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
-
 public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 {
     private static IUnityAdsListener Instance;
@@ -9,6 +8,9 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     private void Awake()
     {
         Instance = this;
+        
+        Advertisement.AddListener(Instance);
+        Advertisement.Initialize("3789069");
     }
 
     public void OnTryAgain()
@@ -24,28 +26,15 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         ShowAd();
     }
 
-    void ShowAd(string zone = "rewardedVideoZone")
+    void ShowAd(string zone = "rewardedVideo")
     {
-        Advertisement.AddListener(Instance);
-
-        StartCoroutine(GetReady(zone));
-    }
-
-    IEnumerator GetReady(string placementId)
-    {
-        while (!Advertisement.IsReady(placementId))
-        {
-            yield return new WaitUntil(() => Advertisement.IsReady(placementId));
-
-            OnUnityAdsReady(placementId);
-        }
+        Advertisement.Show(zone);
     }
 
 
     public void OnUnityAdsReady(string placementId)
     {
-        if (!Advertisement.isShowing)
-            Advertisement.Show(placementId);
+
     }
 
     public void OnUnityAdsDidError(string message)
@@ -64,23 +53,22 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         {
             case ShowResult.Failed:
                 OnUnityAdsDidError("Ad came across an error.");
-                break;
+                return;
             case ShowResult.Skipped:
                 Debug.Log("Ad was skipped.");
                 //Remove Listener
-                break;
+                return;
             case ShowResult.Finished:
-                Debug.Log("Yay! Ad is now finished!!!");
-
-                Advertisement.RemoveListener(Instance);
+                Debug.Log("Yay! Ad is now finished!!!");;
 
                 //Finally, unload this scene
                 GameManager.UnloadScene("GameOverScene", EventManager.AddNewEvent(999, "continue", () =>
                 {
                     //Spawn player to last signal point
                     GameManager.SpawnPlayerToLastSignalPoint();
+                    Advertisement.RemoveListener(Instance);
                 }));
-                break;
+                return;
             default:
                 break;
         }

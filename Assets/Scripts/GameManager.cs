@@ -125,8 +125,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
-        Advertisement.Initialize("3789069");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
     }
 
@@ -329,7 +327,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Loading player back in!!!");
         if (!player.gameObject.activeInHierarchy)
         {
-            
+
+            CurrentSpeed = InitialSpeed;
 
             dontDestroy = true;
 
