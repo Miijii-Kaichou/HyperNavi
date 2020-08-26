@@ -5,6 +5,11 @@ public class TitleScreen : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
+    public void Unload(string sceneName)
+    {
+        GameManager.UnloadScene(sceneName);
+    }
+
     /// <summary>
     /// When the "Play" Option's been selected
     /// </summary>

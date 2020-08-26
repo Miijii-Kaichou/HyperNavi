@@ -42,24 +42,27 @@ SpriteAtlas:
       enableTightPacking: 1
     variantMultiplier: 1
     packables:
-    - {fileID: 21300000, guid: 14bb329ead010b649bafc5472ba8b481, type: 3}
-    - {fileID: 21300000, guid: b738d1d3efeb2bc40b380d7a57550e88, type: 3}
-    - {fileID: 21300000, guid: a794c6f59751dc84688124b2e6eb9c9b, type: 3}
-    - {fileID: 2800000, guid: 14bb329ead010b649bafc5472ba8b481, type: 3}
-    - {fileID: 2800000, guid: b738d1d3efeb2bc40b380d7a57550e88, type: 3}
-    - {fileID: 2800000, guid: a794c6f59751dc84688124b2e6eb9c9b, type: 3}
-    totalSpriteSurfaceArea: 3072
+    - {fileID: 102900000, guid: 23e019a8ef3f1154d89c52ad18e8efae, type: 3}
+    totalSpriteSurfaceArea: 7168
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: b738d1d3efeb2bc40b380d7a57550e88, type: 3}
+  - {fileID: 21300000, guid: acbea2e302722544ebf163c8339c7640, type: 3}
+  - {fileID: 21300000, guid: 8edac5042eee8af4abf9608dff857cb2, type: 3}
   - {fileID: 21300000, guid: a794c6f59751dc84688124b2e6eb9c9b, type: 3}
+  - {fileID: 21300000, guid: adc7c88897569e14c9e1b279af5c57c6, type: 3}
+  - {fileID: 21300000, guid: 8b5cd259df8a4864cbf7858adbe43c43, type: 3}
   - {fileID: 21300000, guid: 14bb329ead010b649bafc5472ba8b481, type: 3}
   m_PackedSpriteNamesToIndex:
   - TrianglePlayerGhost
+  - iconmonstr-twitter-1-240
+  - iconmonstr-linkedin-1-240
   - Walls
+  - iconmonstr-facebook-1-240
+  - iconmonstr-instagram-11-240
   - TrianglePlayer
   m_Tag: TileSpriteAtlas
   m_IsVariant: 0

@@ -17,10 +17,11 @@ public static class EventManager
 
         public CallBackMethod listeners;
 
-        public Event(int uniqueID, string eventCode, CallBackMethod listener) {
+        public Event(int uniqueID, string eventCode, CallBackMethod listener)
+        {
 
             this.uniqueID = uniqueID;
-            
+
             //Null-Checking
             if (string.IsNullOrEmpty(eventCode))
             {
@@ -31,7 +32,7 @@ public static class EventManager
             {
                 this.eventCode = eventCode;
             }
-            
+
             hasTriggered = false;
         }
 
@@ -62,7 +63,7 @@ public static class EventManager
 
         public void RemoveListener(CallBackMethod listener)
         {
-            if(listeners != null)
+            if (listeners != null)
                 listeners -= listener;
         }
 
@@ -134,7 +135,7 @@ public static class EventManager
     /// <param name="eventCode"></param>
     public static void RemoveEvent(string eventCode)
     {
-        for(int idIndex = 0; idIndex < Events.Count; idIndex++)
+        for (int idIndex = 0; idIndex < Events.Count; idIndex++)
         {
             //If we found the event with this eventCode, remove it
             if (eventCode == Events[idIndex].GetEventCode())
@@ -209,7 +210,7 @@ public static class EventManager
     /// <returns></returns>
     public static bool HaveAllTriggered(this Event[] events)
     {
-        foreach(Event @event in events)
+        foreach (Event @event in events)
         {
             if (!@event.HasTriggered()) return false;
         }
@@ -236,6 +237,7 @@ public static class EventManager
 
     public static void TriggerEvent(string eventCode)
     {
+
         for (int idIndex = 0; idIndex < Events.Count; idIndex++)
         {
             //If we found the event with this eventCode, remove it

@@ -48,7 +48,10 @@ public class FollowBehind : MonoBehaviour
                 Vector3 destination = transform.localPosition + delta;
 
                 //Z will be changed
-                transform.localPosition = Vector3.SmoothDamp(transform.localPosition, destination, ref velocity, dampTime);
+                transform.localPosition = Vector3.SmoothDamp(
+                    new Vector3(transform.localPosition.x, transform.localPosition.y, -10), 
+                    new Vector3(destination.x, destination.y, -10), 
+                    ref velocity, dampTime);
             }
             yield return null;
         }

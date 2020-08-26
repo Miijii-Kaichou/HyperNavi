@@ -32,6 +32,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     void ShowAd(string zone = "rewardedVideo")
     {
+        while (!Advertisement.IsReady(zone)) continue;
         Advertisement.Show(zone);
     }
 
@@ -80,7 +81,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 {
                     //Spawn player to last signal point
                     GameManager.SpawnPlayerToLastSignalPoint();
-                    Advertisement.RemoveListener(Instance);
+                    Advertisement.RemoveListener(Instance);;
                 }));
                 return;
             default:

@@ -108,15 +108,17 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = DEFAULT_FRAMERATE;
-
-        //Load Title Screen
-        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
-
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
+
+            //Load Title Screen
+            LoadScene("TitleScreen/1/A");
+
+            Application.targetFrameRate = DEFAULT_FRAMERATE;
+
+            Screen.SetResolution(1920, 1080, true);
         }
         else
         {
@@ -277,6 +279,8 @@ public class GameManager : MonoBehaviour
         LoadScene(sceneName, async, mode);
     }
 
+    
+
     static void LoadScene(string sceneName, bool asynchronously = false, LoadSceneMode mode = LoadSceneMode.Single)
     {
         switch (asynchronously)
@@ -295,18 +299,27 @@ public class GameManager : MonoBehaviour
         Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
     }
 
+    public static void UnloadScene(string sceneName)
+    {
+        Instance.StartCoroutine(AsynchronousUnload(sceneName));
+    }
+
     static IEnumerator AsyncronousLoad(string sceneName, LoadSceneMode mode)
     {
         operation = new AsyncOperation();
         operation = SceneManager.LoadSceneAsync(sceneName, mode);
         operation.allowSceneActivation = false;
+        while (true)
+        {
+            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
 
-        loadingProgress = Mathf.Clamp01(operation.progress / .9f);
-
-        if (loadingProgress >= 0.99f)
-            operation.allowSceneActivation = true;
-
-        yield return operation;
+            if (loadingProgress >= .99f)
+            {
+                operation.allowSceneActivation = true;
+                break;
+            }
+            yield return null;
+        }
     }
 
     static IEnumerator AsynchronousUnload(string sceneName, EventManager.Event @event)
@@ -314,11 +327,42 @@ public class GameManager : MonoBehaviour
         operation = new AsyncOperation();
         operation = SceneManager.UnloadSceneAsync(sceneName);
 
-        loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+        while (true)
+        {
 
-        EventManager.TriggerEvent(@event.eventCode);
+            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
 
-        yield return operation;
+            if (loadingProgress >= .99f)
+            {
+                try
+                {
+                    @event.Trigger();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    static IEnumerator AsynchronousUnload(string sceneName)
+    {
+        operation = new AsyncOperation();
+        operation = SceneManager.UnloadSceneAsync(sceneName);
+
+        while (true)
+        {
+
+            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+
+            if (loadingProgress >= .99f)
+                break;
+
+            yield return null;
+        }
     }
 
     static void FlushPaths()
@@ -436,7 +480,7 @@ public class GameManager : MonoBehaviour
                 }
 
             }
-            
+
         }
     }
 }
