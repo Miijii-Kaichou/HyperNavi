@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
@@ -116,7 +117,8 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
-        } else
+        }
+        else
         {
             Destroy(gameObject);
         }
@@ -298,75 +300,112 @@ public class GameManager : MonoBehaviour
         operation = new AsyncOperation();
         operation = SceneManager.LoadSceneAsync(sceneName, mode);
         operation.allowSceneActivation = false;
-        while (!operation.isDone)
-        {
-            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
-            
-            if (loadingProgress >= 0.99f)
-                operation.allowSceneActivation = true;
 
-            yield return new WaitForEndOfFrame();
-        }
+        loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+
+        if (loadingProgress >= 0.99f)
+            operation.allowSceneActivation = true;
+
+        yield return operation;
     }
 
     static IEnumerator AsynchronousUnload(string sceneName, EventManager.Event @event)
     {
         operation = new AsyncOperation();
         operation = SceneManager.UnloadSceneAsync(sceneName);
-        while (!operation.isDone)
+
+        loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+
+        EventManager.TriggerEvent(@event.eventCode);
+
+        yield return operation;
+    }
+
+    static void FlushPaths()
+    {
+        foreach (OpeningPath path in ObjectPooler.pooledObjects.GetAllPaths())
         {
-            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
-            Debug.Log("DO IT BITCH!!!");
-            EventManager.TriggerEvent(@event.eventCode);
-            yield return new WaitForEndOfFrame();
+            if (path.gameObject.activeInHierarchy)
+                path.gameObject.SetActive(false);
+        }
+    }
+
+    public static void SpawnPlayerToStartLayout()
+    {
+        if (!player.gameObject.activeInHierarchy)
+        {
+            CurrentSpeed = InitialSpeed;
+
+            ResetTime();
+
+            FlushPaths();
+
+            OpeningPath layout = Instance.startingLayout;
+
+            ProceduralGenerator.DontDeactivate();
+            ProceduralGenerator.CurrentLayout = layout;
+
+            layout.gameObject.SetActive(true);
+
+
+
+            player.gameObject.SetActive(true);
+            player.transform.localPosition = layout.GetSignalTriggerPosition();
+            player.transform.rotation = Quaternion.identity;
+            player.ChangeDirection(Direction.UP);
         }
     }
 
     public static void SpawnPlayerToLastSignalPoint()
     {
-        Debug.Log("Loading player back in!!!");
         if (!player.gameObject.activeInHierarchy)
         {
-
             CurrentSpeed = InitialSpeed;
 
             dontDestroy = true;
 
+            ProceduralGenerator.DontDeactivate();
+
             //Assure that when reactivating player, they are facing towards any random open path
             bool leftOpened, rightOpened, topOpened, bottomOpened;
 
-            leftOpened = ProceduralGenerator.CurrentLayout.IsLeftOpen();
-            rightOpened = ProceduralGenerator.CurrentLayout.IsRightOpen();
-            topOpened = ProceduralGenerator.CurrentLayout.IsTopOpen();
-            bottomOpened = ProceduralGenerator.CurrentLayout.IsBottomOpen();
+            FlushPaths();
 
-            int value = Random.Range(0, 4);
+            OpeningPath path = player.GetLastSignalPoint().GetPath();
 
-            ProceduralGenerator.ResetFields();
+            path.gameObject.SetActive(true);
+
+            leftOpened = path.IsLeftOpen();
+            rightOpened = path.IsRightOpen();
+            topOpened = path.IsTopOpen();
+            bottomOpened = path.IsBottomOpen();
+
             player.gameObject.SetActive(true);
-            player.transform.localPosition = ProceduralGenerator.CurrentLayout.transform.localPosition;
 
+            player.transform.localPosition = path.GetSignal().transform.position;
+
+            ResetTime();
+            int value = Random.Range(0, 3);
             switch ((Direction)value)
             {
                 case Direction.LEFT:
-                    if (leftOpened)
-                        player.ChangeDirection((Direction)value);
-                    return;
+                    if (leftOpened && player.GetDirection() != Direction.RIGHT)
+                        player.MoveLeft();
+                    break;
                 case Direction.RIGHT:
-                    if (rightOpened)
-                        player.ChangeDirection((Direction)value);
-                    return;
+                    if (rightOpened && player.GetDirection() != Direction.LEFT)
+                        player.MoveRight();
+                    break;
                 case Direction.UP:
-                    if (topOpened)
-                        player.ChangeDirection((Direction)value);
-                    return;
+                    if (topOpened && player.GetDirection() != Direction.DOWN)
+                        player.MoveUp();
+                    break;
                 case Direction.DOWN:
-                    if (bottomOpened)
-                        player.ChangeDirection((Direction)value);
-                    return;
-                default:
-                    return;
+                    if (bottomOpened && player.GetDirection() != Direction.UP)
+                        player.MoveDown();
+                    break;
             }
         }
     }
+
 }

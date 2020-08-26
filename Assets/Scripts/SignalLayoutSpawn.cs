@@ -52,18 +52,21 @@ public class SignalLayoutSpawn : MonoBehaviour
         }
     }
 
+    public OpeningPath GetPath() => layout;
 
     /// <summary>
     /// Trigger an event to generate a new layout
     /// </summary>
     void SignalGeneration()
     {
+
         ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
 
         if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
             ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
 
         ProceduralGenerator.CurrentLayout = layout;
+
 
         generator.dontDeactivate = false;
 

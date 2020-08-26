@@ -1300,8 +1300,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environmentalLayoutPaths: []
   objectPooler: {fileID: 1613675066}
-  currentLayout: {fileID: 0}
-  previousLayout: {fileID: 0}
   dontDeactivate: 1
 --- !u!1 &1750561396465999662
 GameObject:

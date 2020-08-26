@@ -19,7 +19,7 @@ public class WallDetector : MonoBehaviour
         layoutMask = LayerMask.GetMask("Layout");
     }
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(WallDetectionLoop());
     }
@@ -29,6 +29,7 @@ public class WallDetector : MonoBehaviour
         while (true)
         {
             pos = transform.position;
+            Debug.DrawRay(pos, transform.up * detectionDistance, Color.red);
             hit = Physics2D.Raycast(pos, transform.up, detectionDistance, layoutMask);
             hasContactedWall = hit.collider != null;
             yield return null;

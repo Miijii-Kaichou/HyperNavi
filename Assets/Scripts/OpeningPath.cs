@@ -22,8 +22,10 @@ public class OpeningPath : MonoBehaviour
     public bool IsRightOpen() => rightOpen;
     public bool IsTopOpen() => topOpen;
     public bool IsBottomOpen() => bottomOpen;
-
-    public Vector3 GetSignalTriggerPosition() => signalTrigger.transform.localPosition;
+    public Vector3 GetSignalTriggerPosition()
+    {
+        return signalTrigger.transform.localPosition;
+    }
     public SignalLayoutSpawn GetSignal() => signalTrigger;
     public float GetXUnit() => xUnit;
     public float GetYUnit() => yUnit;

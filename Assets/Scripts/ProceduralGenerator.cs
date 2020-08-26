@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,9 +21,9 @@ public class ProceduralGenerator : MonoBehaviour
 
     public ObjectPooler objectPooler;
 
-    public static OpeningPath CurrentLayout { get; set; }
+    public static OpeningPath CurrentLayout;
 
-    public static OpeningPath PreviousLayout { get; set; }
+    public static OpeningPath PreviousLayout;
 
     public bool dontDeactivate = true;
 
@@ -175,10 +177,9 @@ public class ProceduralGenerator : MonoBehaviour
         return path;
     }
 
-    public static void ResetFields()
+    public static void DontDeactivate()
     {
         Instance.dontDeactivate = true;
-        PreviousLayout = null;
     }
 }
 

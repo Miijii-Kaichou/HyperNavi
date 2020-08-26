@@ -117,6 +117,8 @@ public class PlayerPawn : Pawn
         this.signalPoint = signalPoint;
     }
 
+    public SignalLayoutSpawn GetLastSignalPoint() => signalPoint;
+
     /// <summary>
     /// Get player pawn's controller
     /// </summary>
