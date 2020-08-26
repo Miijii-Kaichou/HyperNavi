@@ -12,12 +12,6 @@ public abstract class Pawn : MonoBehaviour
     private float speed;
     Vector2 direction;
     
-    // Start is called before the first frame update
-    protected virtual void Start()
-    {
-        StartCoroutine(MovementCycle());    
-    }
-
     IEnumerator MovementCycle()
     {
         while (true)
@@ -100,5 +94,6 @@ public abstract class Pawn : MonoBehaviour
     {
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
+        StartCoroutine(MovementCycle());
     }
 }

@@ -58,12 +58,12 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     void SignalGeneration()
     {
-        generator.previousLayout = generator.currentLayout;
+        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
 
-        if (!generator.dontDeactivate && generator.previousLayout != null)
-            generator.previousLayout.gameObject.SetActive(false);
+        if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
+            ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
 
-        generator.currentLayout = layout;
+        ProceduralGenerator.CurrentLayout = layout;
 
         generator.dontDeactivate = false;
 

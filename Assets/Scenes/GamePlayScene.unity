@@ -416,14 +416,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dampTime: 0.025
   offset: {x: 0, y: 0, z: 0}
-  targetTranform: {fileID: 1711948332822375289, guid: a8af83a3c1a554e4c954f1bd1ef457ec,
-    type: 3}
+  targetTranform: {fileID: 0}
   zDepth: 0
-  isCamera: 0
-  additionalTarget: {fileID: 0}
-  divisorValue: 0.1
-  distanceTreshold: 0.1
-  focusMidpoint: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -972,7 +966,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b4d48b4195cc446ae6dbfe85330e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementDetection: {fileID: 905907881}
+  boostDetection: {fileID: 82705932}
   player: {fileID: 1711948332822375294, guid: a8af83a3c1a554e4c954f1bd1ef457ec, type: 3}
+  gameCamera: {fileID: 519420030}
   spawnUnder: {fileID: 1898618192}
 --- !u!1 &1254048689
 GameObject:
@@ -1004,11 +1001,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingLayout: {fileID: 4365486017063413541}
-  movementArea: {fileID: 905907881}
-  boostArea: {fileID: 82705932}
   onPlayerDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1254048690}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: GameOverScene/0/A
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1254048691
 Transform:
   m_ObjectHideFlags: 0

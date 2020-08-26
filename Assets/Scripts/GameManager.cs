@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Advertisements;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
+using Random = UnityEngine.Random;
 
 public enum Direction
 {
@@ -22,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private UnityEvent @onPlayerDeath = new UnityEvent();
+
+    static AsyncOperation operation = new AsyncOperation();
 
     // Handles all gaming things in the game
 
@@ -97,6 +103,8 @@ public class GameManager : MonoBehaviour
 
     private static GameObject playerDeathObj;
 
+    public static float loadingProgress = 0f;
+
     private void Awake()
     {
         Application.targetFrameRate = DEFAULT_FRAMERATE;
@@ -104,12 +112,21 @@ public class GameManager : MonoBehaviour
         //Load Title Screen
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
 
-        Instance = this;
-        DontDestroyOnLoad(Instance);
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        } else
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     private void Start()
     {
+
+        Advertisement.Initialize("3789069");
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
     }
 
@@ -236,4 +253,121 @@ public class GameManager : MonoBehaviour
     }
 
     public static bool Exists() => Instance != null;
+
+    /// <summary>
+    /// Load scene
+    /// Enter in event as: Name of Scene / 0 or 1 / S or A
+    /// </summary>
+    /// <param name="index"></param>
+    public void LoadScene(string pattern)
+    {
+        //Tokenize string
+        string[] values = pattern.Split('/');
+
+        //Get scene name argument
+        string sceneName = values[0];
+
+        //Get async argument
+        bool async = values[1].ToBoolean();
+
+        //Get load scene mode argument
+        LoadSceneMode mode = values[2].DetermineMode();
+
+        //Call load scene
+        LoadScene(sceneName, async, mode);
+    }
+
+    static void LoadScene(string sceneName, bool asynchronously = false, LoadSceneMode mode = LoadSceneMode.Single)
+    {
+        switch (asynchronously)
+        {
+            case true:
+                Instance.StartCoroutine(AsyncronousLoad(sceneName, mode));
+                break;
+            case false:
+                SceneManager.LoadScene(sceneName, mode);
+                break;
+        }
+    }
+
+    public static void UnloadScene(string sceneName, EventManager.Event @event)
+    {
+        Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
+    }
+
+    static IEnumerator AsyncronousLoad(string sceneName, LoadSceneMode mode)
+    {
+        operation = new AsyncOperation();
+        operation = SceneManager.LoadSceneAsync(sceneName, mode);
+        operation.allowSceneActivation = false;
+        while (!operation.isDone)
+        {
+            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+            
+            if (loadingProgress >= 0.99f)
+                operation.allowSceneActivation = true;
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    static IEnumerator AsynchronousUnload(string sceneName, EventManager.Event @event)
+    {
+        operation = new AsyncOperation();
+        operation = SceneManager.UnloadSceneAsync(sceneName);
+        while (!operation.isDone)
+        {
+            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+            Debug.Log("DO IT BITCH!!!");
+            EventManager.TriggerEvent(@event.eventCode);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public static void SpawnPlayerToLastSignalPoint()
+    {
+        Debug.Log("Loading player back in!!!");
+        if (!player.gameObject.activeInHierarchy)
+        {
+            
+
+            dontDestroy = true;
+
+            //Assure that when reactivating player, they are facing towards any random open path
+            bool leftOpened, rightOpened, topOpened, bottomOpened;
+
+            leftOpened = ProceduralGenerator.CurrentLayout.IsLeftOpen();
+            rightOpened = ProceduralGenerator.CurrentLayout.IsRightOpen();
+            topOpened = ProceduralGenerator.CurrentLayout.IsTopOpen();
+            bottomOpened = ProceduralGenerator.CurrentLayout.IsBottomOpen();
+
+            int value = Random.Range(0, 4);
+
+            ProceduralGenerator.ResetFields();
+            player.gameObject.SetActive(true);
+            player.transform.localPosition = ProceduralGenerator.CurrentLayout.transform.localPosition;
+
+            switch ((Direction)value)
+            {
+                case Direction.LEFT:
+                    if (leftOpened)
+                        player.ChangeDirection((Direction)value);
+                    return;
+                case Direction.RIGHT:
+                    if (rightOpened)
+                        player.ChangeDirection((Direction)value);
+                    return;
+                case Direction.UP:
+                    if (topOpened)
+                        player.ChangeDirection((Direction)value);
+                    return;
+                case Direction.DOWN:
+                    if (bottomOpened)
+                        player.ChangeDirection((Direction)value);
+                    return;
+                default:
+                    return;
+            }
+        }
+    }
 }

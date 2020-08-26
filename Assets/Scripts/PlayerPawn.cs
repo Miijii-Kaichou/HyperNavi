@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using UnityEditor.U2D.Path.GUIFramework;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class PlayerPawn : Pawn
 {
@@ -22,10 +19,11 @@ public class PlayerPawn : Pawn
 
     private SignalLayoutSpawn signalPoint;
 
-    protected override void Start()
+
+    protected override void OnEnable()
     {
         StartCoroutine(WallDetectionLoop());
-        base.Start();
+        base.OnEnable();
     }
 
     IEnumerator WallDetectionLoop()
@@ -107,6 +105,8 @@ public class PlayerPawn : Pawn
     public void ProhibitTurn() => canTurn = false;
 
     public Rigidbody2D GetRigidbody() => rb2d;
+
+    public void ChangeDirection(Direction newDirection) => currentDirection = newDirection;
 
     /// <summary>
     /// Update the signal point that the player is at

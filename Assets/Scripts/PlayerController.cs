@@ -9,13 +9,16 @@ public class PlayerController : Controller
 
     PlayerPawn player;
 
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         StartCoroutine(ControllerCycle());
         Init();
     }
 
+    /// <summary>
+    /// Main Controller Cycle
+    /// </summary>
+    /// <returns></returns>
     IEnumerator ControllerCycle()
     {
         while (true)

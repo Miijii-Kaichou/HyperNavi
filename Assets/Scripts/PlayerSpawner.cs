@@ -36,7 +36,7 @@ public class PlayerSpawner : MonoBehaviour
         {
             player.GetController().AssignMovementDetection(movementDetection);
             player.GetController().AssignBoostDetection(boostDetection);
-            gameCamera.AssignTarget(player.transform);
+            gameCamera.AttachTarget(player.transform);
         }
     }
 }

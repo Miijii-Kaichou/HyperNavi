@@ -22,26 +22,26 @@ public class FollowBehind : MonoBehaviour
 
     Vector3 velocity = Vector2.zero;
 
-    Camera m_camera;
-
     private void Start()
     {
-        StartCoroutine(CameraFollowCycle());
+        StartCoroutine(FollowCycle());
         Init();
     }
 
     private void Init()
     {
         initialPosition = GetComponent<Transform>().position;
-        m_camera = GetComponent<Camera>();
     }
 
-
-    IEnumerator CameraFollowCycle()
+    /// <summary>
+    /// Main Camera Follow Cycle
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator FollowCycle()
     {
         while (true)
         {
-            if (targetTranform && m_camera != null && initialPosition != null)
+            if (targetTranform && initialPosition != null)
             {
                 Vector3 point = transform.localPosition - new Vector3(offset.x * Mathf.Sign(targetTranform.localScale.x), offset.y);
                 Vector3 delta = targetTranform.localPosition - new Vector3(point.x, point.y, zDepth);
@@ -53,6 +53,14 @@ public class FollowBehind : MonoBehaviour
             yield return null;
         }
     }
+    /// <summary>
+    /// Attach a target to follow behind object
+    /// </summary>
+    /// <param name="target"></param>
+    public void AttachTarget(Transform target) => targetTranform = target;
 
-    public void AssignTarget(Transform target) => targetTranform = target;
+    /// <summary>
+    /// Detach a target from follow behind object
+    /// </summary>
+    public void DetachTarget() => targetTranform = null; 
 }
