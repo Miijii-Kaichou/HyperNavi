@@ -373,39 +373,71 @@ public class GameManager : MonoBehaviour
 
             OpeningPath path = player.GetLastSignalPoint().GetPath();
 
+            //Set path open
             path.gameObject.SetActive(true);
 
+            //Check if one of side are open
             leftOpened = path.IsLeftOpen();
             rightOpened = path.IsRightOpen();
             topOpened = path.IsTopOpen();
             bottomOpened = path.IsBottomOpen();
 
+
+            //Set player active
             player.gameObject.SetActive(true);
 
+            //Spawn to last checkpoint
             player.transform.localPosition = path.GetSignal().transform.position;
 
             ResetTime();
-            int value = Random.Range(0, 3);
-            switch ((Direction)value)
+            int value;
+            bool pathFound = false;
+            int safety = 0;
+            while (pathFound == false)
             {
-                case Direction.LEFT:
-                    if (leftOpened && player.GetDirection() != Direction.RIGHT)
-                        player.MoveLeft();
+                value = Random.Range(0, 3);
+                switch ((Direction)value)
+                {
+                    case Direction.LEFT:
+                        if (leftOpened)
+                        {
+                            player.MoveLeft();
+                            pathFound = true;
+                        }
+                        break;
+                    case Direction.RIGHT:
+                        if (rightOpened)
+                        {
+                            player.MoveRight();
+                            pathFound = true;
+                        }
+                        break;
+                    case Direction.UP:
+                        if (topOpened)
+                        {
+                            player.MoveUp();
+                            pathFound = true;
+                        }
+                        break;
+                    case Direction.DOWN:
+                        if (bottomOpened)
+                        {
+                            player.MoveDown();
+                            pathFound = true;
+                        }
+                        break;
+                }
+
+                safety++;
+                if (safety >= 100)
+                {
+                    Debug.Log("Iteration Failed");
                     break;
-                case Direction.RIGHT:
-                    if (rightOpened && player.GetDirection() != Direction.LEFT)
-                        player.MoveRight();
-                    break;
-                case Direction.UP:
-                    if (topOpened && player.GetDirection() != Direction.DOWN)
-                        player.MoveUp();
-                    break;
-                case Direction.DOWN:
-                    if (bottomOpened && player.GetDirection() != Direction.UP)
-                        player.MoveDown();
-                    break;
+                }
+
             }
+            
         }
     }
-
 }
+
