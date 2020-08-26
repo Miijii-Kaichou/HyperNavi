@@ -3,32 +3,40 @@
 public class PlayerSpawner : MonoBehaviour
 {
     [SerializeField]
+    TouchDetection movementDetection, boostDetection;
+
+    [SerializeField]
     PlayerPawn player;
 
     [SerializeField]
-    Transform spawnUnder;
+    FollowBehind gameCamera;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    Transform spawnUnder;
 
     private void OnEnable()
     {
         InstantiatePlayer();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Spawn the player
+    /// </summary>
     void InstantiatePlayer()
     {
+        //Instanstiation
         player = Instantiate(player, spawnUnder);
+
+        //Object placement
         player.transform.position = transform.position;
         player.transform.rotation = Quaternion.identity;
+
+        //Touch area / detection assignment
+        if (player != null)
+        {
+            player.GetController().AssignMovementDetection(movementDetection);
+            player.GetController().AssignBoostDetection(boostDetection);
+            gameCamera.AssignTarget(player.transform);
+        }
     }
 }

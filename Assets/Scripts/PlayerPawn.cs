@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor.U2D.Path.GUIFramework;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class PlayerPawn : Pawn
 {
+    [SerializeField]
+    private PlayerController controller;
+
     [SerializeField]
     private WallDetector wallDetector;
 
@@ -20,13 +24,18 @@ public class PlayerPawn : Pawn
 
     protected override void Start()
     {
+        StartCoroutine(WallDetectionLoop());
         base.Start();
     }
 
-    protected override void Update()
+    IEnumerator WallDetectionLoop()
     {
-        hasContactedWall = wallDetector.HasCollided();
-        base.Update();
+        while (true)
+        {
+            hasContactedWall = wallDetector.HasCollided();
+
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -107,4 +116,10 @@ public class PlayerPawn : Pawn
     {
         this.signalPoint = signalPoint;
     }
+
+    /// <summary>
+    /// Get player pawn's controller
+    /// </summary>
+    /// <returns></returns>
+    public PlayerController GetController() => controller;
 }

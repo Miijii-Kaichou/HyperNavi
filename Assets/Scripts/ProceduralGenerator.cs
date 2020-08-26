@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using System.Threading;
-using System.IO;
 
 public enum Side
 {

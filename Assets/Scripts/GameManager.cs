@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public enum Direction
@@ -15,10 +17,13 @@ public class GameManager : MonoBehaviour
 
     private static GameManager Instance;
 
-    // Handles all gaming things in the game
+    [SerializeField]
+    private OpeningPath startingLayout;
 
-    //Const for QuarterOfSec
-    const float QUARTER_OF_A_SEC = 0.25f;
+    [SerializeField]
+    private UnityEvent @onPlayerDeath = new UnityEvent();
+
+    // Handles all gaming things in the game
 
     /// <summary>
     /// The starting speed of the player
@@ -86,7 +91,7 @@ public class GameManager : MonoBehaviour
     public static bool dontDestroy = false;
 
     private static float time;
-    private static float deadTime = 0.1f;
+    private static float deadTime = 0.05f;
 
     private const int DEFAULT_FRAMERATE = 60;
 
@@ -99,21 +104,12 @@ public class GameManager : MonoBehaviour
         //Load Title Screen
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Additive);
 
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(Instance);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
+        DontDestroyOnLoad(Instance);
     }
 
     private void Start()
     {
-        
-
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
     }
 
@@ -136,18 +132,32 @@ public class GameManager : MonoBehaviour
         BoostSpeed = BoostBurstValue;
     }
 
+    /// <summary>
+    /// Determine the timing upon taking a turn
+    /// </summary>
+    /// <param name="distance"></param>
     public static void DetermineTiming(ref float distance)
     {
-        dontDestroy = (distance < 2f);
+        dontDestroy = (distance < 1f);
     }
 
+    /// <summary>
+    /// Allow the player to get destoryed (deactivated)
+    /// </summary>
     public static void AllowDestructionOfPlayer() => dontDestroy = false;
 
+    /// <summary>
+    /// Reset time
+    /// </summary>
     public static void ResetTime()
     {
         time = RESET;
     }
 
+    /// <summary>
+    /// Apply friction
+    /// </summary>
+    /// <returns></returns>
     static IEnumerator Friction()
     {
         while (true)
@@ -157,6 +167,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Acceleration
+    /// </summary>
+    /// <returns></returns>
     static IEnumerator Accelerate()
     {
         while (true)
@@ -166,6 +180,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Official Gameloop
+    /// </summary>
+    /// <returns></returns>
     static IEnumerator GameLoop()
     {
         //Start friction
@@ -176,34 +194,46 @@ public class GameManager : MonoBehaviour
 
         while (true)
         {
-            if(player.HasContactedWall())
+            if (player.HasContactedWall())
                 time += Time.deltaTime;
 
-            if (time >= deadTime &&
+            if (time >= deadTime)
+            {
+                AllowDestructionOfPlayer();
+                if (
                 player.isActiveAndEnabled &&
                 player.HasContactedWall() &&
                 dontDestroy == false)
-                DestoryPlayer();
-
+                    DestoryPlayer();
+            }
             yield return null;
         }
     }
 
     static void DestoryPlayer()
     {
-
+        //Get player death effect object
         playerDeathObj = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);
-        if(playerDeathObj != null && !playerDeathObj.activeInHierarchy)
+
+        if (playerDeathObj != null && !playerDeathObj.activeInHierarchy)
         {
             playerDeathObj.SetActive(true);
             playerDeathObj.transform.localPosition = player.transform.localPosition;
             playerDeathObj.transform.rotation = Quaternion.identity;
 
+            //Play death particle animation
             deathParticle.Play();
         }
+
+        //Rest time
         ResetTime();
+
+        //Deactivate player
         player.gameObject.SetActive(false);
+
+        //Trigger event
+        Instance.onPlayerDeath.Invoke();
     }
 
-    
+    public static bool Exists() => Instance != null;
 }

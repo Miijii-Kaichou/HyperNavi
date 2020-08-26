@@ -7,23 +7,26 @@ public class PlayerController : Controller
     [SerializeField]
     TouchDetection movementTouchArea, boostTouchArea;
 
-    [SerializeField]
-    Sensor[] sensors;
-
     PlayerPawn player;
 
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(ControllerCycle());
         Init();
     }
 
-    private void Update()
+    IEnumerator ControllerCycle()
     {
-        if (GameManager.IsGameStarted)
+        while (true)
         {
-            InputControls();
-            TouchInputControls();
+            if (GameManager.IsGameStarted)
+            {
+                InputControls();
+                TouchInputControls();
+            }
+
+            yield return null;
         }
     }
 
@@ -127,4 +130,16 @@ public class PlayerController : Controller
             player.Boost();
         }
     }
+
+    /// <summary>
+    /// Assign the movement detection to the player controller
+    /// </summary>
+    /// <param name="detection"></param>
+    public void AssignMovementDetection(TouchDetection detection) => movementTouchArea = detection;
+
+    /// <summary>
+    /// Assign the boost detectionn to the player controller
+    /// </summary>
+    /// <param name="detection"></param>
+    public void AssignBoostDetection(TouchDetection detection) => boostTouchArea = detection;
 }

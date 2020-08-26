@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public abstract class Pawn : MonoBehaviour
 {
@@ -14,14 +15,18 @@ public abstract class Pawn : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+        StartCoroutine(MovementCycle());    
     }
 
-    protected virtual void Update()
+    IEnumerator MovementCycle()
     {
-        speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
-        direction = new Vector2(0f, speed);
-        transform.Translate(direction * Time.deltaTime);
+        while (true)
+        {
+            speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
+            direction = new Vector2(0f, speed) * Time.deltaTime;
+            transform.Translate(direction);
+            yield return null;
+        }
     }
 
     protected virtual void OnEnable()
