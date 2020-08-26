@@ -4,22 +4,48 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 {
     private static IUnityAdsListener Instance;
 
+    private static EventManager.Event @continueEvent, @startOverEvent;
+
     private void Awake()
     {
         Instance = this;
-        
-        Advertisement.AddListener(Instance);
-        Advertisement.Initialize("3789069");
-    }
 
-    public void OnTryAgain()
-    {
-        GameManager.UnloadScene("GameOverScene", EventManager.AddNewEvent(998, "continue", () =>
+        continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
+            //Spawn player to last signal point
+            ProceduralGenerator.DontDeactivate();
+            GameManager.ResetTime();
+            GameManager.SpawnPlayerToLastSignalPoint();
+            Advertisement.RemoveListener(Instance);
+            EventManager.RemoveEvent("continue");
+        });
+
+        startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
+        {
+            ProceduralGenerator.DontDeactivate();
+            GameManager.ResetTime();
+
             //Spawn player to last signal point
             GameManager.SpawnPlayerToStartLayout();
             Advertisement.RemoveListener(Instance);
-        }));
+            EventManager.RemoveEvent("startOver");
+        });
+
+        Advertisement.AddListener(Instance);
+
+#if UNITY_ANDROID
+        Advertisement.Initialize("3789069");
+
+#elif UNITY_IOS
+        Advertisement.Initialize("3789068");
+
+#endif
+    }
+
+
+    public void OnTryAgain()
+    {
+        GameManager.UnloadScene("GameOverScene", startOverEvent);
     }
 
     /// <summary>
@@ -49,7 +75,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidStart(string placementId)
     {
-        
+
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
@@ -67,22 +93,12 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 //TODO: You are allowed 10 secs to skip
                 //Give the player a chance to look at it for 10 seconds
                 //As opposed to the whole entire video.
-                GameManager.UnloadScene("GameOverScene", EventManager.AddNewEvent(999, "continue", () =>
-                {
-                    //Spawn player to last signal point
-                    GameManager.SpawnPlayerToLastSignalPoint();
-                    Advertisement.RemoveListener(Instance);
-                }));
+                GameManager.UnloadScene("GameOverScene", continueEvent);
                 return;
 
             case ShowResult.Finished:
                 //Finally, unload this scene
-                GameManager.UnloadScene("GameOverScene", EventManager.AddNewEvent(999, "continue", () =>
-                {
-                    //Spawn player to last signal point
-                    GameManager.SpawnPlayerToLastSignalPoint();
-                    Advertisement.RemoveListener(Instance);;
-                }));
+                GameManager.UnloadScene("GameOverScene", continueEvent);
                 return;
             default:
                 break;

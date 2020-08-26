@@ -98,4 +98,6 @@ public class ObjectPooler : MonoBehaviour
         result = (T)pooledObject.GetComponent(typeof(T));
         return pooledObject;
     }
+
+    public static Vector3 Position() => Instance.transform.localPosition;
 }

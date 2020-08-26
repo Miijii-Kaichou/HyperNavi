@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SignalLayoutSpawn : MonoBehaviour
 {
@@ -59,14 +60,14 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     void SignalGeneration()
     {
+        
 
-        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
+       
 
         if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
             ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
-
+        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
         ProceduralGenerator.CurrentLayout = layout;
-
 
         generator.dontDeactivate = false;
 
@@ -106,6 +107,23 @@ public class SignalLayoutSpawn : MonoBehaviour
         }
     }
 
+    public void ClampPathAmount(int value)
+    {
+        OpeningPath[] paths = ObjectPooler.pooledObjects.GetAllPaths();
+        int pathAmount = 0;
+        for(int iter = 0; iter < paths.Length; iter++)
+        {
+            OpeningPath path = paths[iter];
+            if (path != ProceduralGenerator.CurrentLayout &&
+                path != ProceduralGenerator.PreviousLayout &&
+                path.gameObject.activeInHierarchy &&
+                pathAmount > value)
+                path.gameObject.SetActive(false);
+
+            pathAmount = iter;
+        }
+    }
+
     public void SubmitDistanceToManager()
     {
         GameManager.DetermineTiming(ref distance);
@@ -129,11 +147,10 @@ public class SignalLayoutSpawn : MonoBehaviour
         () =>
         {
             if (player != null && turningPoint)
-            {
                 player.AllowTurn();
-                SignalLayoutSpawn signal = layout.GetSignal();
-                player.UpdateSignalPoint(ref signal);
-            }
+
+            SignalLayoutSpawn signal = layout.GetSignal();
+            player.UpdateSignalPoint(signal);
         });
 
 

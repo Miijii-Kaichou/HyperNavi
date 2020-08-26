@@ -19,18 +19,40 @@ public class PlayerPawn : Pawn
 
     private SignalLayoutSpawn signalPoint;
 
+    private bool iFramesOn = false;
+
+    private float time = 0;
+
 
     protected override void OnEnable()
     {
         StartCoroutine(WallDetectionLoop());
+        StartCoroutine(IFrames());
         base.OnEnable();
+    }
+
+    IEnumerator IFrames()
+    {
+        while (true)
+        {
+            if (iFramesOn)
+            {
+                time += Time.deltaTime;
+                if (time >= 1f)
+                {
+                    iFramesOn = false;
+                    time = 0f;
+                }
+            }
+            yield return null;
+        }
     }
 
     IEnumerator WallDetectionLoop()
     {
         while (true)
         {
-            hasContactedWall = wallDetector.HasCollided();
+            hasContactedWall = !iFramesOn && wallDetector.HasCollided();
 
             yield return null;
         }
@@ -112,7 +134,7 @@ public class PlayerPawn : Pawn
     /// Update the signal point that the player is at
     /// </summary>
     /// <param name="signalPoint"></param>
-    public void UpdateSignalPoint(ref SignalLayoutSpawn signalPoint)
+    public void UpdateSignalPoint(SignalLayoutSpawn signalPoint)
     {
         this.signalPoint = signalPoint;
     }
@@ -124,4 +146,6 @@ public class PlayerPawn : Pawn
     /// </summary>
     /// <returns></returns>
     public PlayerController GetController() => controller;
+
+    public void EnableIFrame() => iFramesOn = true;
 }

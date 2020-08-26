@@ -117,8 +117,6 @@ public class GameManager : MonoBehaviour
             LoadScene("TitleScreen/1/A");
 
             Application.targetFrameRate = DEFAULT_FRAMERATE;
-
-            Screen.SetResolution(1920, 1080, true);
         }
         else
         {
@@ -157,7 +155,7 @@ public class GameManager : MonoBehaviour
     /// <param name="distance"></param>
     public static void DetermineTiming(ref float distance)
     {
-        dontDestroy = (distance < 1f);
+        dontDestroy = (distance < 2f);
     }
 
     /// <summary>
@@ -370,7 +368,9 @@ public class GameManager : MonoBehaviour
         foreach (OpeningPath path in ObjectPooler.pooledObjects.GetAllPaths())
         {
             if (path.gameObject.activeInHierarchy)
+            {
                 path.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -378,25 +378,23 @@ public class GameManager : MonoBehaviour
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            FlushPaths();
+
             CurrentSpeed = InitialSpeed;
 
             ResetTime();
 
-            FlushPaths();
-
             OpeningPath layout = Instance.startingLayout;
 
-            ProceduralGenerator.DontDeactivate();
             ProceduralGenerator.CurrentLayout = layout;
+            ProceduralGenerator.PreviousLayout = null;
 
             layout.gameObject.SetActive(true);
 
-
-
             player.gameObject.SetActive(true);
-            player.transform.localPosition = layout.GetSignalTriggerPosition();
+            player.transform.localPosition = layout.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
-            player.ChangeDirection(Direction.UP);
+            player.ChangeDirection(Direction.UP);  
         }
     }
 
@@ -404,18 +402,21 @@ public class GameManager : MonoBehaviour
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            FlushPaths();
+
             CurrentSpeed = InitialSpeed;
 
             dontDestroy = true;
 
-            ProceduralGenerator.DontDeactivate();
+            
 
             //Assure that when reactivating player, they are facing towards any random open path
             bool leftOpened, rightOpened, topOpened, bottomOpened;
 
-            FlushPaths();
-
             OpeningPath path = player.GetLastSignalPoint().GetPath();
+
+            ProceduralGenerator.CurrentLayout = path;
+            ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
 
             //Set path open
             path.gameObject.SetActive(true);
@@ -426,14 +427,12 @@ public class GameManager : MonoBehaviour
             topOpened = path.IsTopOpen();
             bottomOpened = path.IsBottomOpen();
 
-
-            //Set player active
-            player.gameObject.SetActive(true);
-
-            //Spawn to last checkpoint
-            player.transform.localPosition = path.GetSignal().transform.position;
+            
 
             ResetTime();
+
+            player.EnableIFrame();
+
             int value;
             bool pathFound = false;
             int safety = 0;
@@ -445,6 +444,11 @@ public class GameManager : MonoBehaviour
                     case Direction.LEFT:
                         if (leftOpened)
                         {
+                            //Set player active
+                            player.gameObject.SetActive(true);
+
+                            //Spawn to last checkpoint
+                            player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveLeft();
                             pathFound = true;
                         }
@@ -452,6 +456,11 @@ public class GameManager : MonoBehaviour
                     case Direction.RIGHT:
                         if (rightOpened)
                         {
+                            //Set player active
+                            player.gameObject.SetActive(true);
+
+                            //Spawn to last checkpoint
+                            player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveRight();
                             pathFound = true;
                         }
@@ -459,6 +468,11 @@ public class GameManager : MonoBehaviour
                     case Direction.UP:
                         if (topOpened)
                         {
+                            //Set player active
+                            player.gameObject.SetActive(true);
+
+                            //Spawn to last checkpoint
+                            player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveUp();
                             pathFound = true;
                         }
@@ -466,6 +480,11 @@ public class GameManager : MonoBehaviour
                     case Direction.DOWN:
                         if (bottomOpened)
                         {
+                            //Set player active
+                            player.gameObject.SetActive(true);
+
+                            //Spawn to last checkpoint
+                            player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveDown();
                             pathFound = true;
                         }
