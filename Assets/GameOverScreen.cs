@@ -41,6 +41,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private static string currencyRemainFormat;
 
+    private static bool enableInteraction = true;
+
     private static EndGameComments[] endGameComments =
     {
         new EndGameComments(0,
@@ -89,7 +91,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private void Awake()
     {
-        
+
 
         Instance = this;
 
@@ -103,7 +105,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
-            
+
 
             //Spawn player to last signal point
             ProceduralGenerator.DontDeactivate();
@@ -127,6 +129,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         {
             CurrencySystem.AddToBalance(50);
             PostCurrency();
+            enableInteraction = true;
         });
 
         Advertisement.AddListener(Instance);
@@ -143,12 +146,13 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     public void OnTryAgain()
     {
-        GameManager.UnloadScene("GameOverScene", startOverEvent);
+        if (enableInteraction)
+            GameManager.UnloadScene("GameOverScene", startOverEvent);
     }
 
     public void OnContinue()
     {
-        if(SufficientCurrentcy())
+        if (SufficientCurrentcy() && enableInteraction)
             GameManager.UnloadScene("GameOverScene", continueEvent);
     }
 
@@ -157,13 +161,15 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     /// </summary>
     public void GetGems()
     {
-        ShowAd();
+        if (enableInteraction)
+            ShowAd();
     }
 
     void ShowAd(string zone = "rewardedVideo")
     {
         while (!Advertisement.IsReady(zone)) continue;
         Advertisement.Show(zone);
+        enableInteraction = false;
     }
 
 
@@ -190,6 +196,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 //TODO: Add a message saying that an error 
                 //had occurred with the ad.
                 //Just don't do anything for now.
+                enableInteraction = true;
                 return;
 
             case ShowResult.Skipped:

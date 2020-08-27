@@ -10,6 +10,8 @@ public class CurrencySystem : MonoBehaviour
 
     public static bool IsRunning { get; private set; }
 
+    public static bool HasInitialized { get; private set; } = false;
+
     [SerializeField]
     private TextMeshProUGUI currencyAmount;
 
@@ -71,15 +73,27 @@ public class CurrencySystem : MonoBehaviour
             return;
         }
 
+#if UNITY_EDITOR
         Debug.Log("Insufficient Funds");
+#endif
+
         result = Result.FAILURE;
     }
 
     public static void Init()
     {
-        IsRunning = true;
-        Instance.textParent.SetActive(IsRunning);
-        Instance.StartCoroutine(SystemCycle());
+        if (!HasInitialized)
+        {
+            IsRunning = true;
+            Instance.textParent.SetActive(IsRunning);
+            Instance.StartCoroutine(SystemCycle());
+        }
+#if UNITY_EDITOR
+        else
+        {
+            Debug.Log("Currency System already initialized");
+        }
+#endif
     }
 
     /// <summary>

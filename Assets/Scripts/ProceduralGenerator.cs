@@ -52,6 +52,22 @@ public class ProceduralGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// Remove all active paths
+    /// </summary>
+    public static void FlushPaths()
+    {
+        OpeningPath[] paths = Instance.environmentalLayoutPaths;
+        int size = paths.Length;
+        for (int iter = 0; iter < size; iter++)
+        {
+            OpeningPath path = paths[iter];
+
+            if (path != CurrentLayout && path != PreviousLayout &&  path.gameObject.activeInHierarchy)
+                path.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
     /// Get's All Layouts. Has to be child of this object to work.
     /// </summary>
     void GetAllEnvironmentalLayouts()

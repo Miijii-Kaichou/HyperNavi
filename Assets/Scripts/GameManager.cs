@@ -454,22 +454,6 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Remove all active paths
-    /// </summary>
-    static void FlushPaths()
-    {
-        OpeningPath[] paths = ProceduralGenerator.GetAllPaths();
-        int size = paths.Length;
-        for(int iter = 0; iter < size; iter++ )
-        {
-            OpeningPath path = paths[iter];
-
-            if (path.gameObject.activeInHierarchy)
-                path.gameObject.SetActive(false);
-        }
-    }
-
-    /// <summary>
     /// Spawn the player to the starting layout
     /// </summary>
     public static void SpawnPlayerToStartLayout()
@@ -481,7 +465,7 @@ public class GameManager : MonoBehaviour
             CurrencySystem.Resume();
             ScoreSystem.ResetScore();
 
-            FlushPaths();
+            ProceduralGenerator.FlushPaths();
 
             CurrentSpeed = InitialSpeed;
 
@@ -530,7 +514,7 @@ public class GameManager : MonoBehaviour
             IsGameStarted = true;
             ScoreSystem.Resume();
             CurrencySystem.Resume();
-            FlushPaths();
+            ProceduralGenerator.FlushPaths();
 
             dontDestroy = true;
 
@@ -541,6 +525,7 @@ public class GameManager : MonoBehaviour
 
             ProceduralGenerator.CurrentLayout = null;
             ProceduralGenerator.PreviousLayout = null;
+            
 
             //Set path open
             path.gameObject.SetActive(true);
@@ -573,6 +558,7 @@ public class GameManager : MonoBehaviour
                             player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveLeft();
                             pathFound = true;
+                            
                         }
                         break;
                     case Direction.RIGHT:
@@ -614,7 +600,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 safety++;
-                if (safety >= 100)
+                if (safety >= 10)
                 {
                     Debug.Log("Iteration Failed");
                     break;
@@ -622,6 +608,7 @@ public class GameManager : MonoBehaviour
 
             }
 
+            player.UpdateSignalPoint(null);
         }
     }
 

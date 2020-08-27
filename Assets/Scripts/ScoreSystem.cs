@@ -18,6 +18,7 @@ public class ScoreSystem : MonoBehaviour
     public static bool IsRunning { get; private set; }
     public static int Score { get; private set; } = 0;
     public static int Mulitplier { get; private set; } = 1;
+    public static bool HasInitialized { get; private set; } = false;
     const int SCORE_INCREMENT_VALUE = 1;
 
     void OnEnable()
@@ -65,9 +66,10 @@ public class ScoreSystem : MonoBehaviour
     /// <summary>
     /// Stop system. Score will be sumbitted
     /// </summary>
-    public static void Stop() {
+    public static void Stop()
+    {
         IsRunning = false;
-        Instance.textParent.SetActive(IsRunning); 
+        Instance.textParent.SetActive(IsRunning);
     }
 
     /// <summary>
@@ -76,6 +78,7 @@ public class ScoreSystem : MonoBehaviour
     public static void Resume()
     {
         IsRunning = true;
+        Instance.textParent.SetActive(IsRunning);
     }
 
     /// <summary>
@@ -83,10 +86,21 @@ public class ScoreSystem : MonoBehaviour
     /// </summary>
     public static void Init()
     {
-        
-        IsRunning = true;
-        Instance.textParent.SetActive(IsRunning);
-        Instance.StartCoroutine(SystemCycle());
+        if (!HasInitialized)
+        {
+            IsRunning = true;
+            Instance.textParent.SetActive(IsRunning);
+            Instance.StartCoroutine(SystemCycle());
+
+
+        }
+#if UNITY_EDITOR
+        else
+        {
+
+            Debug.Log("Score System already initialized");
+#endif
+        }
     }
 
     public static void ResetScore()

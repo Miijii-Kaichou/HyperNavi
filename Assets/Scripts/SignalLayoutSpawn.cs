@@ -33,8 +33,6 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     EventManager.Event @generateEvent;
 
-
-
     void Start()
     {
         
@@ -43,14 +41,14 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     IEnumerator DistanceCheckingLoop()
     {
-        
-
         while (true)
         {
             if (player != null)
                 distance = distanceCheck.Distance;
+#if UNITY_EDITOR
             else
                 Debug.Log("Player is null");
+#endif
 
             yield return null;
         }
@@ -65,10 +63,10 @@ public class SignalLayoutSpawn : MonoBehaviour
     {
         if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
             ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
-        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
-        ProceduralGenerator.CurrentLayout = layout;
 
         generator.dontDeactivate = false;
+
+        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
 
         if (player != null)
         {
@@ -148,7 +146,10 @@ public class SignalLayoutSpawn : MonoBehaviour
             if (player != null && turningPoint)
                 player.AllowTurn();
 
+            
             SignalLayoutSpawn signal = layout.GetSignal();
+            ProceduralGenerator.CurrentLayout = layout;
+            ProceduralGenerator.FlushPaths();
             player.UpdateSignalPoint(signal);
         });
 
