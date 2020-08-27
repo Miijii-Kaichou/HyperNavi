@@ -126,7 +126,7 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     public void SubmitDistanceToManager()
     {
-        GameManager.DetermineTiming(ref distance);
+        GameManager.DetermineTiming(distance);
     }
 
     private void Init()

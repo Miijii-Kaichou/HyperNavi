@@ -15,6 +15,9 @@ public class TouchDetection : MonoBehaviour
     [SerializeField]
     private bool debug;
 
+    [SerializeField]
+    Camera mainCamera;
+
     public int touchId = 0;
 
     [SerializeField]
@@ -99,12 +102,12 @@ public class TouchDetection : MonoBehaviour
         {
             foreach (Touch touch in Input.touches)
             {
-                viewportPoint = Camera.main.ScreenToViewportPoint(touch.position);
+                viewportPoint = mainCamera.ScreenToViewportPoint(touch.position);
                 touchX = viewportPoint.x;
                 touchY = viewportPoint.y;
                 touchPoint = new Vector2(touchX, touchY);
 
-                if (touchArea == Physics2D.OverlapPoint(Camera.main.ViewportToWorldPoint(touchPoint), layerMask))
+                if (touchArea == Physics2D.OverlapPoint(mainCamera.ViewportToWorldPoint(touchPoint), layerMask))
                     return true;
             }
         }

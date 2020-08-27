@@ -50,7 +50,7 @@ public class DistanceCheck : MonoBehaviour
         {
             if (target != null)
             {
-                CalculateDistance(ref target, ref parent);
+                CalculateDistance(target, parent);
 
                 if (!trigger && !inside && Distance <= radius)
                     trigger = true;
@@ -98,7 +98,7 @@ public class DistanceCheck : MonoBehaviour
     /// </summary>
     /// <param name="a"></param>
     /// <param name="b"></param>
-    void CalculateDistance(ref Transform a, ref Transform b)
+    void CalculateDistance(Transform a, Transform b)
     {
         Distance = Vector3.Distance(b.localPosition, a.localPosition);
         return;

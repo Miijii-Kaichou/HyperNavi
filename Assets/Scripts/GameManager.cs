@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Advertisements;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.Timeline;
+using UnityEngine.XR.WSA.Input;
 using Random = UnityEngine.Random;
 
 public enum Direction
@@ -30,12 +27,14 @@ public class GameManager : MonoBehaviour
 
     static AsyncOperation operation = new AsyncOperation();
 
+    static ScoreSystem scoreSystem;
+
     // Handles all gaming things in the game
 
     /// <summary>
     /// The starting speed of the player
     /// </summary>
-    public static float InitialSpeed { get; private set; } = 5f;
+    public static float InitialSpeed { get; private set; } = 1f;
 
     /// <summary>
     /// The rate in which to increase speed
@@ -45,7 +44,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The speed added to current speed over a certain rate
     /// </summary>
-    public static float SpeedAcceleration { get; private set; } = 0.0005f;
+    public static float SpeedAcceleration { get; private set; } = 0.01f;
 
     /// <summary>
     /// Current speed of the player
@@ -84,7 +83,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// The max speed of the player
     /// </summary>
-    public const float MaxSpeed = 30f;
+    public const float MaxSpeed = 15f;
 
     /// <summary>
     /// A full second
@@ -98,13 +97,35 @@ public class GameManager : MonoBehaviour
     public static bool dontDestroy = false;
 
     private static float time;
-    private static float deadTime = 0.05f;
+    private static float deadTime = 0.075f;
 
     private const int DEFAULT_FRAMERATE = 60;
 
     private static GameObject playerDeathObj;
 
     public static float loadingProgress = 0f;
+
+    //bigger than one of the values
+    public static float[] timingWindows =
+    {
+        0.75f,
+        1f,
+        1.25f,
+    };
+
+
+    public static int[] points = { 
+        100,
+        10,
+        1
+    };
+
+    public static string[] comments =
+    {
+        "Excellent Turn",
+        "Okay Turn",
+        "Late Turn"
+    };
 
     private void Awake()
     {
@@ -137,8 +158,11 @@ public class GameManager : MonoBehaviour
     {
         IsGameStarted = true;
 
+        scoreSystem.Init();
+
         //Start Game loop
         Instance.StartCoroutine(GameLoop());
+
     }
 
     /// <summary>
@@ -153,9 +177,20 @@ public class GameManager : MonoBehaviour
     /// Determine the timing upon taking a turn
     /// </summary>
     /// <param name="distance"></param>
-    public static void DetermineTiming(ref float distance)
+    public static void DetermineTiming(float distance)
     {
         dontDestroy = (distance < 2f);
+
+        for (int iter = 0; iter < timingWindows.Length; iter++)
+        {
+            float timing = timingWindows[iter];
+            if (distance < Mathf.Abs(timing))
+            {
+                scoreSystem.AddToScore(points[iter]);
+                Debug.Log(comments[iter]);
+                return;
+            }
+        }
     }
 
     /// <summary>
@@ -227,6 +262,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Destory the player
+    /// </summary>
     static void DestoryPlayer()
     {
         //Get player death effect object
@@ -242,6 +280,8 @@ public class GameManager : MonoBehaviour
             deathParticle.Play();
         }
 
+        scoreSystem.Stop();
+
         //Rest time
         ResetTime();
 
@@ -252,6 +292,10 @@ public class GameManager : MonoBehaviour
         Instance.onPlayerDeath.Invoke();
     }
 
+    /// <summary>
+    /// Check if Game Manager Exists and in memory
+    /// </summary>
+    /// <returns></returns>
     public static bool Exists() => Instance != null;
 
     /// <summary>
@@ -278,13 +322,18 @@ public class GameManager : MonoBehaviour
     }
 
     
-
+    /// <summary>
+    /// Load a scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="asynchronously"></param>
+    /// <param name="mode"></param>
     static void LoadScene(string sceneName, bool asynchronously = false, LoadSceneMode mode = LoadSceneMode.Single)
     {
         switch (asynchronously)
         {
             case true:
-                Instance.StartCoroutine(AsyncronousLoad(sceneName, mode));
+                Instance.StartCoroutine(AsynchronousLoad(sceneName, mode));
                 break;
             case false:
                 SceneManager.LoadScene(sceneName, mode);
@@ -292,17 +341,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Unload a scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="event"></param>
     public static void UnloadScene(string sceneName, EventManager.Event @event)
     {
         Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
     }
 
+    /// <summary>
+    /// Unload a scene
+    /// </summary>
+    /// <param name="sceneName"></param>
     public static void UnloadScene(string sceneName)
     {
         Instance.StartCoroutine(AsynchronousUnload(sceneName));
     }
 
-    static IEnumerator AsyncronousLoad(string sceneName, LoadSceneMode mode)
+    /// <summary>
+    /// Asynchronously Load a Scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="mode"></param>
+    /// <returns></returns>
+    static IEnumerator AsynchronousLoad(string sceneName, LoadSceneMode mode)
     {
         operation = new AsyncOperation();
         operation = SceneManager.LoadSceneAsync(sceneName, mode);
@@ -320,6 +384,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Asynchronously Load a Scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="event"></param>
+    /// <returns></returns>
     static IEnumerator AsynchronousUnload(string sceneName, EventManager.Event @event)
     {
         operation = new AsyncOperation();
@@ -346,6 +416,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Asynchronously Unload a Scene
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <returns></returns>
     static IEnumerator AsynchronousUnload(string sceneName)
     {
         operation = new AsyncOperation();
@@ -363,6 +438,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Remove all active paths
+    /// </summary>
     static void FlushPaths()
     {
         foreach (OpeningPath path in ObjectPooler.pooledObjects.GetAllPaths())
@@ -374,10 +452,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn the player to the starting layout
+    /// </summary>
     public static void SpawnPlayerToStartLayout()
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            scoreSystem.Resume();
+            scoreSystem.ResetScore();
+
             FlushPaths();
 
             CurrentSpeed = InitialSpeed;
@@ -398,17 +482,32 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reference Score System
+    /// </summary>
+    /// <param name="system"></param>
+    public static void SetScoreSystem(ScoreSystem system) => scoreSystem = system;
+
+    /// <summary>
+    /// Submit Official Score
+    /// </summary>
+    /// <param name="value"></param>
+    public static void ScoreSubmit(int value) => CurrentScore = value;
+
+
+    /// <summary>
+    /// Spawn the player at the nearest turning point
+    /// </summary>
     public static void SpawnPlayerToLastSignalPoint()
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            scoreSystem.Resume();
             FlushPaths();
 
             CurrentSpeed = InitialSpeed;
 
             dontDestroy = true;
-
-            
 
             //Assure that when reactivating player, they are facing towards any random open path
             bool leftOpened, rightOpened, topOpened, bottomOpened;
@@ -426,8 +525,6 @@ public class GameManager : MonoBehaviour
             rightOpened = path.IsRightOpen();
             topOpened = path.IsTopOpen();
             bottomOpened = path.IsBottomOpen();
-
-            
 
             ResetTime();
 
