@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameColorGradient
   m_EditorClassIdentifier: 
   colorMode: 3
-  topLeft: {r: 0, g: 0.5384617, b: 1, a: 1}
+  topLeft: {r: 0, g: 1, b: 0.98672557, a: 1}
   topRight: {r: 1, g: 1, b: 1, a: 1}
-  bottomLeft: {r: 0, g: 0.8867924, b: 0.8751117, a: 1}
-  bottomRight: {r: 0, g: 0.29182243, b: 1, a: 1}
+  bottomLeft: {r: 0.3537736, g: 0.82931304, b: 1, a: 1}
+  bottomRight: {r: 0.05248642, g: 0, b: 1, a: 1}

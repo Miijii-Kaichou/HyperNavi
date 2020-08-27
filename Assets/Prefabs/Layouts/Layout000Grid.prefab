@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663524713251}
   controller: {fileID: 8514580628340130021}
 --- !u!1 &1750561396474468973
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663524713251}
   controller: {fileID: 8514580628340130021}
 --- !u!1 &2121904137890290455
@@ -317,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663524713251}
   controller: {fileID: 8514580628340130021}
 --- !u!1 &6860303794204035621

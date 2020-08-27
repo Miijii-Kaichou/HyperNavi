@@ -31,9 +31,14 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     [SerializeField]
     private TextMeshProUGUI score;
 
+    [SerializeField]
+    private TextMeshProUGUI currencyAmount;
+
     private static IUnityAdsListener Instance;
 
-    private static EventManager.Event @continueEvent, @startOverEvent;
+    private static EventManager.Event @continueEvent, @startOverEvent, @gemsEvent;
+
+    private static Result transactionResult;
 
     private static EndGameComments[] endGameComments =
     {
@@ -93,12 +98,24 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
-            //Spawn player to last signal point
-            ProceduralGenerator.DontDeactivate();
-            GameManager.ResetTime();
-            GameManager.SpawnPlayerToLastSignalPoint();
-            Advertisement.RemoveListener(Instance);
-            EventManager.RemoveEvent("continue");
+            CurrencySystem.ExecuteTransaction(1000, out transactionResult);
+            switch (transactionResult)
+            {
+                case Result.SUCCESS:
+                    //Spawn player to last signal point
+                    ProceduralGenerator.DontDeactivate();
+                    GameManager.ResetTime();
+                    GameManager.SpawnPlayerToLastSignalPoint();
+                    Advertisement.RemoveListener(Instance);
+                    EventManager.RemoveEvent("continue");
+                    break;
+                case Result.FAILURE:
+                    Debug.Log("Player has no sufficient funds");
+                    break;
+                default:
+                    break;
+            }
+            
         });
 
         startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
@@ -109,6 +126,11 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             GameManager.SpawnPlayerToStartLayout();
             Advertisement.RemoveListener(Instance);
             EventManager.RemoveEvent("startOver");
+        });
+
+        gemsEvent = EventManager.AddNewEvent(997, "getGemsWithVideo", () =>
+        {
+            CurrencySystem.AddToBalance(10);
         });
 
         Advertisement.AddListener(Instance);
@@ -130,7 +152,11 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     public void OnContinue()
     {
-
+        continueEvent.Trigger();
+        if(transactionResult == Result.SUCCESS)
+        {
+            GameManager.UnloadScene("GameOverScene", null);
+        }
     }
 
     /// <summary>
@@ -178,12 +204,12 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 //TODO: You are allowed 10 secs to skip
                 //Give the player a chance to look at it for 10 seconds
                 //As opposed to the whole entire video.
-                GameManager.UnloadScene("GameOverScene", continueEvent);
+                gemsEvent.Trigger();
                 return;
 
             case ShowResult.Finished:
-                //Finally, unload this scene
-                GameManager.UnloadScene("GameOverScene", continueEvent);
+                //Finally, reward the player for there efforts
+                gemsEvent.Trigger();
                 return;
             default:
                 break;
@@ -240,7 +266,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private void PostScore()
     {
-        score.text = GameManager.CurrentScore.ToString("D4", CultureInfo.InvariantCulture);
+        score.text = GameManager.CurrentScore.ToString("D7", CultureInfo.InvariantCulture);
     }
 
     void CheckOnCurrency()

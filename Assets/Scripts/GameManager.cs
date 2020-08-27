@@ -34,8 +34,6 @@ public class GameManager : MonoBehaviour
 
     static ScoreSystem scoreSystem;
 
-    static CurrencySystem currencySystem;
-
     // Handles all gaming things in the game
 
     /// <summary>
@@ -71,6 +69,8 @@ public class GameManager : MonoBehaviour
     //This speed is added to the current speed
     public static float BoostSpeed { get; private set; } = 0f;
 
+
+
     /// <summary>
     /// This is the burst value of the boost. This will be assigned to the BoostSpeed
     /// BoostSpeed will then gradually lerp back to zero
@@ -86,6 +86,11 @@ public class GameManager : MonoBehaviour
     ///  How much BoostSpeed you'll loose over a certain rate
     /// </summary>
     public static float BoostDepletionValue { get; private set; } = 0.1f;
+
+    /// <summary>
+    /// Current In-Game Currency
+    /// </summary>
+    public static int CurrentCurrency { get; private set; }
 
     /// <summary>
     /// The max speed of the player
@@ -165,7 +170,8 @@ public class GameManager : MonoBehaviour
     {
         IsGameStarted = true;
 
-        scoreSystem.Init();
+        ScoreSystem.Init();
+        CurrencySystem.Init();
 
         //Start Game loop
         Instance.StartCoroutine(GameLoop());
@@ -193,7 +199,7 @@ public class GameManager : MonoBehaviour
             float timing = timingWindows[iter];
             if (distance <= timing)
             {
-                scoreSystem.AddToScore(points[iter]);
+                ScoreSystem.AddToScore(points[iter]);
                 return;
             }
         }
@@ -286,7 +292,7 @@ public class GameManager : MonoBehaviour
             deathParticle.Play();
         }
 
-        scoreSystem.Stop();
+        ScoreSystem.Stop();
 
         //Rest time
         ResetTime();
@@ -470,8 +476,8 @@ public class GameManager : MonoBehaviour
         if (!player.gameObject.activeInHierarchy)
         {
             IsGameStarted = true;
-            scoreSystem.Resume();
-            scoreSystem.ResetScore();
+            ScoreSystem.Resume();
+            ScoreSystem.ResetScore();
 
             FlushPaths();
 
@@ -499,13 +505,17 @@ public class GameManager : MonoBehaviour
     /// <param name="system"></param>
     public static void SetScoreSystem(ScoreSystem system) => scoreSystem = system;
 
-    public static void SetCurrencySystem(CurrencySystem system) => currencySystem = system;
-
     /// <summary>
     /// Submit Official Score
     /// </summary>
     /// <param name="value"></param>
     public static void ScoreSubmit(int value) => CurrentScore = value;
+
+    /// <summary>
+    /// Submit Currency
+    /// </summary>
+    /// <param name="currency"></param>
+    static void CurrencySumbit(int value) => CurrentCurrency = value;
 
 
     /// <summary>
@@ -516,7 +526,7 @@ public class GameManager : MonoBehaviour
         if (!player.gameObject.activeInHierarchy)
         {
             IsGameStarted = true;
-            scoreSystem.Resume();
+            ScoreSystem.Resume();
             FlushPaths();
 
             dontDestroy = true;

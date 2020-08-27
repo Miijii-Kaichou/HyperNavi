@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 5529143348715075601}
-  controller: {fileID: 0}
+  controller: {fileID: 9075349666920925882}
 --- !u!1 &1611815761747541785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4511,9 +4511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 5529143348715075601}
-  controller: {fileID: 0}
+  controller: {fileID: 9075349666920925882}
 --- !u!1 &5504912029895098587
 GameObject:
   m_ObjectHideFlags: 0
@@ -4649,9 +4649,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 5529143348715075601}
-  controller: {fileID: 0}
+  controller: {fileID: 9075349666920925882}
 --- !u!1 &8025712621812156363
 GameObject:
   m_ObjectHideFlags: 0
@@ -4679,7 +4679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8025712621812156363}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.000009536743, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1611815761747541766}

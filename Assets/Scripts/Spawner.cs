@@ -2,7 +2,7 @@
 public abstract class Spawner : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject _object;
+    protected string objectIdentifier;
 
     [SerializeField]
     protected Transform spawnUnder;
@@ -20,7 +20,7 @@ public abstract class Spawner : MonoBehaviour
     void InstantiateObject()
     {
         //Uses object pooler instead
-        _object = ObjectPooler.GetMember(_object.name + "(Clone)");
+        GameObject _object = ObjectPooler.GetMember(objectIdentifier);
 
         if (_object.NotUsed())
         {

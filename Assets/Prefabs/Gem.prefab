@@ -99,7 +99,7 @@ MonoBehaviour:
   onPickUp:
     m_PersistentCalls:
       m_Calls: []
-  pickIdentifier: 
+  pickIdentifier: GEM_PICKUP
 --- !u!58 &8216271655920212258
 CircleCollider2D:
   m_ObjectHideFlags: 0

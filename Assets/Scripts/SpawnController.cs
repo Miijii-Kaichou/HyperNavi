@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class SpawnController : MonoBehaviour
@@ -17,7 +15,7 @@ public class SpawnController : MonoBehaviour
     [SerializeField]
     private Spawner[] spawners;
 
-    void OnEnable()
+    void Start()
     {
         Randomize();
     }

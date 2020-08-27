@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Globalization;
-using System.Security.AccessControl;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI accuracy;
 
-    public static bool IsRunnning { get; private set; }
+    public static bool IsRunning { get; private set; }
     public static int Score { get; private set; } = 0;
     public static int Mulitplier { get; private set; } = 1;
     const int SCORE_INCREMENT_VALUE = 1;
@@ -34,11 +33,11 @@ public class ScoreSystem : MonoBehaviour
         GameManager.SetScoreSystem(Instance);
     }
 
-    static IEnumerator ScoreSystemCycle()
+    static IEnumerator SystemCycle()
     {
         while (true)
         {
-            if (IsRunnning)
+            if (IsRunning)
             {
                 Score += Mulitplier * SCORE_INCREMENT_VALUE;
                 UpdateUI();
@@ -53,7 +52,7 @@ public class ScoreSystem : MonoBehaviour
     static void UpdateUI()
     {
         //Formats number as 0000
-        Instance.scoreText.text = Score.ToString("D4", CultureInfo.InvariantCulture);
+        Instance.scoreText.text = Score.ToString("D7", CultureInfo.InvariantCulture);
     }
 
     public static void SubmitToManager(int score)
@@ -64,32 +63,37 @@ public class ScoreSystem : MonoBehaviour
     /// <summary>
     /// Stop system. Score will be sumbitted
     /// </summary>
-    public void Stop() {
-        IsRunnning = false;
+    public static void Stop() {
+        IsRunning = false;
+        Instance.scoreText.transform.parent.gameObject.SetActive(IsRunning);
         SubmitToManager(Score);
     }
 
-    public void Resume()
+    /// <summary>
+    /// Continues System
+    /// </summary>
+    public static void Resume()
     {
-        IsRunnning = true;
+        IsRunning = true;
     }
 
     /// <summary>
     /// Initialize System
     /// </summary>
-    public void Init()
+    public static void Init()
     {
-        scoreText.transform.parent.gameObject.SetActive(true);
-        IsRunnning = true;
-        StartCoroutine(ScoreSystemCycle());
+        
+        IsRunning = true;
+        Instance.scoreText.transform.parent.gameObject.SetActive(IsRunning);
+        Instance.StartCoroutine(SystemCycle());
     }
 
-    public void ResetScore()
+    public static void ResetScore()
     {
         Score = 0;
     }
 
-    public void AddToScore(int value)
+    public static void AddToScore(int value)
     {
         Score += value;
     }

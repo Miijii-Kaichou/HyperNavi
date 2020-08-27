@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663549929056}
   controller: {fileID: 1750561396465999664}
 --- !u!1 &35797839
@@ -392,7 +392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169167769}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 3, z: -1.25}
+  m_LocalPosition: {x: 0.5, y: 3.5, z: -1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9202932663549929056}
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663549929056}
   controller: {fileID: 1750561396465999664}
 --- !u!1 &207231244
@@ -1497,7 +1497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b4d48b4195cc446ae6dbfe85330e89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 0}
+  objectIdentifier: 
   spawnUnder: {fileID: 1898618192}
   gameCamera: {fileID: 519420030}
   movementDetection: {fileID: 905907881}
@@ -1587,7 +1587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281957293}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -3, z: -1.25}
+  m_LocalPosition: {x: 0.5, y: -2.5, z: -1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9202932663549929056}
@@ -1605,7 +1605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 9202932663549929056}
   controller: {fileID: 1750561396465999664}
 --- !u!1 &1613675065
@@ -2141,7 +2141,7 @@ MonoBehaviour:
   spawnAtRandom: 1
   minRange: 0
   maxRange: 1
-  chance: 1
+  chance: 100
   outOf: 100
   spawners:
   - {fileID: 3836741}

@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
 --- !u!1 &1915501395272546169
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
 --- !u!1 &5553840196004580031
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: 
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
 --- !u!1 &6614835856370782628
@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
 --- !u!1 &6796859344550056123
@@ -4731,6 +4731,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: Gem
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
