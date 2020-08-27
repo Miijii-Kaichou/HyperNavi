@@ -181,5 +181,7 @@ public class ProceduralGenerator : MonoBehaviour
     {
         Instance.dontDeactivate = true;
     }
+
+    public static OpeningPath[] GetAllPaths() => Instance.environmentalLayoutPaths;
 }
 

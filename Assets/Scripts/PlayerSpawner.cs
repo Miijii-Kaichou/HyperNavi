@@ -1,20 +1,17 @@
 ﻿using UnityEngine;
 
-public class PlayerSpawner : MonoBehaviour
+public class PlayerSpawner : Spawner
 {
     [SerializeField]
-    TouchDetection movementDetection, boostDetection;
+    private FollowBehind gameCamera;
 
     [SerializeField]
-    PlayerPawn player;
+    private TouchDetection movementDetection, boostDetection;
 
     [SerializeField]
-    FollowBehind gameCamera;
+    private PlayerPawn player;
 
-    [SerializeField]
-    Transform spawnUnder;
-
-    private void OnEnable()
+    protected override void OnEnable()
     {
         InstantiatePlayer();
     }

@@ -15,7 +15,8 @@ public static class Extensions
 
         foreach (GameObject obj in objectList)
         {
-            if((path = obj.GetComponent<OpeningPath>()) != null)
+            path = obj.GetComponent<OpeningPath>();
+            if (path != null)
                 paths.Add(path);
         }
 
@@ -56,5 +57,10 @@ public static class Extensions
             Debug.LogException(fe);
             throw fe;
         }
+    }
+
+    public static bool NotUsed(this GameObject obj)
+    {
+        return (!obj.activeInHierarchy);
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.WSA.Input;
 using Random = UnityEngine.Random;
 
 public enum Direction
@@ -13,6 +11,12 @@ public enum Direction
     RIGHT,
     UP,
     DOWN
+}
+
+public enum Result
+{
+    SUCCESS,
+    FAILURE
 }
 
 public class GameManager : MonoBehaviour
@@ -29,6 +33,8 @@ public class GameManager : MonoBehaviour
     static AsyncOperation operation = new AsyncOperation();
 
     static ScoreSystem scoreSystem;
+
+    static CurrencySystem currencySystem;
 
     // Handles all gaming things in the game
 
@@ -109,9 +115,9 @@ public class GameManager : MonoBehaviour
     //bigger than one of the values
     public static float[] timingWindows =
     {
-        0.2f,
-        0.4f,
-        0.8f,
+        0.35f,
+        0.5f,
+        0.6f,
         1
     };
 
@@ -142,6 +148,8 @@ public class GameManager : MonoBehaviour
             LoadScene("TitleScreen/1/A");
 
             Application.targetFrameRate = DEFAULT_FRAMERATE;
+
+            Screen.SetResolution(1920, 1080, true);
         }
         else
         {
@@ -178,21 +186,17 @@ public class GameManager : MonoBehaviour
     /// <param name="distance"></param>
     public static void DetermineTiming(float distance)
     {
-        dontDestroy = (distance < 1f);
+        dontDestroy = (distance < 1.5f);
 
-        
         for (int iter = 0; iter < timingWindows.Length; iter++)
         {
             float timing = timingWindows[iter];
             if (distance <= timing)
             {
                 scoreSystem.AddToScore(points[iter]);
-                Debug.Log(distance + " : " + comments[iter]);
                 return;
             }
         }
-
-        Debug.Log("Nothing was determined...");
     }
 
     /// <summary>
@@ -447,12 +451,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     static void FlushPaths()
     {
-        foreach (OpeningPath path in ObjectPooler.pooledObjects.GetAllPaths())
+        OpeningPath[] paths = ProceduralGenerator.GetAllPaths();
+        int size = paths.Length;
+        for(int iter = 0; iter < size; iter++ )
         {
+            OpeningPath path = paths[iter];
+
             if (path.gameObject.activeInHierarchy)
-            {
                 path.gameObject.SetActive(false);
-            }
         }
     }
 
@@ -475,7 +481,7 @@ public class GameManager : MonoBehaviour
 
             OpeningPath layout = Instance.startingLayout;
 
-            ProceduralGenerator.CurrentLayout = layout;
+            ProceduralGenerator.CurrentLayout = null;
             ProceduralGenerator.PreviousLayout = null;
 
             layout.gameObject.SetActive(true);
@@ -492,6 +498,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="system"></param>
     public static void SetScoreSystem(ScoreSystem system) => scoreSystem = system;
+
+    public static void SetCurrencySystem(CurrencySystem system) => currencySystem = system;
 
     /// <summary>
     /// Submit Official Score
@@ -518,8 +526,8 @@ public class GameManager : MonoBehaviour
 
             OpeningPath path = player.GetLastSignalPoint().GetPath();
 
-            ProceduralGenerator.CurrentLayout = path;
-            ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
+            ProceduralGenerator.CurrentLayout = null;
+            ProceduralGenerator.PreviousLayout = null;
 
             //Set path open
             path.gameObject.SetActive(true);

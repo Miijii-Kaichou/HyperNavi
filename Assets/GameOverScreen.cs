@@ -128,10 +128,15 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         GameManager.UnloadScene("GameOverScene", startOverEvent);
     }
 
+    public void OnContinue()
+    {
+
+    }
+
     /// <summary>
     /// Player gets extra live, but they have to watch an ad
     /// </summary>
-    public void OnContinue()
+    public void GetGems()
     {
         ShowAd();
     }
@@ -236,5 +241,10 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     private void PostScore()
     {
         score.text = GameManager.CurrentScore.ToString("D4", CultureInfo.InvariantCulture);
+    }
+
+    void CheckOnCurrency()
+    {
+
     }
 }

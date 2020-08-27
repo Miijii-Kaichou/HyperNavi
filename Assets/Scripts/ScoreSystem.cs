@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Globalization;
+using System.Security.AccessControl;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,10 @@ public class ScoreSystem : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    private TextMeshProUGUI accuracy;
+
     public static bool IsRunnning { get; private set; }
     public static int Score { get; private set; } = 0;
     public static int Mulitplier { get; private set; } = 1;

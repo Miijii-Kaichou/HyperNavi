@@ -66,4 +66,9 @@ public class FollowBehind : MonoBehaviour
     /// Detach a target from follow behind object
     /// </summary>
     public void DetachTarget() => targetTranform = null; 
+
+    public void SetOffSet(Vector2 offset)
+    {
+        this.offset = offset;
+    }
 }
