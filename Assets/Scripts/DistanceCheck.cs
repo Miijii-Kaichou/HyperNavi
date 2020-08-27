@@ -22,21 +22,16 @@ public class DistanceCheck : MonoBehaviour
 
     private void Awake()
     {
-        parent = transform.parent;
+        
         OnRangeEnter = EventManager.AddNewEvent(32, "onRangeEnter");
         OnRangeStay = EventManager.AddNewEvent(33, "onRangeStay");
         OnRangeExit = EventManager.AddNewEvent(34, "onRangeExit");
-
-        rerunCoroutineEvent = EventManager.AddNewEvent(35, "resetCoroutine", () =>
-        {
-            StartCoroutine(CheckDistance());
-            StartCoroutine(DeadTime());
-        });
     }
 
     private void OnReset()
     {
-        rerunCoroutineEvent.Trigger();
+        StartCoroutine(CheckDistance());
+        StartCoroutine(DeadTime());
     }
 
     private void OnEnable()
@@ -50,7 +45,7 @@ public class DistanceCheck : MonoBehaviour
         {
             if (target != null)
             {
-                CalculateDistance(target, parent);
+                CalculateDistance(target, transform);
 
                 if (!trigger && !inside && Distance <= radius)
                     trigger = true;
@@ -74,7 +69,7 @@ public class DistanceCheck : MonoBehaviour
                 }
             }
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
     }
 
@@ -100,7 +95,7 @@ public class DistanceCheck : MonoBehaviour
     /// <param name="b"></param>
     void CalculateDistance(Transform a, Transform b)
     {
-        Distance = Vector3.Distance(b.localPosition, a.localPosition);
+        Distance = Vector2.Distance(a.position, b.position);
         return;
     }
 

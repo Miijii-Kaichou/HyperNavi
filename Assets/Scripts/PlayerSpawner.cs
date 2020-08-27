@@ -27,6 +27,8 @@ public class PlayerSpawner : MonoBehaviour
         //Instanstiation
         player = Instantiate(player, spawnUnder);
 
+        GameManager.AssignPlayer(player);
+
         //Object placement
         player.transform.position = transform.position;
         player.transform.rotation = Quaternion.identity;

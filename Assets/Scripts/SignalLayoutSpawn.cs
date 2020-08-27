@@ -1,6 +1,6 @@
 ﻿using System.Collections;
+using System.Runtime.Remoting.Lifetime;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class SignalLayoutSpawn : MonoBehaviour
 {
@@ -11,6 +11,9 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     [SerializeField]
     OpeningPath layout;
+
+    [SerializeField]
+    DistanceCheck distanceCheck;
 
     /// <summary>
     /// States if there's a turning point
@@ -31,23 +34,24 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     EventManager.Event @generateEvent;
 
-    DistanceCheck distanceCheck;
 
-    /// <summary>
-    /// Start of Object
-    /// </summary>
-    private void Start()
+
+    void Start()
     {
-        StartCoroutine(DistanceCheckingLoop());
+        
         Init();
     }
 
     IEnumerator DistanceCheckingLoop()
     {
+        
+
         while (true)
         {
             if (player != null)
                 distance = distanceCheck.Distance;
+            else
+                Debug.Log("Player is null");
 
             yield return null;
         }
@@ -60,10 +64,6 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     void SignalGeneration()
     {
-        
-
-       
-
         if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
             ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
         ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
@@ -111,7 +111,7 @@ public class SignalLayoutSpawn : MonoBehaviour
     {
         OpeningPath[] paths = ObjectPooler.pooledObjects.GetAllPaths();
         int pathAmount = 0;
-        for(int iter = 0; iter < paths.Length; iter++)
+        for (int iter = 0; iter < paths.Length; iter++)
         {
             OpeningPath path = paths[iter];
             if (path != ProceduralGenerator.CurrentLayout &&
@@ -131,16 +131,16 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     private void Init()
     {
-        player = GameManager.player;
-
-        //Get distance check component
-        distanceCheck = GetComponent<DistanceCheck>();
 
         generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
+
+        
 
         //Set distance target
         distanceCheck.SetTarget(player.transform);
+
+
+        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
 
         //Set up OnRangeEnter Event
         distanceCheck.OnRangeEnter.AddNewListener(
@@ -165,4 +165,15 @@ public class SignalLayoutSpawn : MonoBehaviour
             GameManager.ResetTime();
         });
     }
+
+    /// <summary>
+    /// Start of Object
+    /// </summary>
+    private void OnEnable()
+    {
+        player = GameManager.player;
+
+        StartCoroutine(DistanceCheckingLoop());  
+    }
+
 }

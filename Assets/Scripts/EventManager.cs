@@ -103,7 +103,7 @@ public static class EventManager
 
         public bool HasListerners()
         {
-            hasListeners = (listeners.GetInvocationList().Length != 0);
+            hasListeners = (listeners != null && listeners.GetInvocationList().Length != 0);
             return hasListeners;
         }
     }

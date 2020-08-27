@@ -195,7 +195,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         for (int iter = 0; iter < size; iter++)
         {
             EndGameComments comment = endGameComments[iter];
-            EndGameComments nextComment = null;
+            EndGameComments nextComment;
             try
             {
                 nextComment = iter < size ? endGameComments[iter + 1] : comment;

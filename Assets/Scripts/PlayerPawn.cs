@@ -63,9 +63,9 @@ public class PlayerPawn : Pawn
     /// </summary>
     public override void MoveLeft()
     {
+        signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.LEFT;
         transform.eulerAngles = new Vector3(0, 0, 90);
-        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -73,9 +73,9 @@ public class PlayerPawn : Pawn
     /// </summary>
     public override void MoveRight()
     {
+        signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.RIGHT;
         transform.eulerAngles = new Vector3(0, 0, 270);
-        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -83,9 +83,9 @@ public class PlayerPawn : Pawn
     /// </summary>
     public override void MoveUp()
     {
+        signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.UP;
         transform.eulerAngles = new Vector3(0, 0, 0);
-        signalPoint.SubmitDistanceToManager();
     }
 
     /// <summary>
@@ -93,9 +93,9 @@ public class PlayerPawn : Pawn
     /// </summary>
     public override void MoveDown()
     {
+        signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.DOWN;
         transform.eulerAngles = new Vector3(0, 0, 180);
-        signalPoint.SubmitDistanceToManager();
     }
 
     // Unique to player

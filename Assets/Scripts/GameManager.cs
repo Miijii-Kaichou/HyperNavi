@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -108,23 +109,26 @@ public class GameManager : MonoBehaviour
     //bigger than one of the values
     public static float[] timingWindows =
     {
-        0.75f,
-        1f,
-        1.25f,
+        0.2f,
+        0.4f,
+        0.8f,
+        1
     };
 
 
-    public static int[] points = { 
+    public static int[] points = {
         100,
         10,
-        1
+        1,
+        0
     };
 
     public static string[] comments =
     {
         "Excellent Turn",
         "Okay Turn",
-        "Late Turn"
+        "Late Turn",
+        "Bad Turn"
     };
 
     private void Awake()
@@ -144,11 +148,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-    }
-
-    private void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerPawn>();
     }
 
     /// <summary>
@@ -179,18 +178,21 @@ public class GameManager : MonoBehaviour
     /// <param name="distance"></param>
     public static void DetermineTiming(float distance)
     {
-        dontDestroy = (distance < 2f);
+        dontDestroy = (distance < 1f);
 
+        
         for (int iter = 0; iter < timingWindows.Length; iter++)
         {
             float timing = timingWindows[iter];
-            if (distance < Mathf.Abs(timing))
+            if (distance <= timing)
             {
                 scoreSystem.AddToScore(points[iter]);
-                Debug.Log(comments[iter]);
+                Debug.Log(distance + " : " + comments[iter]);
                 return;
             }
         }
+
+        Debug.Log("Nothing was determined...");
     }
 
     /// <summary>
@@ -290,6 +292,8 @@ public class GameManager : MonoBehaviour
 
         //Trigger event
         Instance.onPlayerDeath.Invoke();
+
+        IsGameStarted = false;
     }
 
     /// <summary>
@@ -459,6 +463,7 @@ public class GameManager : MonoBehaviour
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            IsGameStarted = true;
             scoreSystem.Resume();
             scoreSystem.ResetScore();
 
@@ -502,10 +507,9 @@ public class GameManager : MonoBehaviour
     {
         if (!player.gameObject.activeInHierarchy)
         {
+            IsGameStarted = true;
             scoreSystem.Resume();
             FlushPaths();
-
-            CurrentSpeed = InitialSpeed;
 
             dontDestroy = true;
 
@@ -599,5 +603,7 @@ public class GameManager : MonoBehaviour
 
         }
     }
+
+    public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
 }
 
