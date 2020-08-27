@@ -4576,6 +4576,52 @@ CompositeCollider2D:
       - {x: 1.0000252, y: 0.99999}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
+--- !u!1 &5325519188962554341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3961144616830195042}
+  - component: {fileID: 4010202813032872382}
+  m_Layer: 0
+  m_Name: GemSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3961144616830195042
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325519188962554341}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.25, z: -1.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6111639877267678580}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4010202813032872382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325519188962554341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  spawnUnder: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!1 &6109971479521678614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4587,6 +4633,7 @@ GameObject:
   - component: {fileID: 6111639877267678580}
   - component: {fileID: 8797535408517633991}
   - component: {fileID: 5991845817877191460}
+  - component: {fileID: -4479036216076816778}
   m_Layer: 9
   m_Name: Layout004Grid
   m_TagString: EnvironmentLayout
@@ -4607,6 +4654,7 @@ Transform:
   m_Children:
   - {fileID: 2696316020325185738}
   - {fileID: 2546152497232223630}
+  - {fileID: 3961144616830195042}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4641,3 +4689,21 @@ MonoBehaviour:
   bottomOpen: 0
   xUnit: 29
   yUnit: 17
+--- !u!114 &-4479036216076816778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109971479521678614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02986bb034b5949449fa36f10e4d7f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnAtRandom: 1
+  minRange: 0
+  maxRange: 1
+  chance: 1
+  outOf: 100
+  spawners: []

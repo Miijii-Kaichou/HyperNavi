@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1429888882540767084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3628363098502598654}
+  - component: {fileID: 1079512551014010950}
+  m_Layer: 0
+  m_Name: GemSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3628363098502598654
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429888882540767084}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.25, z: -1.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 18069632395194913}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1079512551014010950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429888882540767084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  spawnUnder: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!1 &3228461045700025370
 GameObject:
   m_ObjectHideFlags: 0
@@ -103,6 +149,7 @@ GameObject:
   - component: {fileID: 18069632395194913}
   - component: {fileID: -3428438874863396768}
   - component: {fileID: 5952234930400074380}
+  - component: {fileID: -8042363899041392103}
   m_Layer: 9
   m_Name: Layout005Grid
   m_TagString: EnvironmentLayout
@@ -123,6 +170,7 @@ Transform:
   m_Children:
   - {fileID: 4166444418989349311}
   - {fileID: 1805152414527697555}
+  - {fileID: 3628363098502598654}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -157,6 +205,24 @@ MonoBehaviour:
   bottomOpen: 1
   xUnit: 29
   yUnit: 17
+--- !u!114 &-8042363899041392103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3805002598767380842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02986bb034b5949449fa36f10e4d7f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnAtRandom: 1
+  minRange: 0
+  maxRange: 1
+  chance: 1
+  outOf: 100
+  spawners: []
 --- !u!1 &4166444418989349296
 GameObject:
   m_ObjectHideFlags: 0
