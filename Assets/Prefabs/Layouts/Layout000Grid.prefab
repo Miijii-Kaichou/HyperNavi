@@ -222,7 +222,7 @@ MonoBehaviour:
   spawnAtRandom: 1
   minRange: 0
   maxRange: 1
-  chance: 1
+  chance: 20
   outOf: 100
   spawners:
   - {fileID: 9180870370925528428}

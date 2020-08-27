@@ -6,12 +6,15 @@ using UnityEngine.Events;
 public class CurrencySystem : MonoBehaviour
 {
     public static CurrencySystem Instance;
-    public static int currencyBalance { get; private set; }
+    public static int CurrencyBalance { get; private set; }
 
-    public static bool IsRunnning { get; private set; }
+    public static bool IsRunning { get; private set; }
 
     [SerializeField]
     private TextMeshProUGUI currencyAmount;
+
+    [SerializeField]
+    private GameObject textParent;
 
     [SerializeField]
     private UnityEvent onSpend = new UnityEvent();
@@ -29,13 +32,11 @@ public class CurrencySystem : MonoBehaviour
         }
     }
 
-
-
     static IEnumerator SystemCycle()
     {
         while (true)
         {
-            if (IsRunnning)
+            if (IsRunning)
                 UpdateUI();
 
             yield return new WaitForSeconds(1 / 60);
@@ -45,12 +46,20 @@ public class CurrencySystem : MonoBehaviour
     static void UpdateUI()
     {
         //Formats number as 0000
-        Instance.currencyAmount.text = currencyBalance.ToString();
+        Instance.currencyAmount.text = CurrencyBalance.ToString();
     }
 
-    public static void AddToBalance(int value) => currencyBalance += value;
+    public static void AddToBalance(int value)
+    {
+        CurrencyBalance += value;
+        SubmitToManager();
+    }
 
-    static void WithdrawFromBalance(int value) => currencyBalance -= value;
+    static void WithdrawFromBalance(int value)
+    {
+        CurrencyBalance -= value;
+        SubmitToManager();
+    }
 
     public static void ExecuteTransaction(int valueAmount, out Result result)
     {
@@ -62,12 +71,14 @@ public class CurrencySystem : MonoBehaviour
             return;
         }
 
+        Debug.Log("Insufficient Funds");
         result = Result.FAILURE;
     }
 
     public static void Init()
     {
-        IsRunnning = true;
+        IsRunning = true;
+        Instance.textParent.SetActive(IsRunning);
         Instance.StartCoroutine(SystemCycle());
     }
 
@@ -76,7 +87,9 @@ public class CurrencySystem : MonoBehaviour
     /// </summary>
     public static void Stop()
     {
-        IsRunnning = false;
+        IsRunning = false;
+        Instance.textParent.SetActive(IsRunning);
+        SubmitToManager();
     }
 
     /// <summary>
@@ -84,8 +97,19 @@ public class CurrencySystem : MonoBehaviour
     /// </summary>
     public static void Resume()
     {
-        IsRunnning = true;
+        IsRunning = true;
+        Instance.textParent.SetActive(IsRunning);
     }
 
-    static bool IsSufficientAmount(int requestedAmount) => currencyBalance >= requestedAmount;
+
+    /// <summary>
+    /// Submit value to Game Manager
+    /// </summary>
+    /// <param name="score"></param>
+    public static void SubmitToManager()
+    {
+        GameManager.CurrencySumbit(CurrencyBalance);
+    }
+
+    static bool IsSufficientAmount(int requestedAmount) => CurrencyBalance >= requestedAmount;
 }

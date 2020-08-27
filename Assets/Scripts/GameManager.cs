@@ -15,8 +15,8 @@ public enum Direction
 
 public enum Result
 {
-    SUCCESS,
-    FAILURE
+    SUCCESS = 1,
+    FAILURE = 0
 }
 
 public class GameManager : MonoBehaviour
@@ -293,6 +293,7 @@ public class GameManager : MonoBehaviour
         }
 
         ScoreSystem.Stop();
+        CurrencySystem.Stop();
 
         //Rest time
         ResetTime();
@@ -477,6 +478,7 @@ public class GameManager : MonoBehaviour
         {
             IsGameStarted = true;
             ScoreSystem.Resume();
+            CurrencySystem.Resume();
             ScoreSystem.ResetScore();
 
             FlushPaths();
@@ -515,7 +517,7 @@ public class GameManager : MonoBehaviour
     /// Submit Currency
     /// </summary>
     /// <param name="currency"></param>
-    static void CurrencySumbit(int value) => CurrentCurrency = value;
+    public static void CurrencySumbit(int value) => CurrentCurrency = value;
 
 
     /// <summary>
@@ -527,6 +529,7 @@ public class GameManager : MonoBehaviour
         {
             IsGameStarted = true;
             ScoreSystem.Resume();
+            CurrencySystem.Resume();
             FlushPaths();
 
             dontDestroy = true;

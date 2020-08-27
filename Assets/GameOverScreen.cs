@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using Random = UnityEngine.Random;
@@ -40,6 +39,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private static Result transactionResult;
 
+    private static string currencyRemainFormat;
+
     private static EndGameComments[] endGameComments =
     {
         new EndGameComments(0,
@@ -48,37 +49,37 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             "Take a break. You seem tired.",
             "You're out of it today aren't you?"),
 
-        new EndGameComments(100,
+        new EndGameComments(99,
             "I'm guessing you didn't take this too serious?",
             "First Time?",
             "You must be starting off.",
             "Getting used to the controls, huh?"),
 
-        new EndGameComments(250,
+        new EndGameComments(249,
             "Slowly Getting a hang of it",
             "Just keep practicing",
             "Perhaps better than when you first started?",
             "Good Score"),
 
-        new EndGameComments(500,
+        new EndGameComments(499,
             "Are you caughting on?",
             "Slightly better",
             "It may look easy, but it takes time.",
             "Never stop trying!"),
 
-        new EndGameComments(750,
+        new EndGameComments(749,
             "You're getting good at this...",
             "Very admirable!",
             "Did you see the difficulty increase?",
             "You're almost in the thousands!"),
 
-        new EndGameComments(1000,
+        new EndGameComments(999,
             "Congrats! You've unlocked your hidden potential!",
             "You're officially not a beginner!",
             "Great Navigation!",
             "Go higher!!!"),
 
-        new EndGameComments(2500,
+        new EndGameComments(2499,
             "You're at the highest peak!",
             "You're a professional at this game!",
             "You have amazing hand-eye coordination!",
@@ -88,6 +89,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private void Awake()
     {
+        
+
         Instance = this;
 
         //Generate a random comment based on score
@@ -96,26 +99,18 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         //Post Score to Screen
         PostScore();
 
+        PostCurrency();
+
         continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
-            CurrencySystem.ExecuteTransaction(1000, out transactionResult);
-            switch (transactionResult)
-            {
-                case Result.SUCCESS:
-                    //Spawn player to last signal point
-                    ProceduralGenerator.DontDeactivate();
-                    GameManager.ResetTime();
-                    GameManager.SpawnPlayerToLastSignalPoint();
-                    Advertisement.RemoveListener(Instance);
-                    EventManager.RemoveEvent("continue");
-                    break;
-                case Result.FAILURE:
-                    Debug.Log("Player has no sufficient funds");
-                    break;
-                default:
-                    break;
-            }
             
+
+            //Spawn player to last signal point
+            ProceduralGenerator.DontDeactivate();
+            GameManager.ResetTime();
+            GameManager.SpawnPlayerToLastSignalPoint();
+            Advertisement.RemoveListener(Instance);
+            EventManager.RemoveEvent("continue");
         });
 
         startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
@@ -130,7 +125,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         gemsEvent = EventManager.AddNewEvent(997, "getGemsWithVideo", () =>
         {
-            CurrencySystem.AddToBalance(10);
+            CurrencySystem.AddToBalance(50);
+            PostCurrency();
         });
 
         Advertisement.AddListener(Instance);
@@ -152,11 +148,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     public void OnContinue()
     {
-        continueEvent.Trigger();
-        if(transactionResult == Result.SUCCESS)
-        {
-            GameManager.UnloadScene("GameOverScene", null);
-        }
+        if(SufficientCurrentcy())
+            GameManager.UnloadScene("GameOverScene", continueEvent);
     }
 
     /// <summary>
@@ -243,8 +236,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 (iter < size &&
                 comment != null &&
                 GameManager.CurrentScore >= atScore &&
-                GameManager.CurrentScore < nextAtScore) ||
-                (iter == size && GameManager.CurrentScore >= atScore))
+                GameManager.CurrentScore <= nextAtScore) ||
+                (iter >= size && GameManager.CurrentScore >= atScore))
             {
                 PickComment(comment);
                 return;
@@ -264,13 +257,31 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         comment.text = comments[value];
     }
 
+    /// <summary>
+    /// Post Score on GameOver Screen
+    /// </summary>
     private void PostScore()
     {
-        score.text = GameManager.CurrentScore.ToString("D7", CultureInfo.InvariantCulture);
+        score.text = GameManager.CurrentScore.ToString();
     }
 
-    void CheckOnCurrency()
+    /// <summary>
+    /// Post Remaining Currency on GameOver Screen
+    /// </summary>
+    private void PostCurrency()
     {
+        currencyRemainFormat = string.Format("Remaining: {0}", GameManager.CurrentCurrency);
+        currencyAmount.text = currencyRemainFormat;
+    }
 
+    /// <summary>
+    /// Check if there is sufficient funds
+    /// </summary>
+    /// <returns></returns>
+    bool SufficientCurrentcy()
+    {
+        CurrencySystem.ExecuteTransaction(1000, out transactionResult);
+        int resultValue = (int)transactionResult;
+        return resultValue.ToBoolean();
     }
 }

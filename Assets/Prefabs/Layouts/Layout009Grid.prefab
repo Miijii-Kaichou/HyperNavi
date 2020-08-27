@@ -85,7 +85,7 @@ MonoBehaviour:
   spawnAtRandom: 1
   minRange: 0
   maxRange: 1
-  chance: 1
+  chance: 20
   outOf: 100
   spawners:
   - {fileID: 4711895121226892552}

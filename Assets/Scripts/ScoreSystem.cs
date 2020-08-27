@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +8,9 @@ public class ScoreSystem : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI scoreText;
+
+    [SerializeField]
+    private GameObject textParent;
 
     [SerializeField]
     private TextMeshProUGUI accuracy;
@@ -33,7 +35,7 @@ public class ScoreSystem : MonoBehaviour
         GameManager.SetScoreSystem(Instance);
     }
 
-    static IEnumerator SystemCycle()
+    public static IEnumerator SystemCycle()
     {
         while (true)
         {
@@ -52,12 +54,12 @@ public class ScoreSystem : MonoBehaviour
     static void UpdateUI()
     {
         //Formats number as 0000
-        Instance.scoreText.text = Score.ToString("D7", CultureInfo.InvariantCulture);
+        Instance.scoreText.text = Score.ToString();
     }
 
-    public static void SubmitToManager(int score)
+    public static void SubmitToManager()
     {
-        GameManager.ScoreSubmit(score);
+        GameManager.ScoreSubmit(Score);
     }
 
     /// <summary>
@@ -65,8 +67,7 @@ public class ScoreSystem : MonoBehaviour
     /// </summary>
     public static void Stop() {
         IsRunning = false;
-        Instance.scoreText.transform.parent.gameObject.SetActive(IsRunning);
-        SubmitToManager(Score);
+        Instance.textParent.SetActive(IsRunning); 
     }
 
     /// <summary>
@@ -84,17 +85,19 @@ public class ScoreSystem : MonoBehaviour
     {
         
         IsRunning = true;
-        Instance.scoreText.transform.parent.gameObject.SetActive(IsRunning);
+        Instance.textParent.SetActive(IsRunning);
         Instance.StartCoroutine(SystemCycle());
     }
 
     public static void ResetScore()
     {
         Score = 0;
+        SubmitToManager();
     }
 
     public static void AddToScore(int value)
     {
         Score += value;
+        SubmitToManager();
     }
 }

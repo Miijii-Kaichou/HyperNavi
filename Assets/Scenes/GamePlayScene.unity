@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 207231246}
+  textParent: {fileID: 355369896}
   accuracy: {fileID: 0}
 --- !u!4 &35797841
 Transform:
@@ -470,7 +471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0000000
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -565,7 +566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &310137897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -655,6 +656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currencyAmount: {fileID: 1862345864}
+  textParent: {fileID: 310137896}
   onSpend:
     m_PersistentCalls:
       m_Calls: []
@@ -689,7 +691,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &355369897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2141,7 +2143,7 @@ MonoBehaviour:
   spawnAtRandom: 1
   minRange: 0
   maxRange: 1
-  chance: 100
+  chance: 20
   outOf: 100
   spawners:
   - {fileID: 3836741}

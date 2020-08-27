@@ -82,7 +82,7 @@ MonoBehaviour:
   spawnAtRandom: 1
   minRange: 0
   maxRange: 1
-  chance: 1
+  chance: 20
   outOf: 100
   spawners: []
 --- !u!1 &2731360570745811450
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _object: {fileID: 8216271655920212263, guid: cbc3db5a9c7550d41ad416762a341ecb, type: 3}
+  objectIdentifier: 
   spawnUnder: {fileID: 0}
   controller: {fileID: 0}
 --- !u!1 &6347507918816887641

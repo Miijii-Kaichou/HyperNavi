@@ -15,9 +15,10 @@ public class SpawnController : MonoBehaviour
     [SerializeField]
     private Spawner[] spawners;
 
-    void Start()
+    void OnEnable()
     {
-        Randomize();
+        if (GameManager.IsGameStarted)
+            Randomize();
     }
 
     void Randomize()

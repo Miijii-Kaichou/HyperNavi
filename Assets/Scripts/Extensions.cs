@@ -42,7 +42,7 @@ public static class Extensions
         try
         {
             if (obj.GetType() == typeof(int))
-                return (int)obj == 1 ? true : false;
+                return (int)obj == 1;
 
             if (obj.GetType() == typeof(string))
                 return ((string)obj == "true".ToLower() || (string)obj == "1");
