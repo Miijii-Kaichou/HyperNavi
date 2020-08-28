@@ -1,7 +1,5 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -21,8 +19,10 @@ public class ProceduralGenerator : MonoBehaviour
 
     public ObjectPooler objectPooler;
 
+    public OpeningPath currentLayout;
     public static OpeningPath CurrentLayout;
 
+    public OpeningPath previousLayout;
     public static OpeningPath PreviousLayout;
 
     public bool dontDeactivate = true;
@@ -32,6 +32,8 @@ public class ProceduralGenerator : MonoBehaviour
     // Toggling this on will only use Layout's 0 and 1 in a loop
     // This effect is used for the title screen
     public static bool OnPreview { get; set; } = true;
+    public static bool IsStalling { get; private set; }
+    public static float Time { get; private set; }
 
     private void Awake()
     {
@@ -50,6 +52,14 @@ public class ProceduralGenerator : MonoBehaviour
     {
         GetAllEnvironmentalLayouts();
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        currentLayout = CurrentLayout;
+        previousLayout = PreviousLayout;
+    }
+#endif
 
     /// <summary>
     /// Remove all active paths
@@ -199,5 +209,31 @@ public class ProceduralGenerator : MonoBehaviour
     }
 
     public static OpeningPath[] GetAllPaths() => Instance.environmentalLayoutPaths;
+
+    internal static void Stall(float v)
+    {
+        Instance.StartCoroutine(StallCycle(v));
+    }
+
+    static IEnumerator StallCycle(float v)
+    {
+        IsStalling = true;
+        while (true)
+        {
+            if (IsStalling)
+            {
+                Time += UnityEngine.Time.deltaTime;
+                
+                if(Time >= v)
+                {
+                    IsStalling = false;
+                    Time = 0;
+                    break;
+                }
+            }
+
+            yield return null;
+        }
+    }
 }
 
