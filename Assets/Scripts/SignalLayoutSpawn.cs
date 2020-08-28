@@ -66,7 +66,7 @@ public class SignalLayoutSpawn : MonoBehaviour
 
         generator.dontDeactivate = false;
 
-        ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
+        
 
         if (player != null)
         {
@@ -146,11 +146,14 @@ public class SignalLayoutSpawn : MonoBehaviour
             if (player != null && turningPoint)
                 player.AllowTurn();
 
-            
-            SignalLayoutSpawn signal = layout.GetSignal();
-            ProceduralGenerator.CurrentLayout = layout;
-            ProceduralGenerator.FlushPaths();
-            player.UpdateSignalPoint(signal);
+            if (!ProceduralGenerator.IsStalling)
+            {
+                SignalLayoutSpawn signal = layout.GetSignal();
+                ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
+                ProceduralGenerator.CurrentLayout = layout;
+                ProceduralGenerator.FlushPaths();
+                player.UpdateSignalPoint(signal);
+            }
         });
 
 
