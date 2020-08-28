@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class ObjectPooler : MonoBehaviour
 
     public bool spawnInParent = false;
 
+    public static Transform Parent;
+
     // Start is called before the first frame update
 
     public int poolIndex;
@@ -30,7 +33,8 @@ public class ObjectPooler : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
-        } else
+        }
+        else
         {
             Destroy(gameObject);
         }
@@ -44,12 +48,13 @@ public class ObjectPooler : MonoBehaviour
 
     void InitObjectPooler()
     {
+        Parent = transform.parent;
         pooledObjects = new List<GameObject>();
         foreach (ObjectPoolItem item in itemsToPool)
         {
             for (int i = 0; i < item.size; i++)
             {
-                GameObject newMember = Instantiate(item.prefab, spawnInParent ? transform.parent : null);
+                GameObject newMember = Instantiate(item.prefab, spawnInParent ? Parent : null);
                 newMember.SetActive(false);
                 item.prefab.name = item.name;
                 pooledObjects.Add(newMember);
@@ -63,7 +68,7 @@ public class ObjectPooler : MonoBehaviour
         GameObject pooledObject;
         for (int i = 0; i < pooledObjects.Count; i++)
         {
-             pooledObject = pooledObjects[i];
+            pooledObject = pooledObjects[i];
 
             if (pooledObject != null &&
                 !pooledObject.activeInHierarchy &&
@@ -95,6 +100,18 @@ public class ObjectPooler : MonoBehaviour
         GameObject pooledObject = GetMember(name);
         result = (T)pooledObject.GetComponent(typeof(T));
         return pooledObject;
+    }
+
+    public static void ClearPool()
+    {
+        for (int iter = 0; iter < pooledObjects.Count; iter++)
+        {
+            GameObject obj = pooledObjects[iter];
+            obj.transform.position = Vector2.zero;
+            obj.transform.parent = Parent;
+            obj.transform.rotation = Quaternion.identity;
+            obj.SetActive(false);
+        }
     }
 
     public static Vector3 Position() => Instance.transform.localPosition;

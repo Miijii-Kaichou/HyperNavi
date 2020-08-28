@@ -208,8 +208,8 @@ public class TouchDetection : MonoBehaviour
         diffTouchX = touchX - previousTouchX;
         diffTouchY = touchY - previousTouchY;
 
-        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold / 25);
-        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold / 25);
+        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold / 50);
+        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold / 50);
     }
 
     //Calculate difference in time since a touch was detected
@@ -259,9 +259,9 @@ public class TouchDetection : MonoBehaviour
     }
 
     public bool Tap() => tapDetected;
-    public bool SlideLeft() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 25);
-    public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 25);
-    public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 25);
-    public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 25);
+    public bool SlideLeft() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 50);
+    public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 50);
+    public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 50);
+    public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 50);
     public bool DoubleTap() => doubleTapDetected;
 }

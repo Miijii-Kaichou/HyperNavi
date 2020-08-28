@@ -17,7 +17,7 @@ public abstract class Spawner : MonoBehaviour
         InstantiateObject();
     }
 
-    void InstantiateObject()
+    public virtual void InstantiateObject()
     {
         //Uses object pooler instead
         GameObject _object = ObjectPooler.GetMember(objectIdentifier);
@@ -25,9 +25,9 @@ public abstract class Spawner : MonoBehaviour
         if (_object.NotUsed())
         {
             _object.SetActive(true);
-
+            _object.transform.parent = spawnUnder;
             //Object Placement
-            _object.transform.position = transform.position;
+            _object.transform.localPosition = transform.localPosition;
             _object.transform.rotation = Quaternion.identity;
         }
     }

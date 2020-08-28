@@ -105,11 +105,11 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
-
+            ProceduralGenerator.DontDeactivate();
+            ObjectPooler.ClearPool();
+            GameManager.ResetTime();
 
             //Spawn player to last signal point
-            ProceduralGenerator.DontDeactivate();
-            GameManager.ResetTime();
             GameManager.SpawnPlayerToLastSignalPoint();
             Advertisement.RemoveListener(Instance);
             EventManager.RemoveEvent("continue");
@@ -118,7 +118,9 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
         {
             ProceduralGenerator.DontDeactivate();
+            ObjectPooler.ClearPool();
             GameManager.ResetTime();
+
             //Spawn player to last signal point
             GameManager.SpawnPlayerToStartLayout();
             Advertisement.RemoveListener(Instance);

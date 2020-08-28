@@ -61,6 +61,6 @@ public static class Extensions
 
     public static bool NotUsed(this GameObject obj)
     {
-        return (!obj.activeInHierarchy);
+        return (obj != null && !obj.activeInHierarchy);
     }
 }

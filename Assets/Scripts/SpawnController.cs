@@ -23,14 +23,17 @@ public class SpawnController : MonoBehaviour
 
     void Randomize()
     {
-        float chances = (float)(chance / outOf);
+        float chances = (float)chance / (float)outOf;
+
         float randomValue = Random.Range(minRange, maxRange);
         if (randomValue <= chances)
         {
             for (int iter = 0; iter < spawners.Length; iter++)
             {
+
                 Spawner spawner = spawners[iter];
                 spawner.OnInit();
+
             }
             return;
         }

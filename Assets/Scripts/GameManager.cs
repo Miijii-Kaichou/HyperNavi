@@ -32,8 +32,6 @@ public class GameManager : MonoBehaviour
 
     static AsyncOperation operation = new AsyncOperation();
 
-    static ScoreSystem scoreSystem;
-
     // Handles all gaming things in the game
 
     /// <summary>
@@ -465,31 +463,30 @@ public class GameManager : MonoBehaviour
             CurrencySystem.Resume();
             ScoreSystem.ResetScore();
 
-            ProceduralGenerator.FlushPaths();
+           
+
+            dontDestroy = true;
 
             CurrentSpeed = InitialSpeed;
 
             ResetTime();
 
-            OpeningPath layout = Instance.startingLayout;
+            OpeningPath path = Instance.startingLayout;
 
-            ProceduralGenerator.CurrentLayout = null;
+            ProceduralGenerator.Stall(3f);
+            ProceduralGenerator.CurrentLayout = path;
             ProceduralGenerator.PreviousLayout = null;
 
-            layout.gameObject.SetActive(true);
+            path.gameObject.SetActive(true);
 
             player.gameObject.SetActive(true);
-            player.transform.localPosition = layout.GetSignalTriggerPosition(false);
+            player.transform.localPosition = path.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
-            player.ChangeDirection(Direction.UP);  
+            player.ChangeDirection(Direction.UP);
+
+            ProceduralGenerator.FlushPaths();
         }
     }
-
-    /// <summary>
-    /// Reference Score System
-    /// </summary>
-    /// <param name="system"></param>
-    public static void SetScoreSystem(ScoreSystem system) => scoreSystem = system;
 
     /// <summary>
     /// Submit Official Score
@@ -523,13 +520,10 @@ public class GameManager : MonoBehaviour
 
             OpeningPath path = player.GetLastSignalPoint().GetPath();
 
-            ProceduralGenerator.CurrentLayout = null;
+            ProceduralGenerator.Stall(0.5f);
+            ProceduralGenerator.CurrentLayout = path;
             ProceduralGenerator.PreviousLayout = null;
             
-
-            //Set path open
-            path.gameObject.SetActive(true);
-
             //Check if one of side are open
             leftOpened = path.IsLeftOpen();
             rightOpened = path.IsRightOpen();
@@ -608,7 +602,9 @@ public class GameManager : MonoBehaviour
 
             }
 
-            player.UpdateSignalPoint(null);
+            ProceduralGenerator.FlushPaths();
+            //Set path open
+            path.gameObject.SetActive(true);
         }
     }
 

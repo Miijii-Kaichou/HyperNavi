@@ -32,8 +32,6 @@ public class ScoreSystem : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        GameManager.SetScoreSystem(Instance);
     }
 
     public static IEnumerator SystemCycle()
@@ -94,9 +92,9 @@ public class ScoreSystem : MonoBehaviour
 
 
         }
-#if UNITY_EDITOR
         else
         {
+#if UNITY_EDITOR
 
             Debug.Log("Score System already initialized");
 #endif
