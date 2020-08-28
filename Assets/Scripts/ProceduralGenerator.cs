@@ -37,11 +37,12 @@ public class ProceduralGenerator : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(Instance);
-        } else
+        }
+        else
         {
             Destroy(gameObject);
         }
@@ -72,8 +73,10 @@ public class ProceduralGenerator : MonoBehaviour
         {
             OpeningPath path = paths[iter];
 
-            if (path != CurrentLayout && path != PreviousLayout &&  path.gameObject.activeInHierarchy)
+            if (path != CurrentLayout && path != PreviousLayout && path.gameObject.activeInHierarchy)
+            {
                 path.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -223,8 +226,8 @@ public class ProceduralGenerator : MonoBehaviour
             if (IsStalling)
             {
                 Time += UnityEngine.Time.deltaTime;
-                
-                if(Time >= v)
+
+                if (Time >= v)
                 {
                     IsStalling = false;
                     Time = 0;
