@@ -123,8 +123,10 @@ public static class EventManager
         foreach (CallBackMethod listener in listeners)
         {
             newEvent.AddNewListener(listener);
-            Events.Add(newEvent);
+            
         }
+
+        Events.Add(newEvent);
 
         return newEvent;
     }
