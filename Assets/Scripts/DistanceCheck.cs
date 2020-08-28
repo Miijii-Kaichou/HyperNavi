@@ -13,12 +13,9 @@ public class DistanceCheck : MonoBehaviour
     public EventManager.Event OnRangeExit;
 
     Transform target = null;
-    Transform parent;
 
     bool trigger = false;
     bool inside = false;
-
-    EventManager.Event rerunCoroutineEvent;
 
     private void Awake()
     {

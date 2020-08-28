@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class EventManager
 {
@@ -260,4 +261,17 @@ public static class EventManager
     /// </summary>
     /// <returns></returns>
     public static Event[] GetAllEvents() => Events.ToArray();
+
+    public static int FreeValue()
+    {
+        int value = 0;
+        foreach (Event _event in Events)
+        {
+            value = Random.Range(0, int.MaxValue);
+            if (value != _event.uniqueID)
+                return value;
+        }
+
+        return value;
+    }
 }

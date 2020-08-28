@@ -137,7 +137,7 @@ public class SignalLayoutSpawn : MonoBehaviour
         distanceCheck.SetTarget(player.transform);
 
 
-        generateEvent = EventManager.AddNewEvent(42, "generateLayout", () => SignalGeneration());
+        generateEvent = EventManager.AddNewEvent(EventManager.FreeValue(), "generateLayout", () => SignalGeneration());
 
         //Set up OnRangeEnter Event
         distanceCheck.OnRangeEnter.AddNewListener(
