@@ -63,8 +63,6 @@ MonoBehaviour:
   layout: {fileID: 4365486017038164582}
   distanceCheck: {fileID: 7272798237223641685}
   turningPoint: 0
-  range: 2
-  inside: 0
 --- !u!114 &7272798237223641685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,8 +75,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signal: {fileID: 4477433392671628816}
+  range: 2
   Distance: 0
+  target: {fileID: 0}
 --- !u!1 &1705081039910266604
 GameObject:
   m_ObjectHideFlags: 0

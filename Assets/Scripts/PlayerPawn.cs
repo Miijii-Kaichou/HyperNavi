@@ -11,9 +11,6 @@ public class PlayerPawn : Pawn
     private WallDetector wallDetector;
 
     [SerializeField]
-    private float gridSize = 1f;
-
-    [SerializeField]
     private bool hasContactedWall = false;
 
     private bool canTurn = false;

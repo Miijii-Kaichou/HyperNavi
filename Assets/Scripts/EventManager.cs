@@ -109,6 +109,15 @@ public static class EventManager
         }
     }
 
+
+    public static int FreeValue
+    {
+        get
+        {
+            return SetFreeValue();
+        }
+    }
+
     //This associated an event with
     static List<Event> Events = new List<Event>();
 
@@ -262,7 +271,7 @@ public static class EventManager
     /// <returns></returns>
     public static Event[] GetAllEvents() => Events.ToArray();
 
-    public static int FreeValue()
+    public static int SetFreeValue()
     {
         int value = 0;
         foreach (Event _event in Events)

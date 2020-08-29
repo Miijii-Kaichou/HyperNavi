@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SignalLayoutSpawn : MonoBehaviour
+public class SignalLayoutSpawn : MonoBehaviour, IRange
 {
     ProceduralGenerator generator;
 
@@ -21,10 +19,6 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     bool turningPoint = true;
 
-    public float range = 2f;
-
-    public bool inside = false;
-
     /// <summary>
     /// The Player
     /// </summary>
@@ -32,7 +26,6 @@ public class SignalLayoutSpawn : MonoBehaviour
 
     void Start()
     {
-
         Init();
     }
 
@@ -93,9 +86,22 @@ public class SignalLayoutSpawn : MonoBehaviour
         GameManager.DetermineTiming(distanceCheck.GetDistance());
     }
 
-    public void OnSignalInteraction()
+    private void Init()
     {
+        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
+    }
 
+
+    /// <summary>
+    /// Start of Object
+    /// </summary>
+    private void OnEnable()
+    {
+        player = GameManager.player;
+    }
+
+    public void OnRangeEnter()
+    {
         if (player != null && turningPoint)
             player.AllowTurn();
 
@@ -109,7 +115,7 @@ public class SignalLayoutSpawn : MonoBehaviour
         }
     }
 
-    public void OnEndSignalInteraction()
+    public void OnRangeExit()
     {
         //Signal generator to generate a layout based on the player's direction
         SignalGeneration();
@@ -117,22 +123,4 @@ public class SignalLayoutSpawn : MonoBehaviour
         GameManager.AllowDestructionOfPlayer();
         GameManager.ResetTime();
     }
-
-    private void Init()
-    {
-        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-
-        //Set distance target
-        distanceCheck.SetTarget(player.transform);
-    }
-
-
-    /// <summary>
-    /// Start of Object
-    /// </summary>
-    private void OnEnable()
-    {
-        player = GameManager.player;
-    }
-
 }

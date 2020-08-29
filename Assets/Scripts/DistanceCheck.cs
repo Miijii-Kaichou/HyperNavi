@@ -1,15 +1,35 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Event = EventManager.Event;
 
 public class DistanceCheck : MonoBehaviour
 {
     [SerializeField]
-    SignalLayoutSpawn signal;
+    float range = 2f;
 
     [SerializeField]
     private float Distance = 0f;
 
+    [SerializeField]
     Transform target = null;
+
+    Event onEnter, onExit;
+
+    bool inside = false;
+
+    IRange obj;
+
+    private void Awake()
+    {
+        obj = GetComponent<IRange>();
+    }
+
+    private void Start()
+    {
+        if (target == null)
+            target = GameManager.player.transform;
+        InitializeEvents();
+    }
 
     private void OnReset()
     {
@@ -42,10 +62,12 @@ public class DistanceCheck : MonoBehaviour
     /// </summary>
     private void CheckIfInRange()
     {
-        if (Distance <= signal.range && !signal.inside)
+        if (Distance <= range && !inside)
         {
-            signal.inside = true;
-            signal.OnSignalInteraction();
+            inside = true;
+
+            if (onEnter.HasListerners())
+                onEnter.Trigger();
         }
     }
 
@@ -54,10 +76,13 @@ public class DistanceCheck : MonoBehaviour
     /// </summary>
     private void CheckIfExitFromRange()
     {
-        if (Distance > signal.range && signal.inside)
+        if (Distance > range && inside)
         {
-            signal.inside = false;
-            signal.OnEndSignalInteraction();
+            inside = false;
+
+            if (onExit.HasListerners())
+                onExit.Trigger();
+
         }
     }
 
@@ -78,5 +103,11 @@ public class DistanceCheck : MonoBehaviour
     public void SetTarget(Transform target)
     {
         this.target = target;
+    }
+
+    void InitializeEvents()
+    {
+        onEnter = EventManager.AddNewEvent(EventManager.FreeValue, "onEnter", () => obj.OnRangeEnter());
+        onExit = EventManager.AddNewEvent(EventManager.FreeValue, "onExit", () => obj.OnRangeExit());
     }
 }

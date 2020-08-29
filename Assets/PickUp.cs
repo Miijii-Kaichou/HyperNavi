@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UIElements;
-
-public class PickUp : MonoBehaviour
+[RequireComponent(typeof(DistanceCheck))]
+public class PickUp : MonoBehaviour, IRange
 {
     [SerializeField]
     private UnityEvent @onPickUp = new UnityEvent();
@@ -19,12 +18,6 @@ public class PickUp : MonoBehaviour
         ValidatePreExstingIdentifier(pickIdentifier);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-            onPickUp.Invoke();
-    }
-
     void ValidatePreExstingIdentifier(string input)
     {
         if(input == GEM_PICKUP)
@@ -39,5 +32,17 @@ public class PickUp : MonoBehaviour
                 gameObject.SetActive(false);
             });
         }
+    }
+
+    public void OnRangeEnter()
+    {
+        Debug.Log("PickUp!!!");
+        if(GameManager.player != null)
+            onPickUp.Invoke();
+    }
+
+    public void OnRangeExit()
+    {
+        
     }
 }
