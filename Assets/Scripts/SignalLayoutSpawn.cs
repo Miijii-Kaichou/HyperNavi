@@ -44,7 +44,7 @@ public class SignalLayoutSpawn : MonoBehaviour
         while (true)
         {
             if (player != null)
-                distance = distanceCheck.Distance;
+                distance = distanceCheck.GetDistance();
 #if UNITY_EDITOR
             else
                 Debug.Log("Player is null");
@@ -126,22 +126,9 @@ public class SignalLayoutSpawn : MonoBehaviour
         GameManager.DetermineTiming(distance);
     }
 
-    private void Init()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-
-        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-
-        
-
-        //Set distance target
-        distanceCheck.SetTarget(player.transform);
-
-
-        generateEvent = EventManager.AddNewEvent(EventManager.FreeValue(), "generateLayout", () => SignalGeneration());
-
-        //Set up OnRangeEnter Event
-        distanceCheck.OnRangeEnter.AddNewListener(
-        () =>
+        if (collision.CompareTag("Player"))
         {
             if (player != null && turningPoint)
                 player.AllowTurn();
@@ -154,20 +141,29 @@ public class SignalLayoutSpawn : MonoBehaviour
                 ProceduralGenerator.FlushPaths();
                 player.UpdateSignalPoint(signal);
             }
-        });
+        }
+    }
 
-
-        //Set up OnRangeExit Event
-        distanceCheck.OnRangeExit.AddNewListener(
-        () =>
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
         {
             //Signal generator to generate a layout based on the player's direction
-            generateEvent.Trigger();
+            SignalGeneration();
             player.ProhibitTurn();
             GameManager.AllowDestructionOfPlayer();
             GameManager.ResetTime();
-        });
+        }
     }
+
+    private void Init()
+    {
+        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
+
+        //Set distance target
+        distanceCheck.SetTarget(player.transform);
+    }
+
 
     /// <summary>
     /// Start of Object

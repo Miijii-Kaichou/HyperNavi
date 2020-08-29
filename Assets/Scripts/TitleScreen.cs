@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleScreen : MonoBehaviour
 {
@@ -22,8 +23,8 @@ public class TitleScreen : MonoBehaviour
 
     public void OnOptions()
     {
-        GameManager.LoadScene("Options");
-        GameManager.UnloadScene(GameManager.TitleScreenName());
+        GameManager.UnloadScene("TitleScreen");
+        GameManager.LoadScene("Options", true, LoadSceneMode.Additive);
     }
 
     public void OnCredits()

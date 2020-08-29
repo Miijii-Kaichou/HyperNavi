@@ -1442,13 +1442,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 644233ec1c0cfeb4cbb313944dd00423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleSceneName: TitleScreen
-  optionTabScenesNames:
+  scenesNames:
+  - TitleScreen
+  - Options
   - General
   - Audio
   - Graphics
   - GemShop
-  - Options
   startingLayout: {fileID: 4365486017063413541}
   onPlayerDeath:
     m_PersistentCalls:
@@ -1554,6 +1554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b058a6bc177d7c4bb386a3b7e33ed91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsSingleton: 0
   itemsToPool:
   - name: Layout000Grid
     size: 4
@@ -2125,6 +2126,7 @@ GameObject:
   - component: {fileID: 8459447590518204744}
   - component: {fileID: 8503155309783264763}
   - component: {fileID: 5552883983925311507}
+  - component: {fileID: 5552883983925311508}
   m_Layer: 10
   m_Name: LayoutSpawnTrigger
   m_TagString: Untagged
@@ -2144,23 +2146,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2
   Distance: 0
-  OnRangeEnter:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeStay:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeExit:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
+--- !u!58 &5552883983925311508
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552883983925311506}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!1839735485 &6860303794245898083
 Tilemap:
   m_ObjectHideFlags: 0

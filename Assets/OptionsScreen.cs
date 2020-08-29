@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEditorInternal;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class OptionsScreen : MonoBehaviour
@@ -12,16 +10,24 @@ public class OptionsScreen : MonoBehaviour
     [SerializeField]
     string optionSceneName;
 
+    string currentScene = null;
+    string previousScene = null;
+
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.SceneIndex = GameManager.GetSceneIndexByName("General");
-        Load();
+        currentScene = null;
+        previousScene = null;
+        OnGeneral();
     }
 
     public void BackToTitleMenu()
     {
-
+        GameManager.UnloadScene(currentScene);
+        currentScene = null;
+        previousScene = null;
+        GameManager.UnloadScene("Options");
+        GameManager.LoadScene("TitleScreen", true, LoadSceneMode.Additive);
     }
 
     /// <summary>
@@ -29,8 +35,13 @@ public class OptionsScreen : MonoBehaviour
     /// </summary>
     public void OnGeneral()
     {
-        GameManager.SceneIndex = GameManager.GetSceneIndexByName("General");
-        Load();
+        previousScene = currentScene;
+
+        if (previousScene != "")
+            GameManager.UnloadScene(previousScene);
+
+        currentScene = "General";
+        GameManager.LoadScene(currentScene, true, LoadSceneMode.Additive);
     }
 
     /// <summary>
@@ -38,8 +49,14 @@ public class OptionsScreen : MonoBehaviour
     /// </summary>
     public void OnAudio()
     {
-        GameManager.SceneIndex = GameManager.GetSceneIndexByName("Audio");
-        Load();
+        
+        previousScene = currentScene;
+
+        if (previousScene != "")
+            GameManager.UnloadScene(previousScene);
+
+        currentScene = "Audio";
+        GameManager.LoadScene(currentScene, true, LoadSceneMode.Additive);
     }
 
     /// <summary>
@@ -47,8 +64,15 @@ public class OptionsScreen : MonoBehaviour
     /// </summary>
     public void OnGraphics()
     {
-        GameManager.SceneIndex = GameManager.GetSceneIndexByName("Graphics");
-        Load();
+
+        previousScene = currentScene;
+
+        if (previousScene != "")
+            GameManager.UnloadScene(previousScene);
+
+        previousScene = currentScene;
+        currentScene = "Graphics";
+        GameManager.LoadScene(currentScene, true, LoadSceneMode.Additive);
     }
 
     /// <summary>
@@ -56,25 +80,14 @@ public class OptionsScreen : MonoBehaviour
     /// </summary>
     public void OnGemShop()
     {
-        GameManager.SceneIndex = GameManager.GetSceneIndexByName("GemShop");
-        Load();
-    }
 
+        previousScene = currentScene;
 
-    /// <summary>
-    /// Load in a scene
-    /// </summary>
-    public static void Load()
-    {
-        string currentSceneName = GameManager.SceneNames()[GameManager.SceneIndex];
+        if (previousScene != "")
+            GameManager.UnloadScene(previousScene);
 
-        GameManager.PreviousScene = GameManager.CurrentScene;
+        currentScene = "GemShop";
+        GameManager.LoadScene(currentScene, true, LoadSceneMode.Additive);
 
-        if (GameManager.PreviousScene != null)
-            GameManager.UnloadScene(GameManager.PreviousScene);
-
-        GameManager.CurrentScene = currentSceneName;
-
-        GameManager.LoadScene(currentSceneName, true, LoadSceneMode.Additive);
     }
 }

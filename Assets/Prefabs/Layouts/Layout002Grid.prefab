@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3950049723799250984}
   - component: {fileID: 3870242700291452059}
   - component: {fileID: 8032451131320619230}
+  - component: {fileID: 8974448085320616576}
   m_Layer: 10
   m_Name: LayoutSpawnTrigger (1)
   m_TagString: Untagged
@@ -75,23 +76,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2.5
   Distance: 0
-  OnRangeEnter:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeStay:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeExit:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
+--- !u!58 &8974448085320616576
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061535701966977394}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!1 &1065077063683474612
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b48a17ae2db7764a84d1681ee38418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectIdentifier: 
+  objectIdentifier: Gem
   spawnUnder: {fileID: 825822923277795017}
   controller: {fileID: 5667395589280488645}
 --- !u!1 &6614835856370782628

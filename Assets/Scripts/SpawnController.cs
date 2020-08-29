@@ -17,7 +17,7 @@ public class SpawnController : MonoBehaviour
 
     void OnEnable()
     {
-        if (GameManager.IsGameStarted)
+        if (GameManager.IsGameStarted && spawnAtRandom)
             Randomize();
     }
 
@@ -28,6 +28,7 @@ public class SpawnController : MonoBehaviour
         float randomValue = Random.Range(minRange, maxRange);
         if (randomValue <= chances)
         {
+            Debug.Log("Chances " + chances + "Random Val: " + randomValue);
             for (int iter = 0; iter < spawners.Length; iter++)
             {
 
@@ -35,7 +36,6 @@ public class SpawnController : MonoBehaviour
                 spawner.OnInit();
 
             }
-            return;
         }
     }
 }

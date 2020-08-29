@@ -7,6 +7,9 @@ public class ObjectPooler : MonoBehaviour
 
     private static ObjectPooler Instance;
 
+    [SerializeField]
+    private bool IsSingleton = true;
+
     [System.Serializable]
     public class ObjectPoolItem
     {
@@ -32,11 +35,13 @@ public class ObjectPooler : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(Instance);
+            if (IsSingleton)
+                DontDestroyOnLoad(Instance);
         }
         else
         {
-            Destroy(gameObject);
+            if (IsSingleton)
+                Destroy(gameObject);
         }
     }
 
@@ -115,4 +120,6 @@ public class ObjectPooler : MonoBehaviour
     }
 
     public static Vector3 Position() => Instance.transform.localPosition;
+
+    public static bool Exists() => Instance != null;
 }

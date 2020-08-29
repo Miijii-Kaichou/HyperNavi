@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4415693131881552547}
   - component: {fileID: 4477433392671628816}
   - component: {fileID: 7272798237223641685}
+  - component: {fileID: 6340011102127212813}
   m_Layer: 10
   m_Name: LayoutSpawnTrigger (1)
   m_TagString: Untagged
@@ -75,23 +76,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2.5
   Distance: 0
-  OnRangeEnter:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeStay:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
-  OnRangeExit:
-    uniqueID: 0
-    eventCode: 
-    hasTriggered: 0
-    hasListeners: 0
+--- !u!58 &6340011102127212813
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373097080851483641}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
 --- !u!1 &1705081039910266604
 GameObject:
   m_ObjectHideFlags: 0

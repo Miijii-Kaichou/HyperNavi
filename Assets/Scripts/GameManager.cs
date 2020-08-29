@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -29,10 +28,7 @@ public class GameManager : MonoBehaviour
     /// This should be referenced so we can go back from options
     /// </summary>
     [SerializeField]
-    public string titleSceneName;
-
-    [SerializeField]
-    string[] optionTabScenesNames;
+    string[] scenesNames;
 
     //General should be the first one in the
     //SceneAsset Array
@@ -374,6 +370,7 @@ public class GameManager : MonoBehaviour
     /// <param name="event"></param>
     public static void UnloadScene(string sceneName, EventManager.Event @event)
     {
+        if(sceneName != "" && sceneName !=  null)
         Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
     }
 
@@ -383,6 +380,7 @@ public class GameManager : MonoBehaviour
     /// <param name="sceneName"></param>
     public static void UnloadScene(string sceneName)
     {
+        if(sceneName != "" && sceneName != null)
         Instance.StartCoroutine(AsynchronousUnload(sceneName));
     }
 
@@ -628,18 +626,17 @@ public class GameManager : MonoBehaviour
 
     public static int GetSceneIndexByName(string name)
     {
-        for(int iter = 0; iter < Instance.optionTabScenesNames.Length; iter++)
+        for(int iter = 0; iter < Instance.scenesNames.Length; iter++)
         {
-            string currentName = Instance.optionTabScenesNames[iter];
+            string currentName = Instance.scenesNames[iter];
             if (currentName.Equals(name))
                 return iter;
         }
         return -1;
     }
 
-    public static string[] SceneNames() => Instance.optionTabScenesNames;
+    public static string[] SceneNames() => Instance.scenesNames;
 
-    public static string TitleScreenName() => Instance.titleSceneName;
     public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
 }
 

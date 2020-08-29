@@ -75,6 +75,7 @@ public class ProceduralGenerator : MonoBehaviour
 
             if (path != CurrentLayout && path != PreviousLayout && path.gameObject.activeInHierarchy)
             {
+                Debug.Log("Flushing out path: " + path.name);
                 path.gameObject.SetActive(false);
             }
         }
