@@ -4,6 +4,9 @@ using UnityEngine;
 public class DistanceCheck : MonoBehaviour
 {
     [SerializeField]
+    SignalLayoutSpawn signal;
+
+    [SerializeField]
     private float Distance = 0f;
 
     Transform target = null;
@@ -25,11 +28,39 @@ public class DistanceCheck : MonoBehaviour
             if (target != null)
             {
                 CalculateDistance(target, transform);
+
+                CheckIfInRange();
+                CheckIfExitFromRange();
             }
 
-            yield return new WaitForFixedUpdate();
+            yield return null;
         }
     }
+
+    /// <summary>
+    /// Check if player is within range
+    /// </summary>
+    private void CheckIfInRange()
+    {
+        if (Distance <= signal.range && !signal.inside)
+        {
+            signal.inside = true;
+            signal.OnSignalInteraction();
+        }
+    }
+
+    /// <summary>
+    /// Check if player is now out of range
+    /// </summary>
+    private void CheckIfExitFromRange()
+    {
+        if (Distance > signal.range && signal.inside)
+        {
+            signal.inside = false;
+            signal.OnEndSignalInteraction();
+        }
+    }
+
 
     /// <summary>
     /// Calculate distance between point a and b

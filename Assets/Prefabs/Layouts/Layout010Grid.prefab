@@ -4612,7 +4612,6 @@ GameObject:
   - component: {fileID: 5617451377188657648}
   - component: {fileID: 5661458160127270211}
   - component: {fileID: 1467233084536004870}
-  - component: {fileID: 8109730307408328913}
   m_Layer: 10
   m_Name: LayoutSpawnTrigger
   m_TagString: Untagged
@@ -4664,6 +4663,8 @@ MonoBehaviour:
   layout: {fileID: 7139779891866802801}
   distanceCheck: {fileID: 1467233084536004870}
   turningPoint: 1
+  range: 2
+  inside: 0
 --- !u!114 &1467233084536004870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4676,23 +4677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  signal: {fileID: 5661458160127270211}
   Distance: 0
---- !u!58 &8109730307408328913
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8475495294435723434}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 2
 --- !u!1 &9089004886240626428
 GameObject:
   m_ObjectHideFlags: 0

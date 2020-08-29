@@ -63,17 +63,24 @@ public class TouchDetection : MonoBehaviour
 
     private void Awake()
     {
+        //Set the layer mask to detect
         layerMask = LayerMask.GetMask("TouchInput");
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        //Start the coroutine of receiving touch input from the user
         StartCoroutine(InputCycle());
+
+        //Initialize
         Init();
     }
 
-
+    /// <summary>
+    /// The cycle of receiving input from the user
+    /// </summary>
+    /// <returns></returns>
     IEnumerator InputCycle()
     {
         while (true)
@@ -96,6 +103,10 @@ public class TouchDetection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check if player is touching the specified area
+    /// </summary>
+    /// <returns></returns>
     bool OnTouchArea()
     {
         if (Input.touchCount > 0)
@@ -116,6 +127,9 @@ public class TouchDetection : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Calculate the touch delta for indicating sliding movement
+    /// </summary>
     void TouchPositionDeltaDetection()
     {
 
@@ -135,15 +149,25 @@ public class TouchDetection : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Record the timing between each tap to indicate
+    /// if it's a double tap or not
+    /// </summary>
     void DoubleTapDetection()
     {
-
+        //Record time
         time += Time.deltaTime;
 
+        //If receiving touch on touch area and is not down
         if (OnTouchArea() && !touchIsDown)
         {
+            //Calculate the difference between taps
             CalculateTimeDiff();
+
+            //Update the last time a touch has been received
             lastTimeSinceTouch = time;
+
+            //Mark that a touch has been detected
             touchIsDown = true;
         }
 
@@ -152,6 +176,9 @@ public class TouchDetection : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Reset touch position
+    /// </summary>
     void ResetTouchPosition()
     {
         touchX = RESET;
@@ -162,30 +189,42 @@ public class TouchDetection : MonoBehaviour
         diffTouchY = touchX;
     }
 
+    /// <summary>
+    /// Detect normal tapping
+    /// </summary>
     void TapDetection()
     {
-
+        //If on the touch area and touch is not down
         if (OnTouchArea() && !touchIsDown)
         {
+            //Set it to true
             touchIsDown = true;
-            tapDetected = true;
+            tapDetected = touchIsDown;
         }
-
+        //Otherwise... if not on touching area
         if (!OnTouchArea())
+            //No one is touching the screen
             touchIsDown = false;
 
     }
 
+    /// <summary>
+    /// Set the dead time for tapping
+    /// </summary>
+    /// <returns></returns>
     IEnumerator TapDeadTime()
     {
         float time = 0;
         float deadTime = 0.1f;
         while (true)
         {
-
+            //If a tap has been detected 
+            //record time
             if (tapDetected)
                 time += Time.deltaTime;
 
+            //If the time is greater than our dead
+            //time, turn off tap
             if (time >= deadTime)
             {
                 tapDetected = false;

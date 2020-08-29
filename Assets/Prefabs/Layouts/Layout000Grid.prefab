@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4415693131881552547}
   - component: {fileID: 4477433392671628816}
   - component: {fileID: 7272798237223641685}
-  - component: {fileID: 6340011102127212813}
   m_Layer: 10
   m_Name: LayoutSpawnTrigger (1)
   m_TagString: Untagged
@@ -64,6 +63,8 @@ MonoBehaviour:
   layout: {fileID: 4365486017038164582}
   distanceCheck: {fileID: 7272798237223641685}
   turningPoint: 0
+  range: 2
+  inside: 0
 --- !u!114 &7272798237223641685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,23 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  signal: {fileID: 4477433392671628816}
   Distance: 0
---- !u!58 &6340011102127212813
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373097080851483641}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 2
 --- !u!1 &1705081039910266604
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121904137890290455}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.25, z: -1.25}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: -1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9202932663524713251}

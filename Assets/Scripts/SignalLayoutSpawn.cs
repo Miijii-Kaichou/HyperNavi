@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class SignalLayoutSpawn : MonoBehaviour
@@ -20,38 +21,19 @@ public class SignalLayoutSpawn : MonoBehaviour
     [SerializeField]
     bool turningPoint = true;
 
+    public float range = 2f;
 
-    float distance = 0f;
+    public bool inside = false;
 
     /// <summary>
     /// The Player
     /// </summary>
     PlayerPawn player;
 
-    /// <summary>
-    /// Generation Event
-    /// </summary>
-    EventManager.Event @generateEvent;
-
     void Start()
     {
-        
+
         Init();
-    }
-
-    IEnumerator DistanceCheckingLoop()
-    {
-        while (true)
-        {
-            if (player != null)
-                distance = distanceCheck.GetDistance();
-#if UNITY_EDITOR
-            else
-                Debug.Log("Player is null");
-#endif
-
-            yield return null;
-        }
     }
 
     public OpeningPath GetPath() => layout;
@@ -61,12 +43,14 @@ public class SignalLayoutSpawn : MonoBehaviour
     /// </summary>
     void SignalGeneration()
     {
+        if (!ProceduralGenerator.Exists()) return;
+
         if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
             ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
 
         generator.dontDeactivate = false;
 
-        
+
 
         if (player != null)
         {
@@ -104,56 +88,34 @@ public class SignalLayoutSpawn : MonoBehaviour
         }
     }
 
-    public void ClampPathAmount(int value)
-    {
-        OpeningPath[] paths = ObjectPooler.pooledObjects.GetAllPaths();
-        int pathAmount = 0;
-        for (int iter = 0; iter < paths.Length; iter++)
-        {
-            OpeningPath path = paths[iter];
-            if (path != ProceduralGenerator.CurrentLayout &&
-                path != ProceduralGenerator.PreviousLayout &&
-                path.gameObject.activeInHierarchy &&
-                pathAmount > value)
-                path.gameObject.SetActive(false);
-
-            pathAmount = iter;
-        }
-    }
-
     public void SubmitDistanceToManager()
     {
-        GameManager.DetermineTiming(distance);
+        GameManager.DetermineTiming(distanceCheck.GetDistance());
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnSignalInteraction()
     {
-        if (collision.CompareTag("Player"))
-        {
-            if (player != null && turningPoint)
-                player.AllowTurn();
 
-            if (!ProceduralGenerator.IsStalling)
-            {
-                SignalLayoutSpawn signal = layout.GetSignal();
-                ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
-                ProceduralGenerator.CurrentLayout = layout;
-                ProceduralGenerator.FlushPaths();
-                player.UpdateSignalPoint(signal);
-            }
+        if (player != null && turningPoint)
+            player.AllowTurn();
+
+        if (ProceduralGenerator.Exists() && !ProceduralGenerator.IsStalling)
+        {
+            SignalLayoutSpawn signal = layout.GetSignal();
+            ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
+            ProceduralGenerator.CurrentLayout = layout;
+            ProceduralGenerator.FlushPaths();
+            player.UpdateSignalPoint(signal);
         }
     }
 
-    public void OnTriggerExit2D(Collider2D collision)
+    public void OnEndSignalInteraction()
     {
-        if (collision.CompareTag("Player"))
-        {
-            //Signal generator to generate a layout based on the player's direction
-            SignalGeneration();
-            player.ProhibitTurn();
-            GameManager.AllowDestructionOfPlayer();
-            GameManager.ResetTime();
-        }
+        //Signal generator to generate a layout based on the player's direction
+        SignalGeneration();
+        player.ProhibitTurn();
+        GameManager.AllowDestructionOfPlayer();
+        GameManager.ResetTime();
     }
 
     private void Init()
@@ -171,8 +133,6 @@ public class SignalLayoutSpawn : MonoBehaviour
     private void OnEnable()
     {
         player = GameManager.player;
-
-        StartCoroutine(DistanceCheckingLoop());  
     }
 
 }

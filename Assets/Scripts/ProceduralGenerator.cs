@@ -239,5 +239,7 @@ public class ProceduralGenerator : MonoBehaviour
             yield return null;
         }
     }
+
+    public static bool Exists() => Instance != null;
 }
 
