@@ -45,6 +45,7 @@ public class TouchDetection : MonoBehaviour
     private float diffTouchX, diffTouchY;
 
     private float time = 0;
+    private float updateDeltaTime = 0;
     private float lastTimeSinceTouch;
     private float timeDiff;
 
@@ -64,7 +65,8 @@ public class TouchDetection : MonoBehaviour
     private void Awake()
     {
         //Set the layer mask to detect
-        layerMask = LayerMask.GetMask("TouchInput");
+        // Shift by 11 bits to the left
+        layerMask = 1 << 11; //This represents the Touch Input Layer
     }
 
     // Start is called before the first frame update
@@ -111,7 +113,7 @@ public class TouchDetection : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            for(int iter = 0; iter < Input.touches.Length; iter++)
+            for (int iter = 0; iter < Input.touches.Length; iter++)
             {
                 Touch touch = Input.touches[iter];
                 viewportPoint = mainCamera.ScreenToViewportPoint(touch.position);
@@ -139,7 +141,10 @@ public class TouchDetection : MonoBehaviour
             touchIsDown = true;
 
         if (OnTouchArea())
+        {
+            updateDeltaTime += Time.deltaTime;
             CalculateTouchDiff();
+        }
 
         if (!OnTouchArea())
         {
@@ -248,8 +253,8 @@ public class TouchDetection : MonoBehaviour
         diffTouchX = touchX - previousTouchX;
         diffTouchY = touchY - previousTouchY;
 
-        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold / 50);
-        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold / 50);
+        horizontalSlideDetected = (Mathf.Abs(diffTouchX) >= slideDeltaThreshold / 100);
+        verticalSlideDetected = (Mathf.Abs(diffTouchY) >= slideDeltaThreshold / 100);
     }
 
     //Calculate difference in time since a touch was detected
@@ -299,9 +304,9 @@ public class TouchDetection : MonoBehaviour
     }
 
     public bool Tap() => tapDetected;
-    public bool SlideLeft() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 50);
-    public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 50);
-    public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 50);
-    public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 50);
+    public bool SlideLeft() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX < -slideDeltaThreshold / 100);
+    public bool SlideRight() => (horizontalSlideDetected && !verticalSlideDetected && diffTouchX > slideDeltaThreshold / 100);
+    public bool SlideUp() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY > slideDeltaThreshold / 100);
+    public bool SlideDown() => (verticalSlideDetected && !horizontalSlideDetected && diffTouchY < -slideDeltaThreshold / 100);
     public bool DoubleTap() => doubleTapDetected;
 }

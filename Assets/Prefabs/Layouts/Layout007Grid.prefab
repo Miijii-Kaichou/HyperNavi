@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b3c1868e0fbd74c8d1ddb947d6f675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layout: {fileID: 8331305009448882288}
+  currentPath: {fileID: 8331305009448882288}
   distanceCheck: {fileID: 3241469439244631691}
   turningPoint: 1
 --- !u!114 &3241469439244631691

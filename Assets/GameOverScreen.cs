@@ -105,7 +105,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         continueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
-            ProceduralGenerator.DontDeactivate();
+            ProceduralGenerator.DontDeactivate = true;
             ObjectPooler.ClearPool();
             GameManager.ResetTime();
 
@@ -117,7 +117,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
         {
-            ProceduralGenerator.DontDeactivate();
+            ProceduralGenerator.DontDeactivate = true;
             ObjectPooler.ClearPool();
             GameManager.ResetTime();
 
