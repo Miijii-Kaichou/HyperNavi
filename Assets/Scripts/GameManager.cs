@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
     public static bool dontDestroy = false;
 
     private static float time;
-    private static float deadTime = 0.075f;
+    private static readonly float deadTime = 0.075f;
 
     private const int DEFAULT_FRAMERATE = 60;
 

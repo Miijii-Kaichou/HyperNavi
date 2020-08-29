@@ -4,6 +4,8 @@ using UnityEngine.Purchasing;
 
 public class IAPManager : MonoBehaviour, IStoreListener
 {
+    private static IAPManager Instance;
+
     private static IStoreController m_StoreSystem;
 
     private static IExtensionProvider m_StoreExtensionProvider;
@@ -11,9 +13,26 @@ public class IAPManager : MonoBehaviour, IStoreListener
     //Products In the Game which includes
     //Skins, Game Color Themse, and Coins
     //But for now, we'll worry about coins.
-    private string Get1000Coins = "Get_1000_Coins";
-    private string Get5000Coins = "Get_5000_Coins";
-    private string Get10000Coins = "Get_10000_Coins";
+    private static readonly string Get1000Coins = "Get_1000_Coins";
+    private static readonly string Get5000Coins = "Get_5000_Coins";
+    private static readonly string Get10000Coins = "Get_10000_Coins";
+
+    //*********************** Don't worry about these methods ********************
+
+    void Awake()
+    {
+        #region Singleton
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        }
+        else
+        {
+            Destroy(gameObject);
+        } 
+        #endregion
+    }
 
     void Start()
     {
@@ -24,6 +43,12 @@ public class IAPManager : MonoBehaviour, IStoreListener
             InitializePurchasing();
         }
     }
+
+    /// <summary>
+    /// Get the Instance of IAP Manager
+    /// </summary>
+    /// <returns></returns>
+    public static IAPManager GetInstance() => Instance;
 
 
     /// <summary>
@@ -46,38 +71,40 @@ public class IAPManager : MonoBehaviour, IStoreListener
         UnityPurchasing.Initialize(this, builder);
     }
 
-    public bool IsInitialized() => m_StoreSystem != null;
+    public static bool IsInitialized() => m_StoreSystem != null;
 
   
 
     //***************** We now create our methods here!!! ******************
-    public void Buy1000Coins()
+    // BuyProductID should be used in its respective methods depending on 
+    // what the user is buying / purchasing
+    public static void Buy1000Gems()
     {
-
+        BuyProductId(Get1000Coins);
     }
 
-    public void Buy5000Coins()
+    public static void Buy5000Gems()
     {
-
+        BuyProductId(Get5000Coins);
     }
 
-    public void Buy10000Coins()
+    public static void Buy10000Gems()
     {
-
+        BuyProductId(Get10000Coins);
     }
 
     //TODO: Be sure to set up these products for these methods, and add it to the builder
-    public void BuyTheme(int index)
+    public static void BuyTheme(int index)
     {
 
     }
 
-    public void BuyPlayerIcon(int index)
+    public static void BuyPlayerIcon(int index)
     {
 
     }
 
-    void BuyProductId(string productId)
+    static void BuyProductId(string productId)
     {
         //Check if system has been initialized
         if (IsInitialized())

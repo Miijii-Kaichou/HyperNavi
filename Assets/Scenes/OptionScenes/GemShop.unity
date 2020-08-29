@@ -655,7 +655,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 151.535, y: -59.711304}
-  m_SizeDelta: {x: 303.07, y: 50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &359086149
 MonoBehaviour:
@@ -894,6 +894,7 @@ GameObject:
   - component: {fileID: 398878473}
   - component: {fileID: 398878472}
   - component: {fileID: 398878471}
+  - component: {fileID: 398878474}
   m_Layer: 5
   m_Name: 10000PurchaseButton
   m_TagString: Untagged
@@ -963,7 +964,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 398878472}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 398878474}
+        m_TargetAssemblyTypeName: PurchaseButton, Assembly-CSharp
+        m_MethodName: ClickPurchaseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &398878472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,6 +1015,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398878469}
   m_CullTransparentMesh: 0
+--- !u!114 &398878474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398878469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adec6ccec79c3e4f82a64bd20409505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purchaseType: 2
 --- !u!1 &454995458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,7 +1065,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 152.56, y: -59.711304}
-  m_SizeDelta: {x: 305.12, y: 50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &454995460
 MonoBehaviour:
@@ -1609,6 +1635,7 @@ GameObject:
   - component: {fileID: 1144850322}
   - component: {fileID: 1144850321}
   - component: {fileID: 1144850320}
+  - component: {fileID: 1144850323}
   m_Layer: 5
   m_Name: 5000PurchaseButton
   m_TagString: Untagged
@@ -1678,7 +1705,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1144850321}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1144850323}
+        m_TargetAssemblyTypeName: PurchaseButton, Assembly-CSharp
+        m_MethodName: ClickPurchaseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1144850321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,6 +1756,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144850318}
   m_CullTransparentMesh: 0
+--- !u!114 &1144850323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1144850318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adec6ccec79c3e4f82a64bd20409505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purchaseType: 1
 --- !u!1 &1153842141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,7 +2185,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 151.535, y: -59.711304}
-  m_SizeDelta: {x: 303.07, y: 50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1638171517
 MonoBehaviour:
@@ -2433,6 +2485,7 @@ GameObject:
   - component: {fileID: 2108805544}
   - component: {fileID: 2108805543}
   - component: {fileID: 2108805542}
+  - component: {fileID: 2108805545}
   m_Layer: 5
   m_Name: 1000PurchaseButton
   m_TagString: Untagged
@@ -2502,7 +2555,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2108805543}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2108805545}
+        m_TargetAssemblyTypeName: PurchaseButton, Assembly-CSharp
+        m_MethodName: ClickPurchaseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2108805543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2541,6 +2606,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108805540}
   m_CullTransparentMesh: 0
+--- !u!114 &2108805545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108805540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adec6ccec79c3e4f82a64bd20409505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  purchaseType: 0
 --- !u!1 &2116117341
 GameObject:
   m_ObjectHideFlags: 0
