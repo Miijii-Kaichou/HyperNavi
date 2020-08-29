@@ -4433,7 +4433,7 @@ TilemapCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
+  m_MaximumTileChangeCount: 250
   m_ExtrusionFactor: 0.00001
 --- !u!50 &5020603190284941968
 Rigidbody2D:
@@ -4455,7 +4455,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!66 &1438158194505146013
 CompositeCollider2D:
   m_ObjectHideFlags: 0

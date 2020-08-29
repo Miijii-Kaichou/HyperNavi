@@ -1951,7 +1951,7 @@ TilemapCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
+  m_MaximumTileChangeCount: 500
   m_ExtrusionFactor: 0.00001
 --- !u!114 &4365486017063413541
 MonoBehaviour:
@@ -2016,6 +2016,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 2
+  Distance: 0
+  target: {fileID: 0}
 --- !u!1839735485 &6860303794245898083
 Tilemap:
   m_ObjectHideFlags: 0
@@ -6513,7 +6515,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!114 &8459447590518204744
 MonoBehaviour:
   m_ObjectHideFlags: 0

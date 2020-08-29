@@ -36,7 +36,6 @@ public class PickUp : MonoBehaviour, IRange
 
     public void OnRangeEnter()
     {
-        Debug.Log("PickUp!!!");
         if(GameManager.player != null)
             onPickUp.Invoke();
     }
