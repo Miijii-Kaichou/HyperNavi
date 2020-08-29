@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Security.Permissions;
 using UnityEngine;
 
 public class PlayerPawn : Pawn
@@ -26,9 +27,27 @@ public class PlayerPawn : Pawn
 
     protected override void OnEnable()
     {
+        Init();
+    }
+
+    protected override void Init()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        HookToController(pawnController);
+        StartCoroutine(MovementCycle());
         StartCoroutine(WallDetectionLoop());
         StartCoroutine(IFrames());
-        base.OnEnable();
+    }
+
+    protected override IEnumerator MovementCycle()
+    {
+        while (true)
+        {
+            speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
+            direction = new Vector2(speed * xDir, speed * yDir) * Time.deltaTime;
+            transform.localPosition += (Vector3)direction;
+            yield return null;
+        }
     }
 
     IEnumerator IFrames()
@@ -64,8 +83,10 @@ public class PlayerPawn : Pawn
     public override void MoveLeft()
     {
         signalPoint.SubmitDistanceToManager();
-        currentDirection = Direction.LEFT;
-        transform.eulerAngles = new Vector3(0, 0, 90);
+        currentDirection = Direction.LEFT; ;
+        xDir = -1;
+        yDir = 0;
+        transform.eulerAngles = new Vector3(0, 0, 90f);
     }
 
     /// <summary>
@@ -75,7 +96,10 @@ public class PlayerPawn : Pawn
     {
         signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.RIGHT;
+
         transform.eulerAngles = new Vector3(0, 0, 270);
+        xDir = 1;
+        yDir = 0;
     }
 
     /// <summary>
@@ -85,7 +109,10 @@ public class PlayerPawn : Pawn
     {
         signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.UP;
+
         transform.eulerAngles = new Vector3(0, 0, 0);
+        xDir = 0;
+        yDir = 1;
     }
 
     /// <summary>
@@ -95,7 +122,10 @@ public class PlayerPawn : Pawn
     {
         signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.DOWN;
+
         transform.eulerAngles = new Vector3(0, 0, 180);
+        xDir = 0;
+        yDir = -1;
     }
 
     // Unique to player
@@ -148,4 +178,14 @@ public class PlayerPawn : Pawn
     public PlayerController GetController() => controller;
 
     public void EnableIFrame() => iFramesOn = true;
+
+    public void SetXDir(int sign)
+    {
+        xDir = (int)Mathf.Sign(sign);
+    }
+
+    public void SetYDir(int sign)
+    {
+        yDir = (int)Mathf.Sign(sign);
+    }
 }

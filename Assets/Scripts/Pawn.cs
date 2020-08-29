@@ -9,18 +9,14 @@ public abstract class Pawn : MonoBehaviour
     protected Direction currentDirection = Direction.UP;
     protected Rigidbody2D rb2d;
 
-    private float speed;
-    Vector2 direction;
+    protected private float speed;
+    protected Vector2 direction;
+
+    protected int xDir = 0, yDir = 1;
     
-    IEnumerator MovementCycle()
+    protected virtual IEnumerator MovementCycle()
     {
-        while (true)
-        {
-            speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
-            direction = new Vector2(0f, speed) * Time.deltaTime;
-            transform.Translate(direction);
-            yield return null;
-        }
+        yield return null;
     }
 
     protected virtual void OnEnable()
@@ -33,8 +29,7 @@ public abstract class Pawn : MonoBehaviour
     /// </summary>
     public virtual void MoveLeft()
     {
-        currentDirection = Direction.LEFT;
-        transform.eulerAngles = new Vector3(0f, 0f, 90f);
+  
     }
 
     /// <summary>
@@ -42,8 +37,7 @@ public abstract class Pawn : MonoBehaviour
     /// </summary>
     public virtual void MoveRight()
     {
-        currentDirection = Direction.RIGHT;
-        transform.eulerAngles = new Vector3(0f, 0f, 270f);
+
     }
 
     /// <summary>
@@ -51,8 +45,7 @@ public abstract class Pawn : MonoBehaviour
     /// </summary>
     public virtual void MoveUp()
     {
-        currentDirection = Direction.UP;
-        transform.eulerAngles = new Vector3(0f, 0f, 0f);
+
     }
 
     /// <summary>
@@ -60,8 +53,8 @@ public abstract class Pawn : MonoBehaviour
     /// </summary>
     public virtual void MoveDown()
     {
-        currentDirection = Direction.DOWN;
-        transform.eulerAngles =  new Vector3(0f, 0f, 180f);
+
+        
     }
 
     /// <summary>
@@ -90,10 +83,8 @@ public abstract class Pawn : MonoBehaviour
     /// <summary>
     /// Initialize Pawn
     /// </summary>
-    private void Init()
+    protected virtual void Init()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        HookToController(pawnController);
-        StartCoroutine(MovementCycle());
+        
     }
 }

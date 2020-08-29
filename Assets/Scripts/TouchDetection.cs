@@ -100,8 +100,9 @@ public class TouchDetection : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            foreach (Touch touch in Input.touches)
+            for(int iter = 0; iter < Input.touches.Length; iter++)
             {
+                Touch touch = Input.touches[iter];
                 viewportPoint = mainCamera.ScreenToViewportPoint(touch.position);
                 touchX = viewportPoint.x;
                 touchY = viewportPoint.y;

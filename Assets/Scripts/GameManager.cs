@@ -497,7 +497,7 @@ public class GameManager : MonoBehaviour
             player.gameObject.SetActive(true);
             player.transform.localPosition = path.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
-            player.ChangeDirection(Direction.UP);
+            player.MoveUp();
 
             ProceduralGenerator.FlushPaths();
         }
