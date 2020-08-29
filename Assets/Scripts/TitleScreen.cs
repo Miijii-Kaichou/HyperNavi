@@ -22,7 +22,8 @@ public class TitleScreen : MonoBehaviour
 
     public void OnOptions()
     {
-
+        GameManager.LoadScene("Options");
+        GameManager.UnloadScene(GameManager.TitleScreenName());
     }
 
     public void OnCredits()

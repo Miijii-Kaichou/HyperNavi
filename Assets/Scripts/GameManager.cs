@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -23,6 +24,21 @@ public class GameManager : MonoBehaviour
 {
 
     private static GameManager Instance;
+
+    /// <summary>
+    /// This should be referenced so we can go back from options
+    /// </summary>
+    [SerializeField]
+    public string titleSceneName;
+
+    [SerializeField]
+    string[] optionTabScenesNames;
+
+    //General should be the first one in the
+    //SceneAsset Array
+    public static int SceneIndex = 0;
+
+    public static string CurrentScene, PreviousScene;
 
     [SerializeField]
     private OpeningPath startingLayout;
@@ -66,8 +82,6 @@ public class GameManager : MonoBehaviour
 
     //This speed is added to the current speed
     public static float BoostSpeed { get; private set; } = 0f;
-
-
 
     /// <summary>
     /// This is the burst value of the boost. This will be assigned to the BoostSpeed
@@ -158,7 +172,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
 
     /// <summary>
@@ -341,7 +354,7 @@ public class GameManager : MonoBehaviour
     /// <param name="sceneName"></param>
     /// <param name="asynchronously"></param>
     /// <param name="mode"></param>
-    static void LoadScene(string sceneName, bool asynchronously = false, LoadSceneMode mode = LoadSceneMode.Single)
+    public static void LoadScene(string sceneName, bool asynchronously = false, LoadSceneMode mode = LoadSceneMode.Single)
     {
         switch (asynchronously)
         {
@@ -437,17 +450,21 @@ public class GameManager : MonoBehaviour
     static IEnumerator AsynchronousUnload(string sceneName)
     {
         operation = new AsyncOperation();
-        operation = SceneManager.UnloadSceneAsync(sceneName);
 
-        while (true)
+        if (sceneName != null)
         {
+            operation = SceneManager.UnloadSceneAsync(sceneName);
 
-            loadingProgress = Mathf.Clamp01(operation.progress / .9f);
+            while (true)
+            {
 
-            if (loadingProgress >= .99f)
-                break;
+                loadingProgress = Mathf.Clamp01(operation.progress / .9f);
 
-            yield return null;
+                if (loadingProgress >= .99f)
+                    break;
+
+                yield return null;
+            }
         }
     }
 
@@ -608,6 +625,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public static int GetSceneIndexByName(string name)
+    {
+        for(int iter = 0; iter < Instance.optionTabScenesNames.Length; iter++)
+        {
+            string currentName = Instance.optionTabScenesNames[iter];
+            if (currentName.Equals(name))
+                return iter;
+        }
+        return -1;
+    }
+
+    public static string[] SceneNames() => Instance.optionTabScenesNames;
+
+    public static string TitleScreenName() => Instance.titleSceneName;
     public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
 }
 
