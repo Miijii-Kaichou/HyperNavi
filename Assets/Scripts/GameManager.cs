@@ -161,8 +161,6 @@ public class GameManager : MonoBehaviour
             LoadScene("TitleScreen/1/A");
 
             Application.targetFrameRate = DEFAULT_FRAMERATE;
-
-            Screen.SetResolution(1920, 1080, true);
         }
         else
         {
@@ -474,32 +472,27 @@ public class GameManager : MonoBehaviour
         if (!player.gameObject.activeInHierarchy)
         {
             IsGameStarted = true;
-            ScoreSystem.Resume();
-            CurrencySystem.Resume();
-            ScoreSystem.ResetScore();
-
            
-
             dontDestroy = true;
 
             CurrentSpeed = InitialSpeed;
 
             ResetTime();
 
-            OpeningPath path = Instance.startingLayout;
-
-            ProceduralGenerator.Stall(3f);
-            ProceduralGenerator.CurrentLayout = path;
-            ProceduralGenerator.PreviousLayout = null;
-
-            path.gameObject.SetActive(true);
+            Instance.startingLayout.gameObject.SetActive(true);
 
             player.gameObject.SetActive(true);
-            player.transform.localPosition = path.GetSignalTriggerPosition(false);
+            player.transform.localPosition = Instance.startingLayout.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
             player.MoveUp();
 
-            ProceduralGenerator.FlushPaths();
+            ScoreSystem.Resume();
+            CurrencySystem.Resume();
+            ScoreSystem.ResetScore();
+            ProceduralGenerator.Stall(3f);
+            ProceduralGenerator.CurrentPath = Instance.startingLayout;
+            ProceduralGenerator.PreviousPath = null;
+            ProceduralGenerator.StripPaths();
         }
     }
 
@@ -526,7 +519,7 @@ public class GameManager : MonoBehaviour
             IsGameStarted = true;
             ScoreSystem.Resume();
             CurrencySystem.Resume();
-            ProceduralGenerator.FlushPaths();
+            ProceduralGenerator.StripPaths();
 
             dontDestroy = true;
 
@@ -536,8 +529,8 @@ public class GameManager : MonoBehaviour
             OpeningPath path = player.GetLastSignalPoint().GetPath();
 
             ProceduralGenerator.Stall(0.5f);
-            ProceduralGenerator.CurrentLayout = path;
-            ProceduralGenerator.PreviousLayout = null;
+            ProceduralGenerator.CurrentPath = path;
+            ProceduralGenerator.PreviousPath = null;
             
             //Check if one of side are open
             leftOpened = path.IsLeftOpen();
@@ -611,13 +604,13 @@ public class GameManager : MonoBehaviour
                 safety++;
                 if (safety >= 10)
                 {
+#if UNITY_EDITOR
                     Debug.Log("Iteration Failed");
+#endif //UNITY_EDITOR
                     break;
                 }
 
             }
-
-            ProceduralGenerator.FlushPaths();
             //Set path open
             path.gameObject.SetActive(true);
         }

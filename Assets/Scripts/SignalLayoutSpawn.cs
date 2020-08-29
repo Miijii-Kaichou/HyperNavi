@@ -2,13 +2,12 @@
 
 public class SignalLayoutSpawn : MonoBehaviour, IRange
 {
-    ProceduralGenerator generator;
-
     /// <summary>
     /// Layout that this trigger belongs to
     /// </summary>
     [SerializeField]
-    OpeningPath layout;
+    OpeningPath currentPath;
+    OpeningPath nextPath = null;
 
     [SerializeField]
     DistanceCheck distanceCheck;
@@ -26,57 +25,57 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
 
     void Start()
     {
-        Init();
+
     }
 
-    public OpeningPath GetPath() => layout;
+    public OpeningPath GetPath() => currentPath;
 
     /// <summary>
     /// Trigger an event to generate a new layout
     /// </summary>
     void SignalGeneration()
     {
-        if (!ProceduralGenerator.Exists()) return;
-
-        if (!generator.dontDeactivate && ProceduralGenerator.PreviousLayout != null)
-            ProceduralGenerator.PreviousLayout.gameObject.SetActive(false);
-
-        generator.dontDeactivate = false;
-
-
-
-        if (player != null)
+        if (!ProceduralGenerator.IsGenerating)
         {
-            Side side;
-            OpeningPath path = null;
-            switch (player.GetDirection())
+            if (!ProceduralGenerator.Exists()) return;
+
+            if (!ProceduralGenerator.DontDeactivate && ProceduralGenerator.PreviousPath != null)
+                ProceduralGenerator.PreviousPath.gameObject.SetActive(false);
+
+            ProceduralGenerator.DontDeactivate = false;
+
+            if (player != null)
             {
-                case Direction.LEFT:
-                    //Coming from left. Need right to open
-                    side = Side.RIGHT;
-                    generator.GenerateLayout(side, layout, ref path);
-                    return;
+                Side side;
+                switch (player.GetDirection())
+                {
+                    case Direction.LEFT:
+                        //Coming from left. Need right to open
+                        side = Side.RIGHT;
+                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
+                        return;
 
-                case Direction.RIGHT:
-                    //Coming from Right. Need left to open
-                    side = Side.LEFT;
-                    generator.GenerateLayout(side, layout, ref path);
-                    return;
+                    case Direction.RIGHT:
+                        //Coming from Right. Need left to open
+                        side = Side.LEFT;
+                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
+                        return;
 
-                case Direction.UP:
-                    //Coming from top. Need bottome to open
-                    side = Side.BOTTOM;
-                    generator.GenerateLayout(side, layout, ref path);
-                    return;
+                    case Direction.UP:
+                        //Coming from top. Need bottome to open
+                        side = Side.BOTTOM;
+                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
+                        return;
 
-                case Direction.DOWN:
-                    //Coming from bottom. Need top to open
-                    side = Side.TOP;
-                    generator.GenerateLayout(side, layout, ref path);
-                    return;
+                    case Direction.DOWN:
+                        //Coming from bottom. Need top to open
+                        side = Side.TOP;
+                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
+                        return;
 
-                default:
-                    return;
+                    default:
+                        return;
+                }
             }
         }
     }
@@ -86,12 +85,6 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
         GameManager.DetermineTiming(distanceCheck.GetDistance());
     }
 
-    private void Init()
-    {
-        generator = transform.parent.parent.GetComponent<ProceduralGenerator>();
-    }
-
-
     /// <summary>
     /// Start of Object
     /// </summary>
@@ -100,27 +93,35 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
         player = GameManager.player;
     }
 
+    /// <summary>
+    /// Enter into range of signal
+    /// </summary>
     public void OnRangeEnter()
     {
+        SignalLayoutSpawn signal = currentPath.GetSignal();
+        player.UpdateSignalPoint(signal);
+
         if (player != null && turningPoint)
             player.AllowTurn();
 
         if (ProceduralGenerator.Exists() && !ProceduralGenerator.IsStalling)
         {
-            SignalLayoutSpawn signal = layout.GetSignal();
-            ProceduralGenerator.PreviousLayout = ProceduralGenerator.CurrentLayout;
-            ProceduralGenerator.CurrentLayout = layout;
-            ProceduralGenerator.FlushPaths();
-            player.UpdateSignalPoint(signal);
+            ProceduralGenerator.PreviousPath = ProceduralGenerator.CurrentPath;
+            ProceduralGenerator.CurrentPath = currentPath;
+            ProceduralGenerator.StripPaths();
         }
     }
 
+    /// <summary>
+    /// Exit out of the signal range
+    /// </summary>
     public void OnRangeExit()
     {
-        //Signal generator to generate a layout based on the player's direction
-        SignalGeneration();
         player.ProhibitTurn();
         GameManager.AllowDestructionOfPlayer();
         GameManager.ResetTime();
+
+        //Signal generator to generate a layout based on the player's direction
+        SignalGeneration();
     }
 }

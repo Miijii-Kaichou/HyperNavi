@@ -68,7 +68,7 @@ public class PlayerController : Controller
             player.ProhibitTurn();
         }
 
-        else if (Keymapper.OnKeyDown("up") &&
+        if (Keymapper.OnKeyDown("up") &&
             player.GetDirection() != Direction.DOWN &&
             player.CanTurn())
         {

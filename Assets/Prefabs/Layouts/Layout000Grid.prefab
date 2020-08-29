@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 7707103085566187431}
   m_Layer: 9
   m_Name: Layout000
-  m_TagString: EnvironmentLayout
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295

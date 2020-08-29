@@ -26,8 +26,7 @@ public class DistanceCheck : MonoBehaviour
 
     private void Start()
     {
-        if (target == null)
-            target = GameManager.player.transform;
+       
         InitializeEvents();
     }
 
@@ -43,6 +42,9 @@ public class DistanceCheck : MonoBehaviour
 
     IEnumerator CheckDistance()
     {
+        if (target == null)
+            target = GameManager.player.transform;
+
         while (true)
         {
             if (target != null)
@@ -66,8 +68,10 @@ public class DistanceCheck : MonoBehaviour
         {
             inside = true;
 
-            if (onEnter.HasListerners())
+            if (onEnter != null && onEnter.HasListerners())
                 onEnter.Trigger();
+
+            return;
         }
     }
 
@@ -80,9 +84,9 @@ public class DistanceCheck : MonoBehaviour
         {
             inside = false;
 
-            if (onExit.HasListerners())
+            if (onExit != null && onExit.HasListerners())
                 onExit.Trigger();
-
+            return;
         }
     }
 
@@ -94,7 +98,11 @@ public class DistanceCheck : MonoBehaviour
     /// <param name="b"></param>
     void CalculateDistance(Transform a, Transform b)
     {
-        Distance = Vector2.Distance(a.position, b.position);
+        Distance = Mathf.Sqrt(
+            Mathf.Pow(b.position.x - a.position.x,2f) + 
+            Mathf.Pow(b.position.y - a.position.y,2f)
+            );
+
         return;
     }
 

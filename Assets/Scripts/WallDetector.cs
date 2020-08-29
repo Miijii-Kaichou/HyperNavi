@@ -16,7 +16,7 @@ public class WallDetector : MonoBehaviour
 
     private void Awake()
     {
-        layoutMask = LayerMask.GetMask("Layout");
+        layoutMask = 1 << 9;
     }
 
     private void OnEnable()
@@ -37,4 +37,9 @@ public class WallDetector : MonoBehaviour
     }
 
     public bool HasCollided() => hasContactedWall;
+
+    private void OnDisable()
+    {
+        hasContactedWall = false;
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Security.Permissions;
 using UnityEngine;
 
 public class PlayerPawn : Pawn

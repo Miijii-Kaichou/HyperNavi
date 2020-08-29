@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -20,20 +21,23 @@ public class ProceduralGenerator : MonoBehaviour
     public ObjectPooler objectPooler;
 
     public OpeningPath currentLayout;
-    public static OpeningPath CurrentLayout;
+    public static OpeningPath CurrentPath;
 
     public OpeningPath previousLayout;
-    public static OpeningPath PreviousLayout;
+    public static OpeningPath PreviousPath;
 
-    public bool dontDeactivate = true;
+    public static bool DontDeactivate = true;
 
-    const string ENVIRONMENT_LAYOUT_TAG = "EnvironmentLayout";
+    List<OpeningPath> matchingPaths = new List<OpeningPath>();
+
+    public static float generationCoolDownTime = 0;
 
     // Toggling this on will only use Layout's 0 and 1 in a loop
     // This effect is used for the title screen
     public static bool OnPreview { get; set; } = true;
     public static bool IsStalling { get; private set; }
     public static float Time { get; private set; }
+    public static bool IsGenerating { get; private set; }
 
     private void Awake()
     {
@@ -52,32 +56,55 @@ public class ProceduralGenerator : MonoBehaviour
     void Start()
     {
         GetAllEnvironmentalLayouts();
+        StartCoroutine(CoolDownCycle());
     }
 
 #if UNITY_EDITOR
     private void Update()
     {
-        currentLayout = CurrentLayout;
-        previousLayout = PreviousLayout;
+        currentLayout = CurrentPath;
+        previousLayout = PreviousPath;
     }
 #endif
 
     /// <summary>
     /// Remove all active paths
     /// </summary>
-    public static void FlushPaths()
+    public static void StripPaths()
     {
-        OpeningPath[] paths = Instance.environmentalLayoutPaths;
-        int size = paths.Length;
+        int size = Instance.environmentalLayoutPaths.Length;
         for (int iter = 0; iter < size; iter++)
         {
-            OpeningPath path = paths[iter];
+            OpeningPath path = Instance.environmentalLayoutPaths[iter];
 
-            if (path != CurrentLayout && path != PreviousLayout && path.gameObject.activeInHierarchy)
+            if (path != CurrentPath && path != PreviousPath)
             {
-                Debug.Log("Flushing out path: " + path.name);
+                path.transform.position = ObjectPooler.Position();
                 path.gameObject.SetActive(false);
             }
+        }
+    }
+
+    /// <summary>
+    /// Generation Cool Down Cycle
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator CoolDownCycle()
+    {
+        while (true)
+        {
+            if (IsGenerating)
+            {
+                generationCoolDownTime += UnityEngine.Time.deltaTime;
+
+                if (generationCoolDownTime >= 0.5f)
+                {
+                    generationCoolDownTime = 0;
+                    IsGenerating = false;
+                }
+            }
+
+            yield return null;
         }
     }
 
@@ -92,23 +119,23 @@ public class ProceduralGenerator : MonoBehaviour
         foreach (OpeningPath child in foundChildren)
         {
             //If even 1 child doesn't match the tag, get out of the function
-            if (child != null && !child.CompareTag(ENVIRONMENT_LAYOUT_TAG))
-            {
-                Debug.Log("No Environment Tag...");
+            if (child != null && child.gameObject.layer != 1 << 9)
                 break;
-            }
         }
 
         environmentalLayoutPaths = foundChildren;
     }
 
     //Generate a layout and place it some many units relative to the active layout
-    public void GenerateLayout(Side side, OpeningPath relativePath, ref OpeningPath existingPath)
+    public static void GenerateLayout(Side side, OpeningPath relativePath, OpeningPath existingPath)
     {
         float horSign = 0;
         float verSign = 0;
-        if (!OnPreview)
+
+        if (!OnPreview && !IsGenerating)
         {
+            IsGenerating = true;
+
             switch (side)
             {
                 //I need a layout with left side opened
@@ -139,6 +166,7 @@ public class ProceduralGenerator : MonoBehaviour
                     break;
             }
         }
+
         else
         {
             //Need bottom side open
@@ -162,56 +190,50 @@ public class ProceduralGenerator : MonoBehaviour
     /// If more than one with the amount of openings, a random layout will be chosen
     /// </summary>
     /// <returns></returns>
-    OpeningPath GetOpeningPath(Side side)
+    static OpeningPath GetOpeningPath(Side side)
     {
-        OpeningPath[] paths = environmentalLayoutPaths;
-        List<OpeningPath> matchingPaths = new List<OpeningPath>();
         OpeningPath path;
-        for (int iter = 0; iter < paths.Length; iter++)
-        {
-            path = paths[iter];
-            switch (side)
-            {
-                case Side.LEFT:
-                    if (path.IsLeftOpen())
-                        matchingPaths.Add(path);
-                    break;
+        Parallel.For(0, Instance.environmentalLayoutPaths.Length - 1, (iter) =>
+       {
+           path = Instance.environmentalLayoutPaths[iter];
+           switch (side)
+           {
+               case Side.LEFT:
+                   if (path.IsLeftOpen())
+                       Instance.matchingPaths.Add(path);
+                   break;
 
-                case Side.RIGHT:
-                    if (path.IsRightOpen())
-                        matchingPaths.Add(path);
-                    break;
+               case Side.RIGHT:
+                   if (path.IsRightOpen())
+                       Instance.matchingPaths.Add(path);
+                   break;
 
-                case Side.TOP:
-                    if (path.IsTopOpen())
-                        matchingPaths.Add(path);
-                    break;
+               case Side.TOP:
+                   if (path.IsTopOpen())
+                       Instance.matchingPaths.Add(path);
+                   break;
 
-                case Side.BOTTOM:
-                    if (path.IsBottomOpen())
-                        matchingPaths.Add(path);
-                    break;
-                default:
-                    break;
-            }
-        }
+               case Side.BOTTOM:
+                   if (path.IsBottomOpen())
+                       Instance.matchingPaths.Add(path);
+                   break;
+               default:
+                   break;
+           }
+       });
 
         // Now, return a random matching path
-        int value = Random.Range(0, matchingPaths.Count - 1);
+        int value = Random.Range(0, Instance.matchingPaths.Count - 1);
 
         if (!OnPreview)
-            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out path);
+            ObjectPooler.GetMember(Instance.matchingPaths[value].name.Replace("(Clone)", string.Empty), out path);
         else
             ObjectPooler.GetMember("Layout000Grid", out path);
 
+        Instance.matchingPaths.Clear();
+
         return path;
     }
-
-    public static void DontDeactivate()
-    {
-        Instance.dontDeactivate = true;
-    }
-
     public static OpeningPath[] GetAllPaths() => Instance.environmentalLayoutPaths;
 
     internal static void Stall(float v)
