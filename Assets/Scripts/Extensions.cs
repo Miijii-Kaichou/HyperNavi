@@ -63,4 +63,12 @@ public static class Extensions
     {
         return (obj != null && !obj.activeInHierarchy);
     }
+
+    public static void Reset(this object obj)
+    {
+            if(obj.GetType() == typeof(int) ||
+            obj.GetType() == typeof(float) ||
+            obj.GetType() == typeof(double))
+                obj = 0;
+    }
 }

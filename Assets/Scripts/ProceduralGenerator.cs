@@ -193,35 +193,37 @@ public class ProceduralGenerator : MonoBehaviour
     static OpeningPath GetOpeningPath(Side side)
     {
         OpeningPath path;
-        Parallel.For(0, Instance.environmentalLayoutPaths.Length - 1, (iter) =>
-       {
-           path = Instance.environmentalLayoutPaths[iter];
-           switch (side)
+        if (Instance != null)
+        {
+            Parallel.For(0, Instance.environmentalLayoutPaths.Length - 1, (iter) =>
            {
-               case Side.LEFT:
-                   if (path.IsLeftOpen())
-                       Instance.matchingPaths.Add(path);
-                   break;
+               path = Instance.environmentalLayoutPaths[iter];
+               switch (side)
+               {
+                   case Side.LEFT:
+                       if (path.IsLeftOpen())
+                           Instance.matchingPaths.Add(path);
+                       break;
 
-               case Side.RIGHT:
-                   if (path.IsRightOpen())
-                       Instance.matchingPaths.Add(path);
-                   break;
+                   case Side.RIGHT:
+                       if (path.IsRightOpen())
+                           Instance.matchingPaths.Add(path);
+                       break;
 
-               case Side.TOP:
-                   if (path.IsTopOpen())
-                       Instance.matchingPaths.Add(path);
-                   break;
+                   case Side.TOP:
+                       if (path.IsTopOpen())
+                           Instance.matchingPaths.Add(path);
+                       break;
 
-               case Side.BOTTOM:
-                   if (path.IsBottomOpen())
-                       Instance.matchingPaths.Add(path);
-                   break;
-               default:
-                   break;
-           }
-       });
-
+                   case Side.BOTTOM:
+                       if (path.IsBottomOpen())
+                           Instance.matchingPaths.Add(path);
+                       break;
+                   default:
+                       break;
+               }
+           });
+        }
         // Now, return a random matching path
         int value = Random.Range(0, Instance.matchingPaths.Count - 1);
 

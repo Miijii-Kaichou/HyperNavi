@@ -125,6 +125,9 @@ public class GameManager : MonoBehaviour
 
     public static float loadingProgress = 0f;
 
+    private static float frictionTime = 0;
+    private static float accelerationTime = 0;
+
     //bigger than one of the values
     public static float[] timingWindows =
     {
@@ -231,8 +234,13 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            BoostSpeed = Mathf.Lerp(BoostSpeed, 0f, BoostDepletionValue);
-            yield return new WaitForSeconds(BoostSlowdownRate);
+            frictionTime += Time.deltaTime;
+            if (frictionTime >= BoostSlowdownRate)
+            {
+                BoostSpeed = Mathf.Lerp(BoostSpeed, 0f, BoostDepletionValue);
+                frictionTime = RESET;
+            }
+            yield return null;
         }
     }
 
@@ -244,8 +252,14 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
-            yield return new WaitForSeconds(SpeedRate);
+            accelerationTime += Time.deltaTime;
+            if (accelerationTime >= SpeedRate)
+            {
+                CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
+                accelerationTime = RESET;
+                Debug.Log(accelerationTime);
+            }
+            yield return null;
         }
     }
 
@@ -273,7 +287,10 @@ public class GameManager : MonoBehaviour
                 player.isActiveAndEnabled &&
                 player.HasContactedWall() &&
                 dontDestroy == false)
+                {
                     DestoryPlayer();
+                    ResetTime();
+                }
             }
             yield return null;
         }
