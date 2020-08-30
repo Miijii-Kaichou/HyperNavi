@@ -42,11 +42,9 @@ public class ScoreSystem : MonoBehaviour
             {
                 Score += Mulitplier * SCORE_INCREMENT_VALUE;
                 UpdateUI();
-
-                yield return new WaitForSeconds((60 / GameManager.CurrentSpeed) / 100);
             }
 
-            yield return null;
+            yield return new WaitForSeconds((60 / GameManager.CurrentSpeed) / 100);
         }
     }
 
@@ -68,6 +66,7 @@ public class ScoreSystem : MonoBehaviour
     {
         IsRunning = false;
         Instance.textParent.SetActive(IsRunning);
+        SubmitToManager();
     }
 
     /// <summary>
@@ -89,8 +88,6 @@ public class ScoreSystem : MonoBehaviour
             IsRunning = true;
             Instance.textParent.SetActive(IsRunning);
             Instance.StartCoroutine(SystemCycle());
-
-
         }
         else
         {

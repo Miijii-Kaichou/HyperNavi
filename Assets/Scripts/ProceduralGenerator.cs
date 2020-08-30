@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Event = EventManager.Event;
 
 public enum Side
 {
@@ -28,7 +29,8 @@ public class ProceduralGenerator : MonoBehaviour
 
     public static bool DontDeactivate = true;
 
-    List<OpeningPath> matchingPaths = new List<OpeningPath>();
+    static List<OpeningPath> matchingPaths = new List<OpeningPath>();
+    static OpeningPath path;
 
     public static float generationCoolDownTime = 0;
 
@@ -38,6 +40,7 @@ public class ProceduralGenerator : MonoBehaviour
     public static bool IsStalling { get; private set; }
     public static float Time { get; private set; }
     public static bool IsGenerating { get; private set; }
+    public static Event GenerateEvent;
 
     private void Awake()
     {
@@ -55,6 +58,7 @@ public class ProceduralGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GenerateEvent = EventManager.AddNewEvent(EventManager.FreeValue, "callGenerate");
         GetAllEnvironmentalLayouts();
         StartCoroutine(CoolDownCycle());
     }
@@ -192,47 +196,50 @@ public class ProceduralGenerator : MonoBehaviour
     /// <returns></returns>
     static OpeningPath GetOpeningPath(Side side)
     {
-        OpeningPath path;
+        
         if (Instance != null)
         {
             Parallel.For(0, Instance.environmentalLayoutPaths.Length - 1, (iter) =>
            {
-               path = Instance.environmentalLayoutPaths[iter];
-               switch (side)
+               if (iter < Instance.environmentalLayoutPaths.Length)
                {
-                   case Side.LEFT:
-                       if (path.IsLeftOpen())
-                           Instance.matchingPaths.Add(path);
-                       break;
+                   path = Instance.environmentalLayoutPaths[iter];
+                   switch (side)
+                   {
+                       case Side.LEFT:
+                           if (path.IsLeftOpen())
+                               matchingPaths.Add(path);
+                           break;
 
-                   case Side.RIGHT:
-                       if (path.IsRightOpen())
-                           Instance.matchingPaths.Add(path);
-                       break;
+                       case Side.RIGHT:
+                           if (path.IsRightOpen())
+                               matchingPaths.Add(path);
+                           break;
 
-                   case Side.TOP:
-                       if (path.IsTopOpen())
-                           Instance.matchingPaths.Add(path);
-                       break;
+                       case Side.TOP:
+                           if (path.IsTopOpen())
+                               matchingPaths.Add(path);
+                           break;
 
-                   case Side.BOTTOM:
-                       if (path.IsBottomOpen())
-                           Instance.matchingPaths.Add(path);
-                       break;
-                   default:
-                       break;
+                       case Side.BOTTOM:
+                           if (path.IsBottomOpen())
+                               matchingPaths.Add(path);
+                           break;
+                       default:
+                           break;
+                   }
                }
            });
         }
         // Now, return a random matching path
-        int value = Random.Range(0, Instance.matchingPaths.Count - 1);
+        int value = Random.Range(0, matchingPaths.Count - 1);
 
-        if (!OnPreview)
-            ObjectPooler.GetMember(Instance.matchingPaths[value].name.Replace("(Clone)", string.Empty), out path);
+        if (!OnPreview && ObjectPooler.Exists())
+            ObjectPooler.GetMember(matchingPaths[value].name.Replace("(Clone)", string.Empty), out path);
         else
             ObjectPooler.GetMember("Layout000Grid", out path);
 
-        Instance.matchingPaths.Clear();
+        matchingPaths.Clear();
 
         return path;
     }

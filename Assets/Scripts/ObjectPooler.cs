@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -21,11 +23,15 @@ public class ObjectPooler : MonoBehaviour
 
     public List<ObjectPoolItem> itemsToPool;
 
-    public static List<GameObject> pooledObjects;
+    public static GameObject[] pooledObjects;
 
     public bool spawnInParent = false;
 
     public static Transform Parent;
+
+    public static int size;
+
+    static GameObject obj;
 
     // Start is called before the first frame update
 
@@ -54,15 +60,17 @@ public class ObjectPooler : MonoBehaviour
     void InitObjectPooler()
     {
         Parent = transform.parent;
-        pooledObjects = new List<GameObject>();
-        foreach (ObjectPoolItem item in itemsToPool)
-        {
+        size = itemsToPool.Count;
+        pooledObjects = new GameObject[size];
+        for (int iter = 0; iter < size; iter++)
+        { 
+            ObjectPoolItem item = itemsToPool[iter];
+            item.prefab.name = item.name;
             for (int i = 0; i < item.size; i++)
             {
                 GameObject newMember = Instantiate(item.prefab, spawnInParent ? Parent : null);
                 newMember.SetActive(false);
-                item.prefab.name = item.name;
-                pooledObjects.Add(newMember);
+                pooledObjects[iter] = newMember;
             }
         }
     }
@@ -71,12 +79,12 @@ public class ObjectPooler : MonoBehaviour
     {
         #region Iteration
         GameObject pooledObject;
-        for (int i = 0; i < pooledObjects.Count; i++)
+        for (int iter = 0; iter < pooledObjects.Length; iter++)
         {
-            pooledObject = pooledObjects[i];
+            pooledObject = pooledObjects[iter];
 
             if (pooledObject != null &&
-                !pooledObject.activeInHierarchy &&
+                !pooledObject.Active() &&
                 (name + "(Clone)") == pooledObject.name)
             {
                 return pooledObject;
@@ -85,14 +93,18 @@ public class ObjectPooler : MonoBehaviour
         #endregion
 
         GameObject newMember;
-        foreach (ObjectPoolItem item in Instance.itemsToPool)
+        for(int iter = 0; iter < Instance.itemsToPool.Count; iter++)
         {
+                ObjectPoolItem item = Instance.itemsToPool[iter];
             if (name == item.prefab.name && item.expandPool)
             {
+                //We'll have to rewrite array!
 
                 newMember = Instantiate(item.prefab);
                 newMember.SetActive(false);
-                pooledObjects.Add(newMember);
+                size++;
+                Array.Resize(ref pooledObjects, size);
+                pooledObjects[size-1] = newMember;
                 return newMember;
             }
         }
@@ -109,9 +121,9 @@ public class ObjectPooler : MonoBehaviour
 
     public static void ClearPool()
     {
-        for (int iter = 0; iter < pooledObjects.Count; iter++)
+        for (int iter = 0; iter < pooledObjects.Length; iter++)
         {
-            GameObject obj = pooledObjects[iter];
+            obj = pooledObjects[iter];
             obj.transform.position = Vector2.zero;
             obj.transform.parent = Parent;
             obj.transform.rotation = Quaternion.identity;

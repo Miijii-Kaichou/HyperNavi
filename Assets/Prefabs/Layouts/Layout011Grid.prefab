@@ -65,7 +65,7 @@ MonoBehaviour:
   rightOpen: 1
   topOpen: 1
   bottomOpen: 1
-  xUnit: 29
+  xUnit: 25
   yUnit: 17
 --- !u!114 &607441018539517836
 MonoBehaviour:
@@ -4189,11 +4189,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b3c1868e0fbd74c8d1ddb947d6f675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layout: {fileID: 9014280031045457490}
+  currentPath: {fileID: 0}
   distanceCheck: {fileID: 4360377296768514052}
   turningPoint: 1
-  range: 2
-  inside: 0
 --- !u!114 &4360377296768514052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4206,5 +4204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d435d22fa1aff94db84441010f8fda5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  signal: {fileID: 7371845619812910145}
+  range: 2
   Distance: 0
+  target: {fileID: 0}

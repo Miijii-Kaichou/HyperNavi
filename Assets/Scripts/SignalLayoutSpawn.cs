@@ -25,7 +25,7 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
 
     void Start()
     {
-
+        
     }
 
     public OpeningPath GetPath() => currentPath;
@@ -46,36 +46,39 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
 
             if (player != null)
             {
-                Side side;
+                Side side = default;
+
+                EventManager.CallBackMethod generate = ()=>
+                    ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
+
+                ProceduralGenerator.GenerateEvent.AddNewListener(generate);
                 switch (player.GetDirection())
                 {
                     case Direction.LEFT:
                         //Coming from left. Need right to open
                         side = Side.RIGHT;
-                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
-                        return;
+                        ProceduralGenerator.GenerateEvent.Trigger();
+                        break;
 
                     case Direction.RIGHT:
                         //Coming from Right. Need left to open
                         side = Side.LEFT;
-                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
-                        return;
+                        ProceduralGenerator.GenerateEvent.Trigger();
+                        break;
 
                     case Direction.UP:
                         //Coming from top. Need bottome to open
                         side = Side.BOTTOM;
-                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
-                        return;
+                        ProceduralGenerator.GenerateEvent.Trigger();
+                        break;
 
                     case Direction.DOWN:
                         //Coming from bottom. Need top to open
                         side = Side.TOP;
-                        ProceduralGenerator.GenerateLayout(side, currentPath, nextPath);
-                        return;
-
-                    default:
-                        return;
+                        ProceduralGenerator.GenerateEvent.Trigger();
+                        break;
                 }
+                ProceduralGenerator.GenerateEvent.RemoveListener(generate);
             }
         }
     }

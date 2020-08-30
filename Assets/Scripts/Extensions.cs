@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class Extensions
 {
-    public static OpeningPath[] GetAllPaths(this List<GameObject> objectList)
+    public static OpeningPath[] GetAllPaths(this GameObject[] objectList)
     {
         List<OpeningPath> paths = new List<OpeningPath>();
         OpeningPath path;
@@ -70,5 +70,10 @@ public static class Extensions
             obj.GetType() == typeof(float) ||
             obj.GetType() == typeof(double))
                 obj = 0;
+    }
+
+    public static bool Active(this GameObject obj)
+    {
+        return (obj != null && obj.activeInHierarchy);
     }
 }

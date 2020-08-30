@@ -171,6 +171,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ProceduralGenerator.CurrentPath = startingLayout;
+    }
+
     /// <summary>
     /// Start the game officially
     /// </summary>
@@ -257,7 +262,6 @@ public class GameManager : MonoBehaviour
             {
                 CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
                 accelerationTime = RESET;
-                Debug.Log(accelerationTime);
             }
             yield return null;
         }
@@ -502,6 +506,7 @@ public class GameManager : MonoBehaviour
             player.transform.localPosition = Instance.startingLayout.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
             player.MoveUp();
+            player.ProhibitTurn();
 
             ScoreSystem.Resume();
             CurrencySystem.Resume();
@@ -629,6 +634,7 @@ public class GameManager : MonoBehaviour
 
             }
             //Set path open
+            player.ProhibitTurn();
             path.gameObject.SetActive(true);
         }
     }
@@ -648,5 +654,7 @@ public class GameManager : MonoBehaviour
     public static string[] SceneNames() => Instance.scenesNames;
 
     public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
+
+    public static void TurnOffStartingLayout() => Instance.startingLayout.gameObject.SetActive(false);
 }
 
