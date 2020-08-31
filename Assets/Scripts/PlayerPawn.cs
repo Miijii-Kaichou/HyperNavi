@@ -30,20 +30,11 @@ public class PlayerPawn : Pawn
     {
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
-        StartCoroutine(MovementCycle());
-        StartCoroutine(WallDetectionLoop());
-        StartCoroutine(IFrames());
-    }
 
-    protected override IEnumerator MovementCycle()
-    {
-        while (true)
-        {
-            speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
-            direction = new Vector2(speed * xDir, speed * yDir) * Time.deltaTime;
-            transform.localPosition += (Vector3)direction;
-            yield return null;
-        }
+        StartCoroutines(
+            MovementCycle(),
+            WallDetectionLoop(),
+            IFrames());
     }
 
     IEnumerator IFrames()
@@ -60,6 +51,7 @@ public class PlayerPawn : Pawn
                 }
             }
             yield return null;
+            ;
         }
     }
 
@@ -70,6 +62,7 @@ public class PlayerPawn : Pawn
             hasContactedWall = !iFramesOn && wallDetector.HasCollided();
 
             yield return null;
+            ;
         }
     }
 
@@ -80,8 +73,7 @@ public class PlayerPawn : Pawn
     {
         signalPoint.SubmitDistanceToManager();
         currentDirection = Direction.LEFT; ;
-        xDir = -1;
-        yDir = 0;
+        SetDirection(Sign.Negative, Sign.Zero); ;
         transform.eulerAngles = new Vector3(0, 0, 90f);
     }
 
@@ -94,8 +86,7 @@ public class PlayerPawn : Pawn
         currentDirection = Direction.RIGHT;
 
         transform.eulerAngles = new Vector3(0, 0, 270);
-        xDir = 1;
-        yDir = 0;
+        SetDirection(Sign.Positive, Sign.Zero);
     }
 
     /// <summary>
@@ -107,8 +98,7 @@ public class PlayerPawn : Pawn
         currentDirection = Direction.UP;
 
         transform.eulerAngles = new Vector3(0, 0, 0);
-        xDir = 0;
-        yDir = 1;
+        SetDirection(Sign.Zero, Sign.Positive);
     }
 
     /// <summary>
@@ -120,8 +110,7 @@ public class PlayerPawn : Pawn
         currentDirection = Direction.DOWN;
 
         transform.eulerAngles = new Vector3(0, 0, 180);
-        xDir = 0;
-        yDir = -1;
+        SetDirection(Sign.Zero, Sign.Negative);
     }
 
     // Unique to player

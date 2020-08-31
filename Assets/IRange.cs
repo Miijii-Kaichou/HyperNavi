@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-internal interface IRange
+﻿internal interface IRange
 {
    void OnRangeEnter();
    void OnRangeExit();

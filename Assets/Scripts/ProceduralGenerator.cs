@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using Event = EventManager.Event;
@@ -63,14 +62,6 @@ public class ProceduralGenerator : MonoBehaviour
         StartCoroutine(CoolDownCycle());
     }
 
-#if UNITY_EDITOR
-    private void Update()
-    {
-        currentLayout = CurrentPath;
-        previousLayout = PreviousPath;
-    }
-#endif
-
     /// <summary>
     /// Remove all active paths
     /// </summary>
@@ -109,6 +100,7 @@ public class ProceduralGenerator : MonoBehaviour
             }
 
             yield return null;
+            ;
         }
     }
 
@@ -196,40 +188,40 @@ public class ProceduralGenerator : MonoBehaviour
     /// <returns></returns>
     static OpeningPath GetOpeningPath(Side side)
     {
-        
-        if (Instance != null)
+        if (Instance != null && matchingPaths != null)
         {
-            Parallel.For(0, Instance.environmentalLayoutPaths.Length - 1, (iter) =>
-           {
-               if (iter < Instance.environmentalLayoutPaths.Length)
-               {
-                   path = Instance.environmentalLayoutPaths[iter];
-                   switch (side)
-                   {
-                       case Side.LEFT:
-                           if (path.IsLeftOpen())
-                               matchingPaths.Add(path);
-                           break;
+            for (int iter = 0; iter < Instance.environmentalLayoutPaths.Length; iter++)
+            {
+                path = Instance.environmentalLayoutPaths[iter];
 
-                       case Side.RIGHT:
-                           if (path.IsRightOpen())
-                               matchingPaths.Add(path);
-                           break;
+                if (path != null)
+                {
+                    switch (side)
+                    {
+                        case Side.LEFT:
+                            if (path.IsLeftOpen())
+                                matchingPaths.Add(path);
+                            break;
 
-                       case Side.TOP:
-                           if (path.IsTopOpen())
-                               matchingPaths.Add(path);
-                           break;
+                        case Side.RIGHT:
+                            if (path.IsRightOpen())
+                                matchingPaths.Add(path);
+                            break;
 
-                       case Side.BOTTOM:
-                           if (path.IsBottomOpen())
-                               matchingPaths.Add(path);
-                           break;
-                       default:
-                           break;
-                   }
-               }
-           });
+                        case Side.TOP:
+                            if (path.IsTopOpen())
+                                matchingPaths.Add(path);
+                            break;
+
+                        case Side.BOTTOM:
+                            if (path.IsBottomOpen())
+                                matchingPaths.Add(path);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
         // Now, return a random matching path
         int value = Random.Range(0, matchingPaths.Count - 1);

@@ -4076,7 +4076,7 @@ Tilemap:
   - m_RefCount: 436
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
-  m_AnimationFrameRate: 1
+  m_AnimationFrameRate: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -15, y: -10, z: 0}
   m_Size: {x: 30, y: 21, z: 1}
@@ -4284,6 +4284,52 @@ MonoBehaviour:
   objectIdentifier: Gem
   spawnUnder: {fileID: 6111639877267678580}
   controller: {fileID: -4479036216076816778}
+--- !u!1 &4837074584779592831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5785931555151008827}
+  - component: {fileID: 6481813999236749392}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5785931555151008827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837074584779592831}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6111639877267678580}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6481813999236749392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837074584779592831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99aae3680628be04599211d839c86655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectIdentifier: Enemy
+  spawnUnder: {fileID: 6111639877267678580}
+  controller: {fileID: -4479036216076816778}
 --- !u!1 &5325519188962554341
 GameObject:
   m_ObjectHideFlags: 0
@@ -4365,6 +4411,7 @@ Transform:
   - {fileID: 3961144616830195042}
   - {fileID: 3123668760046216166}
   - {fileID: 4489736803564996785}
+  - {fileID: 5785931555151008827}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4420,6 +4467,7 @@ MonoBehaviour:
   - {fileID: 4010202813032872382}
   - {fileID: 4006672297468023884}
   - {fileID: 8194216563723049950}
+  - {fileID: 6481813999236749392}
 --- !u!1 &7978700424627289987
 GameObject:
   m_ObjectHideFlags: 0

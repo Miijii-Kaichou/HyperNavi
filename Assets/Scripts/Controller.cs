@@ -12,4 +12,14 @@ public abstract class Controller : MonoBehaviour
     {
         AssociatedPawn = pawn;
     }
+
+    protected virtual void OnEnable()
+    {
+
+    }
+
+    protected virtual void Init()
+    {
+
+    }
 }

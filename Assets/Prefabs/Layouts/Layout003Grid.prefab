@@ -124,6 +124,52 @@ MonoBehaviour:
   objectIdentifier: Gem
   spawnUnder: {fileID: 4490195233141703356}
   controller: {fileID: 1563070848632126409}
+--- !u!1 &3919794793615630839
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7375610442180836912}
+  - component: {fileID: 1036291340499963993}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7375610442180836912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3919794793615630839}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4490195233141703356}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1036291340499963993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3919794793615630839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99aae3680628be04599211d839c86655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectIdentifier: Enemy
+  spawnUnder: {fileID: 4490195233141703356}
+  controller: {fileID: 1563070848632126409}
 --- !u!1 &4582031480643956398
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,6 +205,7 @@ Transform:
   - {fileID: 6304810539784402577}
   - {fileID: 102323691497098486}
   - {fileID: 859089732696453814}
+  - {fileID: 7375610442180836912}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -214,6 +261,7 @@ MonoBehaviour:
   - {fileID: 1710669004905158379}
   - {fileID: 7242540857203043019}
   - {fileID: 1981857568777237405}
+  - {fileID: 1036291340499963993}
 --- !u!1 &5136603015178597146
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,7 +4064,7 @@ Tilemap:
   - m_RefCount: 404
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
-  m_AnimationFrameRate: 1
+  m_AnimationFrameRate: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -15, y: -10, z: 0}
   m_Size: {x: 30, y: 23, z: 1}

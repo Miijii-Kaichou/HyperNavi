@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public abstract class Pawn : MonoBehaviour
+public abstract class Pawn : EnhancedMono
 {
     [SerializeField]
     protected Controller pawnController;
@@ -16,7 +16,13 @@ public abstract class Pawn : MonoBehaviour
     
     protected virtual IEnumerator MovementCycle()
     {
-        yield return null;
+        while (true)
+        {
+            speed = GameManager.CurrentSpeed * (1 + GameManager.BoostSpeed);
+            direction = new Vector2(speed * xDir, speed * yDir) * Time.deltaTime;
+            transform.localPosition += (Vector3)direction;
+            yield return null;
+        }
     }
 
     protected virtual void OnEnable()
@@ -63,6 +69,12 @@ public abstract class Pawn : MonoBehaviour
     public virtual void Boost()
     {
 
+    }
+
+    public virtual void SetDirection(int xSign, int ySign)
+    {
+        xDir = xSign;
+        yDir = ySign;
     }
 
     /// <summary>

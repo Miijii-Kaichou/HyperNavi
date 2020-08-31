@@ -36,6 +36,7 @@ public class ObjectPooler : MonoBehaviour
     public int poolIndex;
     void Awake()
     {
+        #region Singleton
         if (Instance == null)
         {
             Instance = this;
@@ -46,7 +47,8 @@ public class ObjectPooler : MonoBehaviour
         {
             if (IsSingleton)
                 Destroy(gameObject);
-        }
+        } 
+        #endregion
     }
 
     private void Start()
@@ -61,7 +63,7 @@ public class ObjectPooler : MonoBehaviour
         size = itemsToPool.Count;
         pooledObjects = new GameObject[size];
         for (int iter = 0; iter < size; iter++)
-        { 
+        {
             ObjectPoolItem item = itemsToPool[iter];
             item.prefab.name = item.name;
             for (int i = 0; i < item.size; i++)
@@ -91,9 +93,9 @@ public class ObjectPooler : MonoBehaviour
         #endregion
 
         GameObject newMember;
-        for(int iter = 0; iter < Instance.itemsToPool.Count; iter++)
+        for (int iter = 0; iter < Instance.itemsToPool.Count; iter++)
         {
-                ObjectPoolItem item = Instance.itemsToPool[iter];
+            ObjectPoolItem item = Instance.itemsToPool[iter];
             if (name == item.prefab.name && item.expandPool)
             {
                 //We'll have to rewrite array!
@@ -102,7 +104,7 @@ public class ObjectPooler : MonoBehaviour
                 newMember.SetActive(false);
                 size++;
                 Array.Resize(ref pooledObjects, size);
-                pooledObjects[size-1] = newMember;
+                pooledObjects[size - 1] = newMember;
                 return newMember;
             }
         }

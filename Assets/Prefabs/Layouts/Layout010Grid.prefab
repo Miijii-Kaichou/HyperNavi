@@ -128,6 +128,7 @@ Transform:
   - {fileID: 555959686408105160}
   - {fileID: 665401303003491080}
   - {fileID: 1988998233896550016}
+  - {fileID: 112932855071350113}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -184,6 +185,7 @@ MonoBehaviour:
   - {fileID: 5372017899723119642}
   - {fileID: 8958309057766794300}
   - {fileID: 2147366765928276979}
+  - {fileID: 6060233249664408568}
 --- !u!1 &5759904058419183181
 GameObject:
   m_ObjectHideFlags: 0
@@ -3786,7 +3788,7 @@ Tilemap:
   - m_RefCount: 392
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
-  m_AnimationFrameRate: 1
+  m_AnimationFrameRate: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -15, y: -10, z: 0}
   m_Size: {x: 30, y: 22, z: 1}
@@ -4078,6 +4080,52 @@ MonoBehaviour:
   range: 2
   Distance: 0
   target: {fileID: 0}
+--- !u!1 &8939554427523992974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 112932855071350113}
+  - component: {fileID: 6060233249664408568}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &112932855071350113
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8939554427523992974}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4089335224584019947}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6060233249664408568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8939554427523992974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99aae3680628be04599211d839c86655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectIdentifier: Enemy
+  spawnUnder: {fileID: 4089335224584019947}
+  controller: {fileID: -5845132734487847335}
 --- !u!1 &9089004886240626428
 GameObject:
   m_ObjectHideFlags: 0

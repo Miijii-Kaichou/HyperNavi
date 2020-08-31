@@ -1,5 +1,51 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &413831327255681554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5031881402225612769}
+  - component: {fileID: 6848918398589513542}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5031881402225612769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413831327255681554}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2005682900902433799}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6848918398589513542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413831327255681554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99aae3680628be04599211d839c86655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectIdentifier: Enemy
+  spawnUnder: {fileID: 2005682900902433799}
+  controller: {fileID: -68133243494062035}
 --- !u!1 &2113676513684635851
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,6 +82,7 @@ Transform:
   - {fileID: 4039443326093538716}
   - {fileID: 6109522754711112795}
   - {fileID: 3302987513686727201}
+  - {fileID: 5031881402225612769}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -92,6 +139,7 @@ MonoBehaviour:
   - {fileID: 2228721267320487927}
   - {fileID: 5126225030025946008}
   - {fileID: 6214786636341962455}
+  - {fileID: 6848918398589513542}
 --- !u!1 &2922028182661491533
 GameObject:
   m_ObjectHideFlags: 0
@@ -3900,7 +3948,7 @@ Tilemap:
   - m_RefCount: 396
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
-  m_AnimationFrameRate: 1
+  m_AnimationFrameRate: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -15, y: -9, z: 0}
   m_Size: {x: 30, y: 21, z: 1}

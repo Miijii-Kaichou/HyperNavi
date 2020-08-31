@@ -21,6 +21,7 @@ public class FollowBehind : MonoBehaviour
     private Vector2 initialPosition;
 
     Vector3 velocity = Vector2.zero;
+    Vector3 point, delta, destination;
 
     private void Start()
     {
@@ -43,9 +44,9 @@ public class FollowBehind : MonoBehaviour
         {
             if (targetTranform && initialPosition != null)
             {
-                Vector3 point = transform.localPosition - new Vector3(offset.x * Mathf.Sign(targetTranform.localScale.x), offset.y);
-                Vector3 delta = targetTranform.localPosition - new Vector3(point.x, point.y, zDepth);
-                Vector3 destination = transform.localPosition + delta;
+                point = transform.localPosition - new Vector3(offset.x * Mathf.Sign(targetTranform.localScale.x), offset.y);
+                delta = targetTranform.localPosition - new Vector3(point.x, point.y, zDepth);
+                destination = transform.localPosition + delta;
 
                 //Z will be changed
                 transform.localPosition = Vector3.SmoothDamp(

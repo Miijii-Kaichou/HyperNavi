@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlayerController : Controller
@@ -9,7 +8,7 @@ public class PlayerController : Controller
 
     PlayerPawn player;
 
-    void OnEnable()
+    protected override void OnEnable()
     {
         StartCoroutine(ControllerCycle());
         Init();
@@ -36,7 +35,7 @@ public class PlayerController : Controller
     /// <summary>
     /// Initialize Player Controller
     /// </summary>
-    void Init()
+    protected override void Init()
     {
         Keymapper.Configure(
             new Keymapper.Key("left", KeyCode.LeftArrow),
@@ -93,7 +92,6 @@ public class PlayerController : Controller
 
     void TouchInputControls()
     {
-        PlayerPawn player = AssociatedPawn as PlayerPawn;
         //Movement controls
         if (movementTouchArea.SlideLeft() &&
             player.GetDirection() != Direction.RIGHT &&

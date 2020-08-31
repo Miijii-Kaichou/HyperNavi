@@ -245,11 +245,14 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 (iter < size &&
                 comment != null &&
                 GameManager.CurrentScore >= atScore &&
-                GameManager.CurrentScore <= nextAtScore) ||
-                (iter >= size && GameManager.CurrentScore >= atScore))
+                GameManager.CurrentScore <= nextAtScore))
             {
                 PickComment(comment);
-                return;
+                break;
+            } else
+            {
+                comment = endGameComments[size - 1];
+                PickComment(comment);
             }
         }
     }

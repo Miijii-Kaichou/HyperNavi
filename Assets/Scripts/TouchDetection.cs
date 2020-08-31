@@ -300,6 +300,7 @@ public class TouchDetection : MonoBehaviour
                     "diffTouchY: {5}\n", touchX, touchY, previousTouchX, previousTouchY, diffTouchX, diffTouchY);
             }
             yield return new WaitForSeconds(1 / 64);
+            ;
         }
     }
 

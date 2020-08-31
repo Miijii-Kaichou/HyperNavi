@@ -15,6 +15,8 @@ public class SpawnController : MonoBehaviour
     [SerializeField]
     private Spawner[] spawners;
 
+    Spawner spawnerToInit = null;
+
     void OnEnable()
     {
         if (GameManager.IsGameStarted && spawnAtRandom)
@@ -31,8 +33,8 @@ public class SpawnController : MonoBehaviour
             for (int iter = 0; iter < spawners.Length; iter++)
             {
 
-                Spawner spawner = spawners[iter];
-                spawner.OnInit();
+                spawnerToInit = spawners[iter];
+                spawnerToInit.OnInit();
 
             }
         }

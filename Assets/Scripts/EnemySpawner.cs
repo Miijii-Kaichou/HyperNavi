@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-public class GemSpawner : Spawner
+public class EnemySpawner : Spawner
 {
     [SerializeField]
     SpawnController controller;
-
 }

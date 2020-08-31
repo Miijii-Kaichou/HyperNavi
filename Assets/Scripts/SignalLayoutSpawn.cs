@@ -23,12 +23,15 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
     /// </summary>
     PlayerPawn player;
 
+    public OpeningPath GetPath() => currentPath;
+
+    EventManager.Event submit;
+
     void Start()
     {
-        
+        submit = EventManager.AddNewEvent(EventManager.FreeValue, "submit", () =>
+        GameManager.DetermineTiming(distanceCheck.GetDistance()));
     }
-
-    public OpeningPath GetPath() => currentPath;
 
     /// <summary>
     /// Trigger an event to generate a new layout
@@ -79,13 +82,15 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
                         break;
                 }
                 ProceduralGenerator.GenerateEvent.RemoveListener(generate);
+                return;
             }
         }
     }
 
     public void SubmitDistanceToManager()
     {
-        GameManager.DetermineTiming(distanceCheck.GetDistance());
+        submit.Trigger();
+        return;
     }
 
     /// <summary>
@@ -93,6 +98,7 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
     /// </summary>
     private void OnEnable()
     {
+        
         player = GameManager.player;
     }
 
@@ -101,8 +107,7 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
     /// </summary>
     public void OnRangeEnter()
     {
-        SignalLayoutSpawn signal = currentPath.GetSignal();
-        player.UpdateSignalPoint(signal);
+        player.UpdateSignalPoint(this);
 
         if (player != null && turningPoint)
             player.AllowTurn();

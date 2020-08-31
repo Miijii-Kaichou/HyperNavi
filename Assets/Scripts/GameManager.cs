@@ -5,6 +5,23 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
+namespace UnityEngine
+{
+    public class EnhancedMono : MonoBehaviour {
+        public Coroutine[] StartCoroutines(params IEnumerator[] routine)
+        {
+            int size = routine.Length;
+            Coroutine[] routines = new Coroutine[size];
+            for(int iter = 0; iter < size; iter++)
+            {
+                IEnumerator enumerator = routine[iter];
+                routines[iter] = StartCoroutine(enumerator);
+            }
+            return routines;
+        }
+    }
+}
+    
 public enum Direction
 {
     LEFT,
@@ -17,6 +34,33 @@ public enum Result
 {
     SUCCESS = 1,
     FAILURE = 0
+}
+
+public struct Sign
+{
+    public static int Positive
+    {
+        get
+        {
+            return 1;
+        }
+    }
+
+    public static int Negative
+    {
+        get
+        {
+            return -1;
+        }
+    }
+
+    public static int Zero
+    {
+        get
+        {
+            return 0;
+        }
+    }
 }
 
 public class GameManager : MonoBehaviour
@@ -362,7 +406,7 @@ public class GameManager : MonoBehaviour
         LoadScene(sceneName, async, mode);
     }
 
-    
+
     /// <summary>
     /// Load a scene
     /// </summary>
@@ -389,8 +433,8 @@ public class GameManager : MonoBehaviour
     /// <param name="event"></param>
     public static void UnloadScene(string sceneName, EventManager.Event @event)
     {
-        if(sceneName != "" && sceneName !=  null)
-        Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
+        if (sceneName != "" && sceneName != null)
+            Instance.StartCoroutine(AsynchronousUnload(sceneName, @event));
     }
 
     /// <summary>
@@ -399,8 +443,8 @@ public class GameManager : MonoBehaviour
     /// <param name="sceneName"></param>
     public static void UnloadScene(string sceneName)
     {
-        if(sceneName != "" && sceneName != null)
-        Instance.StartCoroutine(AsynchronousUnload(sceneName));
+        if (sceneName != "" && sceneName != null)
+            Instance.StartCoroutine(AsynchronousUnload(sceneName));
     }
 
     /// <summary>
@@ -493,7 +537,7 @@ public class GameManager : MonoBehaviour
         if (!player.gameObject.activeInHierarchy)
         {
             IsGameStarted = true;
-           
+
             dontDestroy = true;
 
             CurrentSpeed = InitialSpeed;
@@ -553,7 +597,7 @@ public class GameManager : MonoBehaviour
             ProceduralGenerator.Stall(0.5f);
             ProceduralGenerator.CurrentPath = path;
             ProceduralGenerator.PreviousPath = null;
-            
+
             //Check if one of side are open
             leftOpened = path.IsLeftOpen();
             rightOpened = path.IsRightOpen();
@@ -582,7 +626,7 @@ public class GameManager : MonoBehaviour
                             player.transform.localPosition = path.GetSignal().transform.position;
                             player.MoveLeft();
                             pathFound = true;
-                            
+
                         }
                         break;
                     case Direction.RIGHT:
@@ -642,7 +686,7 @@ public class GameManager : MonoBehaviour
 
     public static int GetSceneIndexByName(string name)
     {
-        for(int iter = 0; iter < Instance.scenesNames.Length; iter++)
+        for (int iter = 0; iter < Instance.scenesNames.Length; iter++)
         {
             string currentName = Instance.scenesNames[iter];
             if (currentName.Equals(name))

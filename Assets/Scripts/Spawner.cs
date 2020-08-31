@@ -7,6 +7,8 @@ public abstract class Spawner : MonoBehaviour
     [SerializeField]
     protected Transform spawnUnder;
 
+    GameObject _object;
+
     protected virtual void OnEnable()
     {
 
@@ -20,7 +22,7 @@ public abstract class Spawner : MonoBehaviour
     public virtual void InstantiateObject()
     {
         //Uses object pooler instead
-        GameObject _object = ObjectPooler.GetMember(objectIdentifier);
+         _object = ObjectPooler.GetMember(objectIdentifier);
 
         if (_object.NotUsed())
         {

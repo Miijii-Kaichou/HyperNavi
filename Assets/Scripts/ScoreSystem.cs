@@ -89,13 +89,6 @@ public class ScoreSystem : MonoBehaviour
             Instance.textParent.SetActive(IsRunning);
             Instance.StartCoroutine(SystemCycle());
         }
-        else
-        {
-#if UNITY_EDITOR
-
-            Debug.Log("Score System already initialized");
-#endif
-        }
     }
 
     public static void ResetScore()
