@@ -76,4 +76,9 @@ public static class Extensions
     {
         return (obj != null && obj.activeInHierarchy);
     }
+
+    public static void ClearString(this string _)
+    {
+        _ = string.Empty;
+    }
 }

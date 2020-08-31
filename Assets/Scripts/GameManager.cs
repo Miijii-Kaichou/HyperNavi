@@ -63,7 +63,7 @@ public struct Sign
     }
 }
 
-public class GameManager : MonoBehaviour
+public class GameManager : EnhancedMono
 {
 
     private static GameManager Instance;
@@ -172,6 +172,9 @@ public class GameManager : MonoBehaviour
     private static float frictionTime = 0;
     private static float accelerationTime = 0;
 
+    //Coroutines
+    IEnumerator accelerationCycle, frictionCycle, gameLoopCycle;
+
     //bigger than one of the values
     public static float[] timingWindows =
     {
@@ -208,6 +211,10 @@ public class GameManager : MonoBehaviour
             LoadScene("TitleScreen/1/A");
 
             Application.targetFrameRate = DEFAULT_FRAMERATE;
+
+            accelerationCycle = Accelerate();
+            frictionCycle = Friction();
+            gameLoopCycle = GameLoop();
         }
         else
         {
@@ -231,7 +238,7 @@ public class GameManager : MonoBehaviour
         CurrencySystem.Init();
 
         //Start Game loop
-        Instance.StartCoroutine(GameLoop());
+        Instance.StartCoroutine(Instance.gameLoopCycle);
 
     }
 
@@ -284,7 +291,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             frictionTime += Time.deltaTime;
-            if (frictionTime >= BoostSlowdownRate)
+            if (frictionTime >= BoostSlowdownRate && IsGameStarted)
             {
                 BoostSpeed = Mathf.Lerp(BoostSpeed, 0f, BoostDepletionValue);
                 frictionTime = RESET;
@@ -302,7 +309,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             accelerationTime += Time.deltaTime;
-            if (accelerationTime >= SpeedRate)
+            if (accelerationTime >= SpeedRate && IsGameStarted)
             {
                 CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
                 accelerationTime = RESET;
@@ -317,11 +324,16 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     static IEnumerator GameLoop()
     {
+
+        Instance.StartCoroutines(
+
         //Start friction
-        Instance.StartCoroutine(Friction());
+        Instance.frictionCycle,
 
         //Start acceleration
-        Instance.StartCoroutine(Accelerate());
+        Instance.accelerationCycle
+
+        );
 
         while (true)
         {
@@ -532,33 +544,56 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Spawn the player to the starting layout
     /// </summary>
-    public static void SpawnPlayerToStartLayout()
+    public static void SpawnPlayerToStartLayout(bool resumeGame = true)
     {
         if (!player.gameObject.activeInHierarchy)
         {
-            IsGameStarted = true;
+            //Game started depends on if we waht to resume playing
+            IsGameStarted = resumeGame;
 
+            //Don't destroy the player
             dontDestroy = true;
 
+            //Reset current speed back to the starting speed
             CurrentSpeed = InitialSpeed;
 
+            //Set boost speed back to zero
+            BoostSpeed = RESET;
+
+            //Reset Time in which the player should day
+            //This is to help prevent from self destruct
             ResetTime();
 
+            //Reenable the starting layout
             Instance.startingLayout.gameObject.SetActive(true);
 
+            //Setting up player, and placing them on the right position
             player.gameObject.SetActive(true);
             player.transform.localPosition = Instance.startingLayout.GetSignalTriggerPosition(false);
             player.transform.rotation = Quaternion.identity;
             player.MoveUp();
             player.ProhibitTurn();
 
-            ScoreSystem.Resume();
-            CurrencySystem.Resume();
-            ScoreSystem.ResetScore();
+            //Resetting everything on the ProceduralGenerator
             ProceduralGenerator.Stall(3f);
             ProceduralGenerator.CurrentPath = Instance.startingLayout;
             ProceduralGenerator.PreviousPath = null;
             ProceduralGenerator.StripPaths();
+
+            /*Reenable Score System, Currency System, and the
+             ScoreSystem as well if we're resuming in playing the game...*/
+            if (resumeGame)
+            {
+                ScoreSystem.Resume();
+                CurrencySystem.Resume();
+                ScoreSystem.ResetScore();
+            } else
+            {
+                //Stop coroutines
+                Instance.StopCoroutine(Instance.frictionCycle);
+                Instance.StopCoroutine(Instance.accelerationCycle);
+                Instance.StopCoroutine(Instance.gameLoopCycle);
+            }
         }
     }
 

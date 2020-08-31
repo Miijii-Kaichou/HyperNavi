@@ -19,8 +19,12 @@ public class DistanceCheck : MonoBehaviour
 
     IRange obj;
 
+    //Coroutines
+    IEnumerator checkDistanceCycle;
+
     private void Awake()
     {
+        checkDistanceCycle = CheckDistance();
         obj = GetComponent<IRange>();
     }
 
@@ -32,7 +36,7 @@ public class DistanceCheck : MonoBehaviour
 
     private void OnReset()
     {
-        StartCoroutine(CheckDistance());
+        StartCoroutine(checkDistanceCycle);
     }
 
     private void OnEnable()

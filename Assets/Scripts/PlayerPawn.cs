@@ -20,9 +20,18 @@ public class PlayerPawn : Pawn
 
     private float time = 0;
 
+    //Coroutines
+    IEnumerator iFramesCycle, wallDetectionCycle;
+
+    private void Start()
+    {
+        
+    }
 
     protected override void OnEnable()
     {
+        iFramesCycle = IFrames();
+        wallDetectionCycle = WallDetectionLoop();
         Init();
     }
 
@@ -32,9 +41,9 @@ public class PlayerPawn : Pawn
         HookToController(pawnController);
 
         StartCoroutines(
-            MovementCycle(),
-            WallDetectionLoop(),
-            IFrames());
+            movementCycle,
+            wallDetectionCycle,
+            iFramesCycle);
     }
 
     IEnumerator IFrames()

@@ -1,4 +1,6 @@
-﻿public class EnemyController : Controller
+﻿using System.Collections;
+
+public class EnemyController : Controller
 {
     PlayerPawn player;
     EnemyPawn pawn;

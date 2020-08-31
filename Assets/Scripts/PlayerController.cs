@@ -8,9 +8,17 @@ public class PlayerController : Controller
 
     PlayerPawn player;
 
+    //Coroutine
+    IEnumerator controllerCycle;
+
+    private void Awake()
+    {
+        controllerCycle = ControllerCycle();
+    }
+
     protected override void OnEnable()
     {
-        StartCoroutine(ControllerCycle());
+        StartCoroutine(controllerCycle);
         Init();
     }
 

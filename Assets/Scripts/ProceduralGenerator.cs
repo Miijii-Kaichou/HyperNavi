@@ -263,6 +263,8 @@ public class ProceduralGenerator : MonoBehaviour
         }
     }
 
+    public static void SetToPreview() => OnPreview = true;
+
     public static bool Exists() => Instance != null;
 }
 

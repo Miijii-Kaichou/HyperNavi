@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Advertisements;
 using Random = UnityEngine.Random;
 public class GameOverScreen : MonoBehaviour, IUnityAdsListener
@@ -35,7 +36,10 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private static IUnityAdsListener Instance;
 
-    private static EventManager.Event @continueEvent, @startOverEvent, @gemsEvent;
+    private static EventManager.Event ContinueEvent, 
+        StartOverEvent,
+        GemsEvent, 
+        BackToMainMenuEvent;
 
     private static Result transactionResult;
 
@@ -91,8 +95,6 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private void Awake()
     {
-
-
         Instance = this;
 
         //Generate a random comment based on score
@@ -103,7 +105,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         PostCurrency();
 
-        continueEvent = EventManager.AddNewEvent(999, "continue", () =>
+        ContinueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
             ProceduralGenerator.DontDeactivate = true;
             ObjectPooler.ClearPool();
@@ -112,10 +114,10 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             //Spawn player to last signal point
             GameManager.SpawnPlayerToLastSignalPoint();
             Advertisement.RemoveListener(Instance);
-            EventManager.RemoveEvent("continue");
+            EventManager.RemoveEvent(ContinueEvent);
         });
 
-        startOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
+        StartOverEvent = EventManager.AddNewEvent(998, "startOver", () =>
         {
             ProceduralGenerator.DontDeactivate = true;
             ObjectPooler.ClearPool();
@@ -124,14 +126,42 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             //Spawn player to last signal point
             GameManager.SpawnPlayerToStartLayout();
             Advertisement.RemoveListener(Instance);
-            EventManager.RemoveEvent("startOver");
+            EventManager.RemoveEvent(StartOverEvent);
         });
 
-        gemsEvent = EventManager.AddNewEvent(997, "getGemsWithVideo", () =>
+        GemsEvent = EventManager.AddNewEvent(997, "getGemsWithVideo", () =>
         {
             CurrencySystem.AddToBalance(50);
             PostCurrency();
             enableInteraction = true;
+        });
+
+        BackToMainMenuEvent = EventManager.AddNewEvent(996, "backToMainMenu", () =>
+        {
+            //Don't deactivate any players
+            ProceduralGenerator.DontDeactivate = true;
+
+            //Set the ProceduralGenerator Back to Preview Mode
+            ProceduralGenerator.SetToPreview();
+
+            //Put all active objects back into the object pool
+            ObjectPooler.ClearPool();
+
+            //Reset time
+            GameManager.ResetTime();
+
+            //Spawn player to last Signal Point
+            //Do not continue game
+            GameManager.SpawnPlayerToStartLayout(false);
+            
+            //Remove advertisement listener
+            Advertisement.RemoveListener(Instance);
+
+            //Load the titles screen additively
+            GameManager.LoadScene("TitleScreen", true, LoadSceneMode.Additive);
+
+            //Remove this event
+            EventManager.RemoveEvent(BackToMainMenuEvent);
         });
 
         Advertisement.AddListener(Instance);
@@ -149,13 +179,13 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     public void OnTryAgain()
     {
         if (enableInteraction)
-            GameManager.UnloadScene("GameOverScene", startOverEvent);
+            GameManager.UnloadScene("GameOverScene", StartOverEvent);
     }
 
     public void OnContinue()
     {
         if (SufficientCurrentcy() && enableInteraction)
-            GameManager.UnloadScene("GameOverScene", continueEvent);
+            GameManager.UnloadScene("GameOverScene", ContinueEvent);
     }
 
     /// <summary>
@@ -174,6 +204,12 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         enableInteraction = false;
     }
 
+
+    public void BackToMainMenu()
+    {
+        if (enableInteraction)
+            GameManager.UnloadScene("GameOverScene", BackToMainMenuEvent);
+    }
 
     public void OnUnityAdsReady(string placementId)
     {
@@ -206,12 +242,12 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
                 //TODO: You are allowed 10 secs to skip
                 //Give the player a chance to look at it for 10 seconds
                 //As opposed to the whole entire video.
-                gemsEvent.Trigger();
+                GemsEvent.Trigger();
                 return;
 
             case ShowResult.Finished:
                 //Finally, reward the player for there efforts
-                gemsEvent.Trigger();
+                GemsEvent.Trigger();
                 return;
             default:
                 break;

@@ -29,8 +29,10 @@ public class SignalLayoutSpawn : MonoBehaviour, IRange
 
     void Start()
     {
-        submit = EventManager.AddNewEvent(EventManager.FreeValue, "submit", () =>
-        GameManager.DetermineTiming(distanceCheck.GetDistance()));
+        submit = EventManager.AddNewEvent(EventManager.FreeValue, "submit", () => 
+        {
+            GameManager.DetermineTiming(distanceCheck.GetDistance());
+        });
     }
 
     /// <summary>

@@ -21,6 +21,14 @@ public class CurrencySystem : MonoBehaviour
     [SerializeField]
     private UnityEvent onSpend = new UnityEvent();
 
+    //Coroutines
+    IEnumerator systemCycle;
+
+    private void Awake()
+    {
+        systemCycle = SystemCycle();
+    }
+
     void OnEnable()
     {
         if (Instance == null)
@@ -86,7 +94,7 @@ public class CurrencySystem : MonoBehaviour
         {
             IsRunning = true;
             Instance.textParent.SetActive(IsRunning);
-            Instance.StartCoroutine(SystemCycle());
+            Instance.StartCoroutine(Instance.systemCycle);
         }
 #if UNITY_EDITOR
         else
@@ -103,6 +111,7 @@ public class CurrencySystem : MonoBehaviour
     {
         IsRunning = false;
         Instance.textParent.SetActive(IsRunning);
+        Instance.StopCoroutine(Instance.systemCycle);
         SubmitToManager();
     }
 
@@ -113,6 +122,7 @@ public class CurrencySystem : MonoBehaviour
     {
         IsRunning = true;
         Instance.textParent.SetActive(IsRunning);
+        Instance.StartCoroutine(Instance.systemCycle);
     }
 
 

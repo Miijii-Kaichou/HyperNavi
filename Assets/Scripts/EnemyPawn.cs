@@ -7,7 +7,7 @@ public class EnemyPawn : Pawn
         rb2d = GetComponent<Rigidbody2D>();
         HookToController(pawnController);
 
-        StartCoroutine(MovementCycle());
+        StartCoroutine(movementCycle);
     }
 
     protected override IEnumerator MovementCycle()

@@ -13,7 +13,14 @@ public abstract class Pawn : EnhancedMono
     protected Vector2 direction;
 
     protected int xDir = 0, yDir = 1;
-    
+
+    protected IEnumerator movementCycle;
+
+    private void Awake()
+    {
+        movementCycle = MovementCycle();
+    }
+
     protected virtual IEnumerator MovementCycle()
     {
         while (true)
