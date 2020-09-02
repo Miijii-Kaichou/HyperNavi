@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class TimeControl : MonoBehaviour
@@ -19,8 +20,8 @@ public class TimeControl : MonoBehaviour
     public static float PreviousTimeScale { get; private set; }
 
     private float scaleValue = 1f;
-    private float scaleDelta = 0.25f;
-    private float scaleRate = 0.01f;
+    private readonly float scaleDelta = 0.25f;
+    private readonly float scaleRate = 0.01f;
     private const float FREEZE = 0;
 
     public static bool IsPaused { get; private set; } = false;
@@ -49,6 +50,10 @@ public class TimeControl : MonoBehaviour
         StartCoroutine(timeLerpCycle);
     }
 
+    /// <summary>
+    /// Set the slowdown time
+    /// </summary>
+    /// <param name="value"></param>
     public static void SlowDownTime(float value = 0.5f)
     {
         Instance.scaleValue = value;
@@ -69,16 +74,27 @@ public class TimeControl : MonoBehaviour
                 //Lerp back to one
                 scaleValue = Mathf.Lerp(scaleValue, 1f, scaleDelta);
             }
-            else if (IsPaused)
-                scaleValue = FREEZE;
 
             //Check if the applciation is focued
-            IsPaused = !Application.isFocused;
+            if (!Application.isFocused)
+                Pause();
 
             yield return new WaitForSecondsRealtime(scaleRate);
         }
     }
 
+    /// <summary>
+    /// Pause the game.
+    /// </summary>
+    public static void Pause()
+    {
+        Instance.scaleValue = FREEZE;
+    }
+
+    /// <summary>
+    /// When the application pauses
+    /// </summary>
+    /// <param name="paused"></param>
     public static void OnApplicationPause(bool paused)
     {
         PreviousTimeScale = CurrentTimeScale;
@@ -86,6 +102,9 @@ public class TimeControl : MonoBehaviour
         IsPaused = paused;
     }
 
+    /// <summary>
+    /// When application is on focus
+    /// </summary>
     static void OnApplicationFocus()
     {
         CurrentTimeScale = PreviousTimeScale;

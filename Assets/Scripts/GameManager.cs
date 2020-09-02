@@ -102,6 +102,8 @@ public class GameManager : EnhancedMono
     /// </summary>
     public static float SpeedRate { get; private set; } = 0.5f;
 
+  
+
     /// <summary>
     /// The speed added to current speed over a certain rate
     /// </summary>
@@ -121,6 +123,11 @@ public class GameManager : EnhancedMono
     /// Current score
     /// </summary>
     public static int CurrentScore { get; private set; } = 0;
+
+    /// <summary>
+    /// CurrentHighScore
+    /// </summary>
+    public static int CurrentHighScore { get; private set; }
 
     //This speed is added to the current speed
     public static float BoostSpeed { get; private set; } = 0f;
@@ -610,6 +617,16 @@ public class GameManager : EnhancedMono
     /// </summary>
     /// <param name="value"></param>
     public static void ScoreSubmit(int value) => CurrentScore = value;
+    
+
+    /// <summary>
+    /// Submit Official Highscore
+    /// </summary>
+    /// <param name="highScore"></param>
+    public static void HighScoreSubmit(int value)
+    {
+        CurrentHighScore = value;
+    }
 
     /// <summary>
     /// Submit Currency

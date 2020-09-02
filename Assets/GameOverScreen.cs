@@ -32,6 +32,9 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     private TextMeshProUGUI score;
 
     [SerializeField]
+    private TextMeshProUGUI highScore;
+
+    [SerializeField]
     private TextMeshProUGUI currencyAmount;
 
     private static IUnityAdsListener Instance;
@@ -46,6 +49,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     private static string currencyRemainFormat;
 
     private static bool enableInteraction = true;
+
+    private static string highScoreFormat = "Highscore: {0}";
 
     private static EndGameComments[] endGameComments =
     {
@@ -102,6 +107,9 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
         //Post Score to Screen
         PostScore();
+
+        //Post HighScore to Screen
+        PostHighScore();
 
         PostCurrency();
 
@@ -311,6 +319,11 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     private void PostScore()
     {
         score.text = GameManager.CurrentScore.ToString();
+    }
+
+    private void PostHighScore()
+    {
+        highScore.text = string.Format(highScoreFormat, GameManager.CurrentHighScore);
     }
 
     /// <summary>

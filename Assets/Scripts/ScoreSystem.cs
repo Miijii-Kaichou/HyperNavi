@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
-
+using UTime = UnityEngine.Time;
 public class ScoreSystem : MonoBehaviour
 {
     private static ScoreSystem Instance;
 
     [SerializeField]
     private TextMeshProUGUI scoreText;
+
+
 
     [SerializeField]
     private GameObject textParent;
@@ -17,12 +20,16 @@ public class ScoreSystem : MonoBehaviour
 
     public static bool IsRunning { get; private set; }
     public static int Score { get; private set; } = 0;
+    public static int HighScore { get; private set; } = 0;
     public static int Mulitplier { get; private set; } = 1;
     public static bool HasInitialized { get; private set; } = false;
     const int SCORE_INCREMENT_VALUE = 1;
 
+    static float Time = 0;
+    
     void OnEnable()
     {
+        #region Singleton
         if (Instance == null)
         {
             Instance = this;
@@ -31,32 +38,56 @@ public class ScoreSystem : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        } 
+        #endregion
     }
 
+    /// <summary>
+    /// Score System Cycle
+    /// </summary>
+    /// <returns></returns>
     public static IEnumerator SystemCycle()
     {
         while (true)
         {
-            if (IsRunning)
+            Time += UTime.deltaTime;
+
+            if (Time >= ((60 / GameManager.CurrentSpeed) / 100) && IsRunning)
             {
                 Score += Mulitplier * SCORE_INCREMENT_VALUE;
+                UpdateHighScore();
                 UpdateUI();
+                Time = 0;
             }
 
-            yield return new WaitForSeconds((60 / GameManager.CurrentSpeed) / 100);
+            yield return null;
         }
     }
 
+    /// <summary>
+    /// Update HighScore
+    /// </summary>
+    private static void UpdateHighScore()
+    {
+        HighScore = (Score > HighScore) ? Score : HighScore;
+    }
+
+    /// <summary>
+    /// Update the Ui when it calls for ut
+    /// </summary>
     static void UpdateUI()
     {
         //Formats number as 0000
         Instance.scoreText.text = Score.ToString();
     }
 
+    /// <summary>
+    /// Submit object value (score) to manager
+    /// </summary>
     public static void SubmitToManager()
     {
         GameManager.ScoreSubmit(Score);
+        GameManager.HighScoreSubmit(HighScore);
     }
 
     /// <summary>

@@ -76,7 +76,7 @@ public class EnemyController : Controller, IRange
             /*TODO: We want to decrease the time scale to around 0.5, and Lerp itself back 
              into 1 at a given rate. We'll have a TimeControl class that will emulate this effect.
             */
-            TimeControl.SlowDownTime(0.05f);
+            TimeControl.SlowDownTime(0.005f);
             ScoreSystem.AddToScore(100);
             gameObject.SetActive(false);
         }
