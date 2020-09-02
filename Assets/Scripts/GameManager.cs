@@ -88,9 +88,6 @@ public class GameManager : EnhancedMono
     [SerializeField]
     private UnityEvent @onPlayerDeath = new UnityEvent();
 
-    [SerializeField]
-    private BoostMeter boostMeter;
-
     static AsyncOperation operation = new AsyncOperation();
 
     // Handles all gaming things in the game
@@ -252,8 +249,12 @@ public class GameManager : EnhancedMono
     /// </summary>
     public static void BurstIntoBoost()
     {
-        BoostSpeed = BoostBurstValue;
-        Instance.boostMeter.DepleteBoost(BoostSpeed * 2f);
+        //If we have enough boost
+        if (BoostMeter.SufficientValue())
+        {
+            BoostSpeed = BoostBurstValue;
+            BoostMeter.DepleteBoost(BoostSpeed * 2f);
+        }
     }
 
     /// <summary>
@@ -593,6 +594,7 @@ public class GameManager : EnhancedMono
                 ScoreSystem.Resume();
                 CurrencySystem.Resume();
                 ScoreSystem.ResetScore();
+                BoostMeter.Reset();
             } else
             {
                 //Stop coroutines
@@ -626,6 +628,7 @@ public class GameManager : EnhancedMono
             IsGameStarted = true;
             ScoreSystem.Resume();
             CurrencySystem.Resume();
+            BoostMeter.Reset();
             ProceduralGenerator.StripPaths();
 
             dontDestroy = true;
