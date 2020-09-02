@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using PlayFab;
+using PlayFab.ClientModels;
+using PlayFab.Json;
+using UnityEngine.Purchasing.Security;
 
 public class IAPManager : MonoBehaviour, IStoreListener
 {
     private static IAPManager Instance;
+
+    private static List<CatalogItem> Catalog;
 
     private static IStoreController m_StoreSystem;
 
@@ -30,18 +37,13 @@ public class IAPManager : MonoBehaviour, IStoreListener
         else
         {
             Destroy(gameObject);
-        } 
+        }
         #endregion
     }
 
     void Start()
     {
-        //If we having initalized the purchasing system yet
-        if (m_StoreSystem == null)
-        {
-            // Configure connection to Purchasing
-            InitializePurchasing();
-        }
+
     }
 
     /// <summary>
@@ -71,9 +73,9 @@ public class IAPManager : MonoBehaviour, IStoreListener
         UnityPurchasing.Initialize(this, builder);
     }
 
-    public static bool IsInitialized() => m_StoreSystem != null;
+    public static bool IsInitialized() => m_StoreSystem != null && Catalog != null;
 
-  
+
 
     //***************** We now create our methods here!!! ******************
     // BuyProductID should be used in its respective methods depending on 
@@ -102,6 +104,24 @@ public class IAPManager : MonoBehaviour, IStoreListener
     public static void BuyPlayerIcon(int index)
     {
 
+    }
+
+    public static void RefreshIAPItems()
+    {
+        PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest(), result =>
+        {
+            Catalog = result.Catalog;
+
+            //Make Unity IAP Initialize
+
+            //If we having initalized the purchasing system yet
+            if (m_StoreSystem == null)
+            {
+                // Configure connection to Purchasing
+                Instance.InitializePurchasing();
+            }
+        }, error =>
+        Debug.LogError(error.GenerateErrorReport()));
     }
 
     static void BuyProductId(string productId)
@@ -142,7 +162,7 @@ public class IAPManager : MonoBehaviour, IStoreListener
         {
 #if UNITY_EDITOR
             //Has not initalized
-            Debug.Log("BuyProductID FAIL. Not initialzed");
+            throw new Exception("IAP Service is not initialized!");
 #endif
         }
     }
@@ -260,42 +280,110 @@ public class IAPManager : MonoBehaviour, IStoreListener
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
     {
         //We set all of our products in here, and check the argument
+        //But ffirst, get if UNITYIAP has initialized
+        if (!IsInitialized())
+        {
+            return PurchaseProcessingResult.Complete;
+        }
+
+        //Test cases where product is unknown
+        if (args.purchasedProduct == null)
+        {
+            #region DEBUG_LOGWARNING_IGNORE
+#if UNITY_EDITOR
+            Debug.LogWarning("Attempted to process purchase with unknown product. Ignoring...");
+#endif //UNITY_EDITOR 
+            #endregion
+            return PurchaseProcessingResult.Complete;
+        }
+
+        //Test case where purchase has no receipt
+        if (string.IsNullOrEmpty(args.purchasedProduct.receipt))
+        {
+            #region DEBUG_LOGWARNING_IGNORE
+#if UNITY_EDITOR
+            Debug.LogWarning("Attempted to process purchase with no receipt. Ignoring...");
+#endif //UNITY_EDITOR 
+            #endregion
+            return PurchaseProcessingResult.Complete;
+        }
+
+        #region DEBUG_LOG_PROCESSING_TRANSACTION
+#if UNITY_EDITOR
+        Debug.Log("Processing Transaction: " + args.purchasedProduct.transactionID);
+#endif //UNITY_EDITOR 
+        #endregion
+
+        //Deserialize receipt
+        var googleReceipt = GooglePurchase.FromJson(args.purchasedProduct.transactionID);
+
+        //Invoke reveipt validation
+        PlayFabClientAPI.ValidateGooglePlayPurchase(new ValidateGooglePlayPurchaseRequest()
+        {
+            //Pass in currency code in ISO format
+            CurrencyCode = args.purchasedProduct.metadata.isoCurrencyCode,
+
+            //Convert and set purchase price
+            PurchasePrice = (uint)(args.purchasedProduct.metadata.localizedPrice * 100),
+
+            //Pass in the receipt
+            ReceiptJson = googleReceipt.PayloadData.json,
+
+            //Pass in the signature
+            Signature = googleReceipt.PayloadData.signature
+        }
+            , result =>
+            #region DEBUG_LOG_VALIDATION_SUCCESSFUL
+            Debug.Log("Validation successful!")
+            #endregion
+
+            , error =>
+            #region DEBUG_LOG_VALIDATION_FAILED
+                Debug.Log("Validation failed: " + error.GenerateErrorReport())
+
+            #endregion
+        );
 
         /*A consumable product has been purchased
          by this user*/
         if (string.Equals(args.purchasedProduct.definition.id, Get1000Coins, StringComparison.Ordinal))
         {
+            #region DEBUG_LOG_PASS
 #if UNITY_EDITOR
             Debug.Log(string.Format("ProcessPurchase: PASS. Product:"));
-#endif //UNITY_EDITOR
-
+#endif //UNITY_EDITOR 
+            #endregion
             /*1000 Gems has succesfully been purchased. Add 1000 Gems to the player.*/
             CurrencySystem.AddToBalance(1000);
         }
         else if (string.Equals(args.purchasedProduct.definition.id, Get1000Coins, StringComparison.Ordinal))
         {
+            #region DEBUG_LOG_PASS
 #if UNITY_EDITOR
             Debug.Log(string.Format("ProcessPurchase: PASS. Product:"));
-#endif //UNITY_EDITOR
-
+#endif //UNITY_EDITOR 
+            #endregion
             /*1000 Gems has succesfully been purchased. Add 1000 Gems to the player.*/
             CurrencySystem.AddToBalance(1000);
         }
         else if (string.Equals(args.purchasedProduct.definition.id, Get1000Coins, StringComparison.Ordinal))
         {
+            #region DEBUG_LOG_PASS
 #if UNITY_EDITOR
             Debug.Log(string.Format("ProcessPurchase: PASS. Product:"));
-#endif //UNITY_EDITOR
-
+#endif //UNITY_EDITOR 
+            #endregion
             /*1000 Gems has succesfully been purchased. Add 1000 Gems to the player.*/
             CurrencySystem.AddToBalance(1000);
         }
         //At this point. We had failed to go through the purchasing process.
         else
         {
+            #region DEBUG_LOG_FAIL
 #if UNITY_EDITOR
             Debug.Log(string.Format(string.Format("ProcessPurchase: FAIL. Unrecognized product: '{0}'", args.purchasedProduct.definition.id)));
-#endif //UNITY_EDITOR
+#endif //UNITY_EDITOR 
+            #endregion
         }
 
         /*Return a flag indicating whether this product has completely been
@@ -304,4 +392,49 @@ public class IAPManager : MonoBehaviour, IStoreListener
         saving purchased prodcuts to the cloud, and when that save is delayed.*/
         return PurchaseProcessingResult.Complete;
     }
+
+    #region Helper Classes
+    public class JsonData
+    {
+        public string orderId;
+        public string packageName;
+        public string productID;
+        public long purchaseTime;
+        public int purchaseState;
+        public string purchaseToken;
+    }
+
+    public class PayLoadData
+    {
+        public JsonData JsonData;
+
+        //JSON Fields, Case Sensitive
+        public string signature;
+        public string json;
+
+        public static PayLoadData FromJson(string json)
+        {
+            var payload = JsonUtility.FromJson<PayLoadData>(json);
+            payload.JsonData = JsonUtility.FromJson<JsonData>(payload.json);
+            return payload;
+        }
+    }
+
+    public class GooglePurchase
+    {
+        public PayLoadData PayloadData;
+
+        //JSON Fields, Case-Sensative
+        public string Store;
+        public string TransactionID;
+        public string Payload;
+
+        public static GooglePurchase FromJson(string json)
+        {
+            var purchase = JsonUtility.FromJson<GooglePurchase>(json);
+            purchase.PayloadData = PayLoadData.FromJson(purchase.Payload);
+            return purchase;
+        }
+    }
+    #endregion
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
+using PlayFab;
+using PlayFab.ClientModels;
 
 namespace UnityEngine
 {
@@ -85,6 +87,9 @@ public class GameManager : EnhancedMono
 
     [SerializeField]
     private UnityEvent @onPlayerDeath = new UnityEvent();
+
+    [SerializeField]
+    private BoostMeter boostMeter;
 
     static AsyncOperation operation = new AsyncOperation();
 
@@ -248,6 +253,7 @@ public class GameManager : EnhancedMono
     public static void BurstIntoBoost()
     {
         BoostSpeed = BoostBurstValue;
+        Instance.boostMeter.DepleteBoost(BoostSpeed * 2f);
     }
 
     /// <summary>
@@ -735,5 +741,28 @@ public class GameManager : EnhancedMono
     public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
 
     public static void TurnOffStartingLayout() => Instance.startingLayout.gameObject.SetActive(false);
+
+    //Playfab specific stuff
+    /// <summary>
+    /// This is invoked manually on Start to initiate login ops
+    /// </summary>
+    private void Login()
+    {
+#if UNITY_ANDROID
+        //Login with Android ID
+        PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest()
+        {
+            CreateAccount = true,
+            AndroidDevice = SystemInfo.deviceUniqueIdentifier
+        }, result =>
+        {
+            Debug.Log("Logged in");
+            //Refresh avaliable items
+            IAPManager.RefreshIAPItems();
+        }, error => Debug.LogError(error.GenerateErrorReport()));
+#endif //UNITY_ANDROID
+    }
+
+   
 }
 

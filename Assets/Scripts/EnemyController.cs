@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-public class EnemyController : Controller
+public class EnemyController : Controller, IRange
 {
     PlayerPawn player;
     EnemyPawn pawn;
@@ -66,5 +66,24 @@ public class EnemyController : Controller
                     return;
             }
         }
+    }
+
+    public void OnRangeEnter()
+    {
+        //If the player runs into the enemy at higher tha 1 for the boost speed
+        if (GameManager.BoostSpeed > 0f)
+        {
+            /*TODO: We want to decrease the time scale to around 0.5, and Lerp itself back 
+             into 1 at a given rate. We'll have a TimeControl class that will emulate this effect.
+            */
+            TimeControl.SlowDownTime(0.05f);
+            ScoreSystem.AddToScore(100);
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void OnRangeExit()
+    {
+        
     }
 }
