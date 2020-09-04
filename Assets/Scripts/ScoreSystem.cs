@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UTime = UnityEngine.Time;
@@ -122,12 +121,19 @@ public class ScoreSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reset score to 0
+    /// </summary>
     public static void ResetScore()
     {
         Score = 0;
         SubmitToManager();
     }
 
+    /// <summary>
+    /// Add value to score
+    /// </summary>
+    /// <param name="value"></param>
     public static void AddToScore(int value)
     {
         Score += value;

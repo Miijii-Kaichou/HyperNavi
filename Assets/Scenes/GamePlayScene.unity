@@ -637,7 +637,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &355369896
 GameObject:
@@ -1130,6 +1130,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &829443212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 829443214}
+  - component: {fileID: 829443213}
+  m_Layer: 0
+  m_Name: BoostSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &829443213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829443212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37804476191d9e478cdd343dace9e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boostMeter: {fileID: 527299147}
+  boostParent: {fileID: 1609361407}
+--- !u!4 &829443214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829443212}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1137.2117, y: 444.6778, z: -2274.325}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &905907879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,7 +1383,7 @@ RectTransform:
   - {fileID: 310137897}
   - {fileID: 1609361408}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1580,7 +1625,6 @@ MonoBehaviour:
           m_StringArgument: GameOverScene/0/A
           m_BoolArgument: 0
         m_CallState: 2
-  boostMeter: {fileID: 1609361409}
 --- !u!4 &1254048691
 Transform:
   m_ObjectHideFlags: 0
@@ -1604,14 +1648,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1609361408}
-  - component: {fileID: 1609361409}
   m_Layer: 5
   m_Name: BoostMeter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1609361408
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1633,19 +1676,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.034393, y: -270}
   m_SizeDelta: {x: 1920, y: 540.0008}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1609361409
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609361407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e37804476191d9e478cdd343dace9e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boostMeter: {fileID: 527299147}
 --- !u!1 &1613675065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1885,7 @@ RectTransform:
   - {fileID: 905907880}
   - {fileID: 82705931}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2161,7 +2191,7 @@ Transform:
   - {fileID: 9202932663549929056}
   - {fileID: 1613675067}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1898618193
 MonoBehaviour:
@@ -2212,7 +2242,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

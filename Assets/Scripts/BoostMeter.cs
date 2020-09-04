@@ -13,6 +13,9 @@ public class BoostMeter : MonoBehaviour
     [SerializeField]
     private Slider boostMeter;
 
+    [SerializeField]
+    private GameObject boostParent;
+
     public static float BoostAmount { get; private set; }
 
     //This is the value that the BoostAmount will lerp to
@@ -30,8 +33,11 @@ public class BoostMeter : MonoBehaviour
     //Time
     private static float Time = 0;
 
+    //Is Running
+    public static bool  IsRunning { get; private set; }
+
     //Coroutine
-    static IEnumerator boostMeterCycle;
+    static IEnumerator boostSystemCycle;
 
     private void Awake()
     {
@@ -48,18 +54,12 @@ public class BoostMeter : MonoBehaviour
         #endregion
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init(true);
-    }
-
     /// <summary>
     /// Lerping between current and the difference of boost value
     /// making a smooth decrease effect for the meter
     /// </summary>
     /// <returns></returns>
-    static IEnumerator BoostMeterCycle()
+    static IEnumerator SystemCycle()
     {
         while (true)
         {
@@ -67,7 +67,7 @@ public class BoostMeter : MonoBehaviour
 
             //If BoostAmount is not equal to BoostAmountValue, 
             //start lerping to that value
-            if (Time >= BoostMeterRate && !BoostAmount.Equals(BoostAmountValue))
+            if (Time >= BoostMeterRate && !BoostAmount.Equals(BoostAmountValue) && IsRunning)
             {
                 BoostAmount = Mathf.Lerp(BoostAmount, BoostAmountValue, BoostMeterDelta);
                 UpdateUI();
@@ -94,7 +94,23 @@ public class BoostMeter : MonoBehaviour
     public static void ReplenishBoost(float value)
         => BoostAmountValue += value;
 
-    public static void Reset()
+    public static void Stop()
+    {
+        IsRunning = false;
+
+        //Disable Parent
+        Instance.boostParent.SetActive(IsRunning);
+    }
+
+    public static void Resume()
+    {
+        IsRunning = true;
+
+        //Disable Parent
+        Instance.boostParent.SetActive(IsRunning);
+    }
+
+    public static void ResetSystem()
     {
         Init(false);
     }
@@ -102,10 +118,15 @@ public class BoostMeter : MonoBehaviour
     /// <summary>
     /// Initialize object
     /// </summary>
-    static void Init(bool startCoroutine = true)
+    public static void Init(bool startCoroutine = true)
     {
+        IsRunning = true;
+
         //Assign IEnumerator
-        boostMeterCycle = BoostMeterCycle();
+        boostSystemCycle = SystemCycle();
+
+        //Enable Parent
+        Instance.boostParent.SetActive(IsRunning);
 
         //Set min and max value of sliders
         Instance.boostMeter.minValue = METER_MIN_VALUE;
@@ -123,7 +144,7 @@ public class BoostMeter : MonoBehaviour
         if (startCoroutine)
         {
             //Start Boost Meter Cycle
-            Instance.StartCoroutine(boostMeterCycle);
+            Instance.StartCoroutine(boostSystemCycle);
         }
     }
 }

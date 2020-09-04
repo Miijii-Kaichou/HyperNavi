@@ -233,6 +233,7 @@ public class GameManager : EnhancedMono
 
     private void Start()
     {
+        Login();
         ProceduralGenerator.CurrentPath = startingLayout;
     }
 
@@ -245,6 +246,7 @@ public class GameManager : EnhancedMono
 
         ScoreSystem.Init();
         CurrencySystem.Init();
+        BoostMeter.Init();
 
         //Start Game loop
         Instance.StartCoroutine(Instance.gameLoopCycle);
@@ -390,6 +392,7 @@ public class GameManager : EnhancedMono
 
         ScoreSystem.Stop();
         CurrencySystem.Stop();
+        BoostMeter.Stop();
 
         //Rest time
         ResetTime();
@@ -600,8 +603,9 @@ public class GameManager : EnhancedMono
             {
                 ScoreSystem.Resume();
                 CurrencySystem.Resume();
+                BoostMeter.Resume();
                 ScoreSystem.ResetScore();
-                BoostMeter.Reset();
+                BoostMeter.ResetSystem();
             } else
             {
                 //Stop coroutines
@@ -645,7 +649,8 @@ public class GameManager : EnhancedMono
             IsGameStarted = true;
             ScoreSystem.Resume();
             CurrencySystem.Resume();
-            BoostMeter.Reset();
+            BoostMeter.Resume();
+            BoostMeter.ResetSystem();
             ProceduralGenerator.StripPaths();
 
             dontDestroy = true;
@@ -768,21 +773,20 @@ public class GameManager : EnhancedMono
     /// </summary>
     private void Login()
     {
-#if UNITY_ANDROID
         //Login with Android ID
-        PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest()
+        if (Application.platform == RuntimePlatform.Android)
         {
-            CreateAccount = true,
-            AndroidDevice = SystemInfo.deviceUniqueIdentifier
-        }, result =>
-        {
-            Debug.Log("Logged in");
+            PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest()
+            {
+                CreateAccount = true,
+                AndroidDevice = SystemInfo.deviceUniqueIdentifier
+            }, result =>
+            {
+                Debug.Log("Logged in");
             //Refresh avaliable items
             IAPManager.RefreshIAPItems();
-        }, error => Debug.LogError(error.GenerateErrorReport()));
-#endif //UNITY_ANDROID
+            }, error => Debug.LogError(error.GenerateErrorReport()));
+        }
     }
-
-   
 }
 
