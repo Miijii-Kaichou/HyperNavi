@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
-using PlayFab;
-using PlayFab.ClientModels;
 
 namespace UnityEngine
 {
@@ -233,7 +231,6 @@ public class GameManager : EnhancedMono
 
     private void Start()
     {
-        Login();
         ProceduralGenerator.CurrentPath = startingLayout;
     }
 
@@ -766,27 +763,5 @@ public class GameManager : EnhancedMono
     public static void AssignPlayer(PlayerPawn newPlayer) => player = newPlayer;
 
     public static void TurnOffStartingLayout() => Instance.startingLayout.gameObject.SetActive(false);
-
-    //Playfab specific stuff
-    /// <summary>
-    /// This is invoked manually on Start to initiate login ops
-    /// </summary>
-    private void Login()
-    {
-        //Login with Android ID
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            PlayFabClientAPI.LoginWithAndroidDeviceID(new LoginWithAndroidDeviceIDRequest()
-            {
-                CreateAccount = true,
-                AndroidDevice = SystemInfo.deviceUniqueIdentifier
-            }, result =>
-            {
-                Debug.Log("Logged in");
-            //Refresh avaliable items
-            IAPManager.RefreshIAPItems();
-            }, error => Debug.LogError(error.GenerateErrorReport()));
-        }
-    }
 }
 

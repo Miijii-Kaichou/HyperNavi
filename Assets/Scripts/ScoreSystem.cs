@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UTime = UnityEngine.Time;
@@ -8,8 +9,6 @@ public class ScoreSystem : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI scoreText;
-
-
 
     [SerializeField]
     private GameObject textParent;
@@ -25,7 +24,7 @@ public class ScoreSystem : MonoBehaviour
     const int SCORE_INCREMENT_VALUE = 1;
 
     static float Time = 0;
-    
+
     void OnEnable()
     {
         #region Singleton
@@ -37,7 +36,7 @@ public class ScoreSystem : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        } 
+        }
         #endregion
     }
 
@@ -86,7 +85,10 @@ public class ScoreSystem : MonoBehaviour
     public static void SubmitToManager()
     {
         GameManager.ScoreSubmit(Score);
+
+        //Only change the highscore if the score is greater than it.
         GameManager.HighScoreSubmit(HighScore);
+        PlayFabLogin.SetStats();
     }
 
     /// <summary>
@@ -137,6 +139,15 @@ public class ScoreSystem : MonoBehaviour
     public static void AddToScore(int value)
     {
         Score += value;
+    }
+
+    /// <summary>
+    /// Update the highscore
+    /// </summary>
+    /// <param name="value"></param>
+    internal static void UpdateHighScore(int value)
+    {
+        HighScore = value;
         SubmitToManager();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,6 +12,12 @@ public class CurrencySystem : MonoBehaviour
     /// Current User Balance 
     /// </summary>
     public static int CurrencyBalance { get; private set; }
+
+    /// <summary>
+    /// The amount of gems you collect during the run of
+    /// the game
+    /// </summary>
+    public static int GemsCollected { get; private set; }
 
     /// <summary>
     /// Check if the system is running
@@ -57,6 +64,7 @@ public class CurrencySystem : MonoBehaviour
     /// <returns></returns>
     static IEnumerator SystemCycle()
     {
+        PlayFabLogin.GetUserCurrency();
         while (true)
         {
             //If running, update the UI
@@ -84,6 +92,11 @@ public class CurrencySystem : MonoBehaviour
     public static void AddToBalance(int value)
     {
         CurrencyBalance += value;
+        GemsCollected += value;
+
+        UpdateUI();
+
+        //Submit Currency to the GameManager
         SubmitToManager();
     }
 
@@ -94,6 +107,11 @@ public class CurrencySystem : MonoBehaviour
     static void WithdrawFromBalance(int value)
     {
         CurrencyBalance -= value;
+        PlayFabLogin.WithdrawUserCurrency(value);
+
+        UpdateUI();
+
+        //Submit Currency to the GameManager
         SubmitToManager();
     }
 
@@ -110,6 +128,12 @@ public class CurrencySystem : MonoBehaviour
         {
             //Withdraw the specified amount
             WithdrawFromBalance(valueAmount);
+
+            //Update Virtual Currency
+            PlayFabLogin.WithdrawUserCurrency(valueAmount);
+
+            //Get Updated Virtual Currency
+            PlayFabLogin.GetUserCurrency();
 
             //Trigger the "onSpend" event
             Instance.onSpend.Invoke();
@@ -151,9 +175,20 @@ public class CurrencySystem : MonoBehaviour
     /// </summary>
     public static void Stop()
     {
+        //Stop running
         IsRunning = false;
+
+        //Disable text parent, and stop coroutine
         Instance.textParent.SetActive(IsRunning);
         Instance.StopCoroutine(Instance.systemCycle);
+
+        //Update virtual currency
+        PlayFabLogin.DepositUserCurrency(GemsCollected);
+
+        //Reset Collected Amount
+        ResetCollectedAmount();
+
+        //Submit Currency To GameManager
         SubmitToManager();
     }
 
@@ -177,5 +212,29 @@ public class CurrencySystem : MonoBehaviour
         GameManager.CurrencySumbit(CurrencyBalance);
     }
 
+    /// <summary>
+    /// Check if there's sufficient amount upon withdrawing
+    /// </summary>
+    /// <param name="requestedAmount"></param>
+    /// <returns></returns>
     static bool IsSufficientAmount(int requestedAmount) => CurrencyBalance >= requestedAmount;
+
+    /// <summary>
+    /// Reset the total amount of gems collected
+    /// This will be used to update virtual currency balance
+    /// </summary>
+    internal static void ResetCollectedAmount() => GemsCollected = 0;
+
+    /// <summary>
+    /// Update the currency balance
+    /// </summary>
+    /// <param name="balance"></param>
+    internal static void UpdateBalance(int balance)
+    {
+        CurrencyBalance = balance;
+        SubmitToManager();
+
+        //Update the UI Manually, even when the system is not running
+        UpdateUI();
+    }
 }

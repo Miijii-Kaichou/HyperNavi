@@ -39,14 +39,14 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private static IUnityAdsListener Instance;
 
-    private static EventManager.Event ContinueEvent, 
+    private static EventManager.Event ContinueEvent,
         StartOverEvent,
-        GemsEvent, 
+        GemsEvent,
         BackToMainMenuEvent;
 
     private static Result transactionResult;
 
-    private static string currencyRemainFormat;
+    private static string currencyRemainFormat = "Remaining: {0}";
 
     private static bool enableInteraction = true;
 
@@ -111,7 +111,11 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         //Post HighScore to Screen
         PostHighScore();
 
+        //Post Currency
         PostCurrency();
+
+        //Update Status
+        PlayFabLogin.SetStats();
 
         ContinueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {
@@ -140,6 +144,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         GemsEvent = EventManager.AddNewEvent(997, "getGemsWithVideo", () =>
         {
             CurrencySystem.AddToBalance(50);
+            CurrencySystem.SubmitToManager();
             PostCurrency();
             enableInteraction = true;
         });
@@ -161,7 +166,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             //Spawn player to last Signal Point
             //Do not continue game
             GameManager.SpawnPlayerToStartLayout(false);
-            
+
             //Remove advertisement listener
             Advertisement.RemoveListener(Instance);
 
@@ -192,7 +197,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     public void OnContinue()
     {
-        if (SufficientCurrentcy() && enableInteraction)
+        if (SufficientCurrency() && enableInteraction)
             GameManager.UnloadScene("GameOverScene", ContinueEvent);
     }
 
@@ -293,7 +298,8 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
             {
                 PickComment(comment);
                 break;
-            } else
+            }
+            else
             {
                 comment = endGameComments[size - 1];
                 PickComment(comment);
@@ -323,6 +329,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
 
     private void PostHighScore()
     {
+        PlayFabLogin.GetStats();
         highScore.text = string.Format(highScoreFormat, GameManager.CurrentHighScore);
     }
 
@@ -331,15 +338,14 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
     /// </summary>
     private void PostCurrency()
     {
-        currencyRemainFormat = string.Format("Remaining: {0}", GameManager.CurrentCurrency);
-        currencyAmount.text = currencyRemainFormat;
+        currencyAmount.text = string.Format(currencyRemainFormat, GameManager.CurrentCurrency);
     }
 
     /// <summary>
     /// Check if there is sufficient funds
     /// </summary>
     /// <returns></returns>
-    bool SufficientCurrentcy()
+    bool SufficientCurrency()
     {
         CurrencySystem.ExecuteTransaction(1000, out transactionResult);
         int resultValue = (int)transactionResult;
