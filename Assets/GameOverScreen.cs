@@ -115,7 +115,7 @@ public class GameOverScreen : MonoBehaviour, IUnityAdsListener
         PostCurrency();
 
         //Update Status
-        PlayFabLogin.SetStats();
+        PlayFabLogin.SetCloudStats();
 
         ContinueEvent = EventManager.AddNewEvent(999, "continue", () =>
         {

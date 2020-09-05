@@ -88,7 +88,7 @@ public class ScoreSystem : MonoBehaviour
 
         //Only change the highscore if the score is greater than it.
         GameManager.HighScoreSubmit(HighScore);
-        PlayFabLogin.SetStats();
+        PlayFabLogin.SetCloudStats();
     }
 
     /// <summary>

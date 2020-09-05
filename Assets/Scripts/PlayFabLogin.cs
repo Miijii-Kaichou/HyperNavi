@@ -1,6 +1,5 @@
 ﻿using PlayFab;
 using PlayFab.ClientModels;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayFabLogin : MonoBehaviour
@@ -220,26 +219,20 @@ public class PlayFabLogin : MonoBehaviour
 
     //TODO: Make this a seperate script
     #region PlayerStatistics
-    public static void SetStats()
+    public static void SetCloudStats()
     {
-        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest
+        PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
         {
-            //Request.Statistics is a list, so multiple StatisticsUpate objects can be defined if required.
-            Statistics = new List<StatisticUpdate>
-            {
-                new StatisticUpdate{StatisticName = "HighScore", Value = GameManager.CurrentHighScore},
-                new StatisticUpdate{ StatisticName = "Gems", Value = GameManager.CurrentCurrency}
-            }
-        },
-        result =>
+            FunctionName = "UpdatePlayerStats",
+            FunctionParameter = new { HighScore = GameManager.CurrentHighScore, Gems = GameManager.CurrentCurrency },
+            GeneratePlayStreamEvent = true
+        }, cloudResult =>
         {
-            Debug.Log("user statistics updated");
-        },
-        error =>
-            {
-                Debug.LogError(error.GenerateErrorReport());
-            }
-        );
+            Debug.Log("Statistics successfully updated!");
+        }, cloudError =>
+        {
+            Debug.LogError(cloudError.GenerateErrorReport());
+        });
     }
 
     public static void GetStats()
