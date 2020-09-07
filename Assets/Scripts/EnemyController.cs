@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 
 public class EnemyController : Controller, IRange
 {
@@ -14,7 +14,10 @@ public class EnemyController : Controller, IRange
         {
             player = GameManager.player;
         }
-        
+
+        if (EnemyDetector.Exists())
+            EnemyDetector.SignalEnemyApproach();
+
         Init();
     }
 
@@ -26,7 +29,7 @@ public class EnemyController : Controller, IRange
     Direction DeterminePlayerDirection()
     {
         //Get the player's current direction
-        if(player != null)
+        if (player != null)
             return player.GetDirection();
         return default;
     }
@@ -71,19 +74,22 @@ public class EnemyController : Controller, IRange
     public void OnRangeEnter()
     {
         //If the player runs into the enemy at higher tha 1 for the boost speed
-        if (GameManager.BoostSpeed > 0f)
+        if (GameManager.BoostSpeed > 1f)
         {
+            Debug.Log("Current Boost Speed: " + GameManager.BoostSpeed);
             /*TODO: We want to decrease the time scale to around 0.5, and Lerp itself back 
              into 1 at a given rate. We'll have a TimeControl class that will emulate this effect.
             */
-            TimeControl.SlowDownTime(0.005f);
             ScoreSystem.AddToScore(100);
+            BoostMeter.ReplenishBoost((GameManager.BoostSpeed / 5f) * 100f);
             gameObject.SetActive(false);
-        }
+            TimeControl.SlowDownTime(0.01f); 
+        } else
+            GameManager.DestoryPlayer();
     }
 
     public void OnRangeExit()
     {
-        
+
     }
 }

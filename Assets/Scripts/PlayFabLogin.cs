@@ -80,11 +80,12 @@ public class PlayFabLogin : MonoBehaviour
         }
     }
 
-    //TODO: Make a seperate script for this
     #region Login
     private void OnMobileLoginSuccess(LoginResult obj)
     {
+#if UNITY_EDITOR
         Debug.Log("Congratulations, you made your first successful API call!");
+#endif //sUNITY_EDITOR
 
         GetStats();
         GetUserCurrency();
@@ -108,7 +109,9 @@ public class PlayFabLogin : MonoBehaviour
     /// <param name="result"></param>
     private void OnLoginSuccess(LoginResult result)
     {
-        Debug.Log("Congratulations, you made your first successful API call!");
+#if UNITY_EDITOR
+        Debug.Log("Congratulations, you made your first successful API call!"); 
+#endif //UNITY_EDITOR
 
         //Remember the player
         PlayerPrefs.SetString("EMAIL", userEmail);
@@ -141,7 +144,9 @@ public class PlayFabLogin : MonoBehaviour
     /// <param name="result"></param>
     private void OnRegisterSuccess(RegisterPlayFabUserResult result)
     {
+#if UNITY_EDITOR
         Debug.Log("Congratulations, you made your first successful API call!");
+#endif //UNITY_EDITOR
 
         //Remember the player
         PlayerPrefs.SetString("EMAIL", userEmail);
@@ -158,7 +163,9 @@ public class PlayFabLogin : MonoBehaviour
     /// <param name="result"></param>
     private void OnAddLoginSuccess(AddUsernamePasswordResult result)
     {
+#if UNITY_EDITOR
         Debug.Log("Congratulations, you made your first successful API call!");
+#endif //UNITY_EDITOR
 
         //Remember the player
         PlayerPrefs.SetString("EMAIL", userEmail);
@@ -169,19 +176,32 @@ public class PlayFabLogin : MonoBehaviour
 
     private void OnRegisterFailure(PlayFabError error)
     {
+#if UNITY_EDITOR
         Debug.LogError(error.GenerateErrorReport());
+#endif //UNITY_EDITOR
     }
 
+    /// <summary>
+    /// Get the current user's email
+    /// </summary>
+    /// <param name="emailIn"></param>
     public void GetUserEmail(string emailIn)
     {
         userEmail = emailIn;
     }
 
+    /// <summary>
+    /// Get the current user's password
+    /// </summary>
+    /// <param name="passwordIn"></param>
     public void GetUserPassword(string passwordIn)
     {
         userPassword = passwordIn;
     }
 
+    /// <summary>
+    /// On authentication sumbission
+    /// </summary>
     public void OnSubmit()
     {
         var request = new LoginWithEmailAddressRequest
@@ -193,6 +213,10 @@ public class PlayFabLogin : MonoBehaviour
         PlayFabClientAPI.LoginWithEmailAddress(request, OnLoginSuccess, OnLoginFailure);
     }
 
+    /// <summary>
+    /// Get the current user's username
+    /// </summary>
+    /// <param name="userNameIn"></param>
     public void GetUserName(string userNameIn)
     {
         userName = userNameIn;
@@ -217,7 +241,6 @@ public class PlayFabLogin : MonoBehaviour
     }
     #endregion
 
-    //TODO: Make this a seperate script
     #region PlayerStatistics
     public static void SetCloudStats()
     {
@@ -228,10 +251,14 @@ public class PlayFabLogin : MonoBehaviour
             GeneratePlayStreamEvent = true
         }, cloudResult =>
         {
+#if UNITY_EDITOR
             Debug.Log("Statistics successfully updated!");
+#endif //UNITY_EDITOR
         }, cloudError =>
         {
+#if UNITY_EDITOR
             Debug.LogError(cloudError.GenerateErrorReport());
+#endif //UNITY_EDITOR
         });
     }
 
@@ -246,10 +273,14 @@ public class PlayFabLogin : MonoBehaviour
 
     static void OnGetStats(GetPlayerStatisticsResult result)
     {
+#if UNITY_EDITOR
         Debug.Log("Received the following Statistics:");
+#endif //UNITY_EDITOR
         foreach (var eachStat in result.Statistics)
         {
+#if UNITY_EDITOR
             Debug.Log("Statistic (" + eachStat.StatisticName + "): " + eachStat.Value);
+#endif //UNITY_EDITOR
             switch (eachStat.StatisticName)
             {
                 case "HighScore":
@@ -262,7 +293,6 @@ public class PlayFabLogin : MonoBehaviour
 
     #region User Currency
 
-
     public static void DepositUserCurrency(int amount)
     {
         PlayFabClientAPI.ExecuteCloudScript(new ExecuteCloudScriptRequest()
@@ -274,10 +304,14 @@ public class PlayFabLogin : MonoBehaviour
         cloudResult =>
         {
             CurrencySystem.SubmitToManager();
+#if UNITY_EDITOR
             Debug.Log("Successfully Deposited Player Currency!!!");
+#endif //UNITY_EDITOR
         }, cloudError =>
         {
+#if UNITY_EDITOR
             Debug.LogError(cloudError.GenerateErrorReport());
+#endif //UNITY_EDITOR
         });
     }
 
@@ -292,10 +326,14 @@ public class PlayFabLogin : MonoBehaviour
         cloudResult =>
         {
             CurrencySystem.SubmitToManager();
+#if UNITY_EDITOR
             Debug.Log("Successfully Withdrew Player Currency!!!");
+#endif //UNITY EDITOR
         }, cloudError =>
         {
+#if UNITY_EDITOR
             Debug.LogError(cloudError.GenerateErrorReport());
+#endif //UNITY_EDITOR
         });
     }
 

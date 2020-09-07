@@ -372,7 +372,7 @@ public class GameManager : EnhancedMono
     /// <summary>
     /// Destory the player
     /// </summary>
-    static void DestoryPlayer()
+    public static void DestoryPlayer()
     {
         //Get player death effect object
         playerDeathObj = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);
@@ -536,6 +536,7 @@ public class GameManager : EnhancedMono
     /// <returns></returns>
     static IEnumerator AsynchronousUnload(string sceneName)
     {
+        
         operation = new AsyncOperation();
 
         if (sceneName != null)
@@ -544,7 +545,6 @@ public class GameManager : EnhancedMono
 
             while (true)
             {
-
                 loadingProgress = Mathf.Clamp01(operation.progress / .9f);
 
                 if (loadingProgress >= .99f)

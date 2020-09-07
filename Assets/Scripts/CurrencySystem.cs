@@ -20,6 +20,12 @@ public class CurrencySystem : MonoBehaviour
     public static int GemsCollected { get; private set; }
 
     /// <summary>
+    /// The amount of gems that you spend during the 
+    /// duration of playing the game
+    /// </summary>
+    public static int GemsSpent { get; private set; }
+
+    /// <summary>
     /// Check if the system is running
     /// </summary>
     public static bool IsRunning { get; private set; }
@@ -107,7 +113,7 @@ public class CurrencySystem : MonoBehaviour
     static void WithdrawFromBalance(int value)
     {
         CurrencyBalance -= value;
-        PlayFabLogin.WithdrawUserCurrency(value);
+        GemsSpent += value;
 
         UpdateUI();
 
@@ -129,11 +135,8 @@ public class CurrencySystem : MonoBehaviour
             //Withdraw the specified amount
             WithdrawFromBalance(valueAmount);
 
-            //Update Virtual Currency
-            PlayFabLogin.WithdrawUserCurrency(valueAmount);
-
-            //Get Updated Virtual Currency
-            PlayFabLogin.GetUserCurrency();
+            //Submit to GameManager
+            SubmitToManager();
 
             //Trigger the "onSpend" event
             Instance.onSpend.Invoke();
@@ -184,9 +187,13 @@ public class CurrencySystem : MonoBehaviour
 
         //Update virtual currency
         PlayFabLogin.DepositUserCurrency(GemsCollected);
+        PlayFabLogin.WithdrawUserCurrency(GemsSpent);
 
         //Reset Collected Amount
         ResetCollectedAmount();
+
+        //Reset Spent Amount
+        ResetSpentAmount();
 
         //Submit Currency To GameManager
         SubmitToManager();
@@ -224,6 +231,12 @@ public class CurrencySystem : MonoBehaviour
     /// This will be used to update virtual currency balance
     /// </summary>
     internal static void ResetCollectedAmount() => GemsCollected = 0;
+
+    /// <summary>
+    /// Reset the total amount of gems spend
+    /// This will be used to update virtual currency balance
+    /// </summary>
+    internal static void ResetSpentAmount() => GemsSpent = 0;
 
     /// <summary>
     /// Update the currency balance

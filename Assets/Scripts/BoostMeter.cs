@@ -74,9 +74,25 @@ public class BoostMeter : MonoBehaviour
                 Time = 0;
             }
 
+            //Regulate boost meter value
+            RegulateBoostMeter();
+
             yield return null;
         }
 
+    }
+
+    /// <summary>
+    /// Make sure the boost amount value is not greater than or less than
+    /// its max or min value
+    /// </summary>
+    static void RegulateBoostMeter()
+    {
+        if (BoostAmount <= METER_MIN_VALUE)
+            BoostAmount = METER_MIN_VALUE;
+
+        if (BoostAmount >= METER_MAX_VALUE)
+            BoostAmount = METER_MAX_VALUE;
     }
 
     public static bool SufficientValue()

@@ -26,6 +26,7 @@ public class PickUp : MonoBehaviour, IRange
             onPickUp.AddListener(() =>
             {
                 CurrencySystem.AddToBalance(1);
+                BoostMeter.ReplenishBoost(10f);
                 transform.position = Vector2.zero;
                 transform.parent = ObjectPooler.Parent;
                 transform.rotation = Quaternion.identity;

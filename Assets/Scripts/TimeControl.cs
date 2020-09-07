@@ -19,8 +19,7 @@ public class TimeControl : MonoBehaviour
     public static float PreviousTimeScale { get; private set; }
 
     private float scaleValue = 1f;
-    private readonly float scaleDelta = 0.25f;
-    private readonly float scaleRate = 0.01f;
+    private readonly float scaleDelta = 0.025f;
     private const float FREEZE = 0;
 
     public static bool IsPaused { get; private set; } = false;
@@ -78,7 +77,7 @@ public class TimeControl : MonoBehaviour
             if (!Application.isFocused)
                 Pause();
 
-            yield return new WaitForSecondsRealtime(scaleRate);
+            yield return null;
         }
     }
 
