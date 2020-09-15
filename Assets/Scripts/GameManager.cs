@@ -536,7 +536,6 @@ public class GameManager : EnhancedMono
     /// <returns></returns>
     static IEnumerator AsynchronousUnload(string sceneName)
     {
-        
         operation = new AsyncOperation();
 
         if (sceneName != null)

@@ -87,6 +87,7 @@ public class TimeControl : MonoBehaviour
     public static void Pause()
     {
         Instance.scaleValue = FREEZE;
+        OnApplicationPause(Application.isFocused);
     }
 
     /// <summary>
