@@ -116,6 +116,10 @@ namespace PlayFab.DataModels
         /// Names of the files to be finalized. Restricted to a-Z, 0-9, '(', ')', '_', '-' and '.'
         /// </summary>
         public List<string> FileNames;
+        /// <summary>
+        /// The current version of the profile, can be used for concurrency control during updates.
+        /// </summary>
+        public int ProfileVersion;
     }
 
     [Serializable]
@@ -139,7 +143,7 @@ namespace PlayFab.DataModels
     public class GetFileMetadata : PlayFabBaseModel
     {
         /// <summary>
-        /// Checksum value for the file
+        /// Checksum value for the file, can be used to check if the file on the server has changed.
         /// </summary>
         public string Checksum;
         /// <summary>

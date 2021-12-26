@@ -85,7 +85,7 @@ public class EnemyController : Controller, IRange
             gameObject.SetActive(false);
             TimeControl.SlowDownTime(0.01f); 
         } else
-            GameManager.DestoryPlayer();
+            GameManager.DestroyPlayer();
     }
 
     public void OnRangeExit()

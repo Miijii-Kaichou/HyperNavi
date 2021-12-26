@@ -13,17 +13,13 @@ MonoBehaviour:
   m_Name: PlayFabSharedSettings
   m_EditorClassIdentifier: 
   TitleId: 892A0
-  DeveloperSecretKey: O6XGBUNQK7IBDKAZQOEGWOFBG8XJONTY6NZAK3GTRQJFWG6ITX
+  DeveloperSecretKey: JARIFUMRKFP18HK1R7BI374FSOM4RYD1GEQUDKCPXHOPH6QSDI
   ProductionEnvironmentUrl: 
   RequestType: 2
-  AdvertisingIdType: 
-  AdvertisingIdValue: 
-  DisableAdvertising: 0
   DisableDeviceInfo: 0
   DisableFocusTimeCollection: 0
   RequestTimeout: 2000
   RequestKeepAlive: 1
-  CompressApiData: 1
   LogLevel: 12
   LoggerHost: 
   LoggerPort: 0

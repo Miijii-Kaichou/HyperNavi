@@ -43,11 +43,9 @@ namespace PlayFab
         /// </summary>
         public static readonly PlayFabAuthenticationContext staticPlayer = new PlayFabAuthenticationContext();
 
-        public const string SdkVersion = "2.94.200901";
-        public const string BuildIdentifier = "jbuild_unitysdk__sdk-unity-3-slave_0";
-        public const string VersionString = "UnitySDK-2.94.200901";
-        public const string AD_TYPE_IDFA = "Idfa";
-        public const string AD_TYPE_ANDROID_ID = "Adid";
+        public const string SdkVersion = "2.116.211012";
+        public const string BuildIdentifier = "jbuild_unitysdk_sdk-unity-4-slave_0";
+        public const string VersionString = "UnitySDK-2.116.211012";
 
         public const string DefaultPlayFabApiUrl = "playfabapi.com";
 
@@ -91,8 +89,6 @@ namespace PlayFab
 #if ENABLE_PLAYFABSERVER_API || ENABLE_PLAYFABADMIN_API || UNITY_EDITOR
         public static string DeveloperSecretKey { get { return staticSettings.DeveloperSecretKey; } set { staticSettings.DeveloperSecretKey = value; } }
 #endif
-        /// <summary> Set this to true to prevent IDFA from leaving the device </summary>
-        public static bool DisableAdvertising { get { return staticSettings.DisableAdvertising; } set { staticSettings.DisableAdvertising = value; } }
         /// <summary> Set this to true to prevent hardware information from leaving the device </summary>
         public static bool DisableDeviceInfo { get { return staticSettings.DisableDeviceInfo; } set { staticSettings.DisableDeviceInfo = value; } }
         /// <summary> Set this to true to prevent focus change information from leaving the device </summary>
@@ -108,7 +104,6 @@ namespace PlayFab
         public static WebRequestType RequestType { get { return PlayFabSharedPrivate.RequestType; } set { PlayFabSharedPrivate.RequestType = value; } }
         public static int RequestTimeout { get { return PlayFabSharedPrivate.RequestTimeout; } set { PlayFabSharedPrivate.RequestTimeout = value; } }
         public static bool RequestKeepAlive { get { return PlayFabSharedPrivate.RequestKeepAlive; } set { PlayFabSharedPrivate.RequestKeepAlive = value; } }
-        public static bool CompressApiData { get { return PlayFabSharedPrivate.CompressApiData; } set { PlayFabSharedPrivate.CompressApiData = value; } }
         public static string LoggerHost { get { return PlayFabSharedPrivate.LoggerHost; } set { PlayFabSharedPrivate.LoggerHost = value; } }
         public static int LoggerPort { get { return PlayFabSharedPrivate.LoggerPort; } set { PlayFabSharedPrivate.LoggerPort = value; } }
         public static bool EnableRealTimeLogging { get { return PlayFabSharedPrivate.EnableRealTimeLogging; } set { PlayFabSharedPrivate.EnableRealTimeLogging = value; } }

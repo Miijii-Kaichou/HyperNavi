@@ -218,7 +218,7 @@ public class GameManager : EnhancedMono
             LoadScene("TitleScreen/1/A");
 
             Application.targetFrameRate = DEFAULT_FRAMERATE;
-
+            QualitySettings.vSyncCount = 1;
             accelerationCycle = Accelerate();
             frictionCycle = Friction();
             gameLoopCycle = GameLoop();
@@ -327,7 +327,7 @@ public class GameManager : EnhancedMono
                 CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, SpeedAcceleration);
                 accelerationTime = RESET;
             }
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
     }
 
@@ -361,7 +361,7 @@ public class GameManager : EnhancedMono
                 player.HasContactedWall() &&
                 dontDestroy == false)
                 {
-                    DestoryPlayer();
+                    DestroyPlayer();
                     ResetTime();
                 }
             }
@@ -372,7 +372,7 @@ public class GameManager : EnhancedMono
     /// <summary>
     /// Destory the player
     /// </summary>
-    public static void DestoryPlayer()
+    public static void DestroyPlayer()
     {
         //Get player death effect object
         playerDeathObj = ObjectPooler.GetMember("PlayerDeath", out ParticleSystem deathParticle);

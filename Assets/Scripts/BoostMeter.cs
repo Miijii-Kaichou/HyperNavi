@@ -69,6 +69,7 @@ public class BoostMeter : MonoBehaviour
             //start lerping to that value
             if (Time >= BoostMeterRate && !BoostAmount.Equals(BoostAmountValue) && IsRunning)
             {
+                Debug.Log(BoostAmountValue);
                 BoostAmount = Mathf.Lerp(BoostAmount, BoostAmountValue, BoostMeterDelta);
                 UpdateUI();
                 Time = 0;
